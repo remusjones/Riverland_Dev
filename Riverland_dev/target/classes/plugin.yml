@@ -4,12 +4,20 @@ main: riverland.dev.riverland.Riverland
 api-version: 1.13
 author: riverland.dev
 commands:
-  foo:
-    description: Foo command
-    permission: Riverland.foo
+  AdminHelp:
+    description: Create Admin Ticket!
+    permission: Riverland.AdminHelp
+    permission-message: You do not have permission!
+    usage: /<command>
+  OPAdminHelp:
+    description: Access OP Tools for AdminHelp
+    permission: Riverland.OPAdminHelp
     permission-message: You do not have permission!
     usage: /<command>
   permissions:
-    Riverland.foo:
-    description: Allows foo command
-    default: op
+    Riverland.AdminHelp:
+      description: Allows AdminHelp command
+      default: op
+    Riverland.OpAdminHelp:
+      description: Allows OPAdminHelp command
+      default: op

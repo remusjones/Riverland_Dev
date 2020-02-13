@@ -36,6 +36,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RunManager">
     <configuration name="Riverland_dev build" type="MavenRunConfiguration" factoryName="Maven">
@@ -79,21 +80,29 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="3306" height="414" key="GridCell.Tab.0.bottom" timestamp="1581586610294">
+    <state width="3306" height="414" key="GridCell.Tab.0.bottom" timestamp="1581606073562">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="414" key="GridCell.Tab.0.bottom/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581586610294" />
-    <state width="3306" height="414" key="GridCell.Tab.0.center" timestamp="1581586610294">
+    <state width="3306" height="414" key="GridCell.Tab.0.bottom/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581606073562" />
+    <state width="3306" height="414" key="GridCell.Tab.0.center" timestamp="1581606073562">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="414" key="GridCell.Tab.0.center/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581586610294" />
-    <state width="3306" height="414" key="GridCell.Tab.0.left" timestamp="1581586610294">
+    <state width="3306" height="414" key="GridCell.Tab.0.center/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581606073562" />
+    <state width="3306" height="414" key="GridCell.Tab.0.left" timestamp="1581606073561">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="414" key="GridCell.Tab.0.left/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581586610294" />
-    <state width="3306" height="414" key="GridCell.Tab.0.right" timestamp="1581586610294">
+    <state width="3306" height="414" key="GridCell.Tab.0.left/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581606073561" />
+    <state width="3306" height="414" key="GridCell.Tab.0.right" timestamp="1581606073562">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="414" key="GridCell.Tab.0.right/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581586610294" />
+    <state width="3306" height="414" key="GridCell.Tab.0.right/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581606073562" />
+    <state x="1175" y="362" key="SettingsEditor" timestamp="1581600790643">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state x="1175" y="362" key="SettingsEditor/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581600790643" />
+    <state x="1337" y="325" width="672" height="678" key="search.everywhere.popup" timestamp="1581603430941">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state x="1337" y="325" width="672" height="678" key="search.everywhere.popup/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581603430941" />
   </component>
 </project>
