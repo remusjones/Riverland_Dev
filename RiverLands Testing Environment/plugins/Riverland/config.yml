@@ -1,1 +1,7 @@
+SQL_Host: sql12.freemysqlhosting.net
+SQL_Port: 3306
+SQL_Database: sql12322586
+SQL_Username: sql12322586
+SQL_Password: CF8Lqj5kiS
+SQL_TablePrefix: TICKET_
 WelcomeMessage: Welcome to Riverlands!

@@ -24,5 +24,6 @@ public class PlayerJoinAutoMessage implements Listener
         Player player = event.getPlayer();
         player.sendMessage(welcome);
         pluginReference.getLogger().log(Level.INFO, "Sending Player: " + player.getDisplayName() + " A welcome message..");
+
     }
 }
