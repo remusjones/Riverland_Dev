@@ -9,7 +9,7 @@ commands:
     permission: Riverland.foo
     permission-message: You do not have permission!
     usage: /<command>
-permissions:
-  Riverland.foo:
+  permissions:
+    Riverland.foo:
     description: Allows foo command
     default: op
