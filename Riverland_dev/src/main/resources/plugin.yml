@@ -1,15 +1,15 @@
 name: Riverland
 version: ${project.version}
 main: riverland.dev.riverland.Riverland
-               api-version: 1.13
-               author: riverland.dev
-               commands:
-                 foo:
-                   description: Foo command
-                   permission: Riverland.foo
-                   permission-message: You do not have permission!
-                   usage: /<command>
-               permissions:
-                 Riverland.foo:
-                   description: Allows foo command
-                   default: op
+api-version: 1.13
+author: riverland.dev
+commands:
+  foo:
+    description: Foo command
+    permission: Riverland.foo
+    permission-message: You do not have permission!
+    usage: /<command>
+  permissions:
+    Riverland.foo:
+    description: Allows foo command
+    default: op
