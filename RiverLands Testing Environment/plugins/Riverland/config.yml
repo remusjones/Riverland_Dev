@@ -1,3 +1,4 @@
+SQL_MaxTicketIssuesPerPlayer: 5
 SQL_Host: sql12.freemysqlhosting.net
 SQL_Port: 3306
 SQL_Database: sql12322586

@@ -5,19 +5,19 @@ api-version: 1.13
 author: riverland.dev
 commands:
   AdminHelp:
-    description: Create Admin Ticket!
+    description: Creates a Ticket, and sends it to server admins for review.
     permission: Riverland.AdminHelp
     permission-message: You do not have permission!
-    usage: /<command>
+    usage: /<command> [msg]
   OPAdminHelp:
     description: Access OP Tools for AdminHelp
-    permission: Riverland.OPAdminHelp
+    permission: Riverland.OpAdminHelp
     permission-message: You do not have permission!
-    usage: /<command>
-  permissions:
-    Riverland.AdminHelp:
-      description: Allows AdminHelp command
-      default: op
-    Riverland.OpAdminHelp:
-      description: Allows OPAdminHelp command
-      default: op
+    usage: /<command> [Display|Remove|RemoveAll]
+permissions:
+  Riverland.AdminHelp:
+    description: Allows AdminHelp command
+    default: true
+  Riverland.OpAdminHelp:
+    description: Allows OPAdminHelp command
+    default: op

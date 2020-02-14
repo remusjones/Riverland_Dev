@@ -2,6 +2,8 @@ package riverland.dev.riverland;
 
 
 // sql include
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,10 +25,15 @@ public class TicketSQL
     Map<Player, String> SqlToWrite = new HashMap <Player, String>();
     // int ID / String info..
     public Map<Integer, String> storedTicketIssues = new HashMap<Integer, String>();
+    public Map<String, Integer> playerSubmittedTicketIssues = new HashMap<String,Integer>();
+    public Integer maxIssuesPerPlayer = 5;
+
+
+
     public ArrayList<Integer> removeDataBaseIssueID = new ArrayList<Integer>();
     public int highestTicketID = 0;
 
-    public TicketSQL(String _host, int _port, String _prefix,String _dataBase, String _userName, String _password)
+    public TicketSQL(String _host, int _port, String _prefix,String _dataBase, String _userName, String _password, Integer maxIssuesOpen)
     {
         // load mySQL Settings..
         host = _host;
@@ -35,6 +42,7 @@ public class TicketSQL
         database = _dataBase;
         username = _userName;
         password = _password;
+        maxIssuesPerPlayer = maxIssuesOpen;
     }
 /*
 ResultSet result = statement.executeQuery("SELECT * FROM PlayerData WHERE BALANCE = 0;");
@@ -62,7 +70,6 @@ while (result.next()) {
 
             try
             {
-
                     openConnection();
                     Statement statement = connection.createStatement();
                     java.util.Date date = new Date();
@@ -70,15 +77,27 @@ while (result.next()) {
                     storedTicketIssues.clear();
                     // dump issues..
                     ResultSet result = statement.executeQuery("SELECT * FROM TICKETS");
-
+                    playerSubmittedTicketIssues.clear();
                     while (result.next())
                     {
                         int currID = result.getInt("TICKET_ID");
+                        String playerName = result.getString("PLAYER_NAME");
                         if (currID > highestTicketID)
                             highestTicketID = currID;
 
-                        String issue = result.getString("PLAYER_NAME") + " : " + result.getString("MSG");
+                        String issue = playerName + " : " + result.getString("MSG");
                         storedTicketIssues.put(currID, issue);
+
+                        // get player name, and compare it against our already stored issues..
+
+                        if (playerSubmittedTicketIssues.containsKey(playerName))
+                        {
+                            // adds an increase to the player sum.
+                            //playerSubmittedTicketIssues.merge(playerName, 1,Integer::);
+                            playerSubmittedTicketIssues.merge(playerName, 1, (prev, one) -> prev + one);
+                        }else // otherwise we init the list..
+                            playerSubmittedTicketIssues.put(playerName, 1);
+
                     }
 
                     Set<Map.Entry<Player, String>> map = SqlToWrite.entrySet();
@@ -92,7 +111,7 @@ while (result.next()) {
                                     "INSERT INTO " +
                                             "TICKETS " +
                                             "(TICKET_ID, PLAYER_NAME, MSG) " +
-                                            "VALUES (" + id + "," + "'" + pair.getKey().getDisplayName() + "', '" + pair.getValue() + "');"); //TODO: substring pair.getValue() to not exceed table value size..
+                                            "VALUES (" + id + "," + "'" + pair.getKey().getName() + "', '" + pair.getValue() + "');"); //TODO: substring pair.getValue() to not exceed table value size..
                             iter++;
                         }
                         catch (Exception exc)
@@ -105,6 +124,21 @@ while (result.next()) {
                     if (map.size() > 0)
                     {
                         Riverland._Instance.getLogger().log(Level.INFO, "Sending: " + map.size() + " pairs..");
+                        for(Player player : Bukkit.getOnlinePlayers())
+                        {
+                            if (player.isOp())
+                            {
+                                net.md_5.bungee.api.chat.TextComponent message = new net.md_5.bungee.api.chat.TextComponent( "New Ticket(s) in AdminHelp " );
+                                message.setColor( ChatColor.GOLD );
+
+                                net.md_5.bungee.api.chat.TextComponent click = new net.md_5.bungee.api.chat.TextComponent( " [Click to View]" );
+                                click.setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/opadminhelp display")); // if the user clicks the message, tp them to the coords
+                                click.setColor( ChatColor.AQUA );
+                                message.addExtra( click );
+
+                                player.sendMessage(message);
+                            }
+                        }
                         SqlToWrite.clear(); // everything has been written, clear the list..
                     }
                     if (removeDataBaseIssueID.size() > 0) // removes index(s) specified..

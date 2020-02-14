@@ -3,4 +3,4 @@ riverland\dev\riverland\AdminHelp.class
 riverland\dev\riverland\TicketSQL$1.class
 riverland\dev\riverland\TicketSQL.class
 riverland\dev\riverland\OPAdminHelp.class
-riverland\dev\riverland\PlayerJoinAutoMessage.class
+riverland\dev\riverland\RiverLandEventListener.class
