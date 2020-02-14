@@ -35,6 +35,12 @@
     },
     "done": true
   },
+  "minecraft:end/root": {
+    "criteria": {
+      "entered_end": "2020-02-14 18:39:59 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/combat/diamond_chestplate": {
     "criteria": {
       "has_diamond": "2020-02-13 16:56:24 +1100"
@@ -62,7 +68,8 @@
   "minecraft:adventure/adventuring_time": {
     "criteria": {
       "minecraft:forest": "2020-02-13 16:35:04 +1100",
-      "minecraft:beach": "2020-02-13 16:35:47 +1100"
+      "minecraft:beach": "2020-02-13 16:35:47 +1100",
+      "minecraft:savanna": "2020-02-14 12:24:23 +1100"
     },
     "done": false
   },
@@ -114,6 +121,12 @@
     },
     "done": true
   },
+  "minecraft:recipes/transportation/birch_boat": {
+    "criteria": {
+      "in_water": "2020-02-14 11:39:53 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/building_blocks/brown_concrete_powder": {
     "criteria": {
       "has_sand": "2020-02-13 16:48:22 +1100"
@@ -132,6 +145,12 @@
     },
     "done": true
   },
+  "minecraft:recipes/transportation/acacia_boat": {
+    "criteria": {
+      "in_water": "2020-02-14 11:39:53 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/combat/diamond_sword": {
     "criteria": {
       "has_diamond": "2020-02-13 16:56:24 +1100"
@@ -144,9 +163,21 @@
     },
     "done": true
   },
+  "minecraft:recipes/transportation/jungle_boat": {
+    "criteria": {
+      "in_water": "2020-02-14 11:39:53 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/decorations/jukebox": {
     "criteria": {
       "has_diamond": "2020-02-13 16:56:24 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/spruce_boat": {
+    "criteria": {
+      "in_water": "2020-02-14 11:39:53 +1100"
     },
     "done": true
   },
@@ -186,6 +217,12 @@
     },
     "done": true
   },
+  "minecraft:recipes/transportation/dark_oak_boat": {
+    "criteria": {
+      "in_water": "2020-02-14 11:39:53 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/tools/diamond_pickaxe": {
     "criteria": {
       "has_diamond": "2020-02-13 16:56:24 +1100"
@@ -207,13 +244,22 @@
   "minecraft:adventure/kill_all_mobs": {
     "criteria": {
       "minecraft:skeleton": "2020-02-13 16:49:48 +1100",
-      "minecraft:spider": "2020-02-13 23:58:34 +1100"
+      "minecraft:spider": "2020-02-13 23:58:34 +1100",
+      "minecraft:creeper": "2020-02-14 11:56:25 +1100",
+      "minecraft:zombie": "2020-02-14 11:55:00 +1100",
+      "minecraft:drowned": "2020-02-14 11:54:40 +1100"
     },
     "done": false
   },
   "minecraft:recipes/tools/diamond_shovel": {
     "criteria": {
       "has_diamond": "2020-02-13 16:56:24 +1100"
+    },
+    "done": true
+  },
+  "minecraft:story/enter_the_end": {
+    "criteria": {
+      "entered_end": "2020-02-14 18:39:59 +1100"
     },
     "done": true
   },
@@ -274,6 +320,12 @@
   "minecraft:recipes/combat/crossbow": {
     "criteria": {
       "has_stick": "2020-02-14 00:00:15 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/oak_boat": {
+    "criteria": {
+      "in_water": "2020-02-14 11:39:53 +1100"
     },
     "done": true
   },
