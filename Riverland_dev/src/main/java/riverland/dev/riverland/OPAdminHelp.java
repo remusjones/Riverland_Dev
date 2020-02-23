@@ -1,6 +1,7 @@
 package riverland.dev.riverland;
 
 import net.md_5.bungee.api.chat.ClickEvent;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -24,6 +25,7 @@ public class OPAdminHelp implements CommandExecutor
             return false;
         }
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
@@ -49,7 +51,16 @@ public class OPAdminHelp implements CommandExecutor
                             net.md_5.bungee.api.chat.TextComponent strSeperator = new net.md_5.bungee.api.chat.TextComponent(" | "); // put seperator
                             strSeperator.setColor(net.md_5.bungee.api.ChatColor.GREEN); // set green
 
-                            net.md_5.bungee.api.chat.TextComponent nameMessageCombo = new net.md_5.bungee.api.chat.TextComponent(pair.getValue()); // get pair message
+                            String targetString = pair.getValue();
+                            Integer worldStart = pair.getValue().lastIndexOf("BlockPos:") + 9;
+                            if (!((Player)sender).isOp())
+                            {
+                                targetString = StringUtils.left(targetString, worldStart);
+                                targetString += "[Redacted]";
+                            }
+
+
+                            net.md_5.bungee.api.chat.TextComponent nameMessageCombo = new net.md_5.bungee.api.chat.TextComponent(targetString); // get pair message
                             nameMessageCombo.setColor(net.md_5.bungee.api.ChatColor.GOLD); // set Gold
 
                             net.md_5.bungee.api.chat.TextComponent clickable1 = new net.md_5.bungee.api.chat.TextComponent("  [Click to Remove]"); // add inline text button text
@@ -69,44 +80,35 @@ public class OPAdminHelp implements CommandExecutor
 
                                 Integer start = pair.getValue().lastIndexOf('('); // find index of init bracket for pos
                                 Integer end = pair.getValue().lastIndexOf(')'); // find end index of closing bracket for pos
-                                Integer worldStart = pair.getValue().lastIndexOf("world:"); // find index of the world: identifier
+                                worldStart = pair.getValue().lastIndexOf("world:"); // find index of the world: identifier
                                 String split = pair.getValue().substring(start+1 , end-1); // offset the substr to ignore closing brackets.
                                 String[] pos = split.split(","); // seperate positions by commas and store them as double if possible.
                                 x = Double.parseDouble(pos[0]);
                                 y = Double.parseDouble(pos[1]);
                                 z = Double.parseDouble(pos[2]);
 
-                                targetWorld = Riverland._Instance.getServer().getWorld( pair.getValue().substring(worldStart+6 , pair.getValue().length())); // fetch world by name..
+                               // targetWorld = Riverland._Instance.getServer().getWorld( pair.getValue().substring(worldStart+6 , pair.getValue().length())); // fetch world by name..
+
                             }
                             catch (Exception exc)
                             {
                                 player.sendMessage(exc.toString());
                             }
 
-                            String worldName = "overworld";
+                          //  String worldName = "overworld";
 
-                            // create location
-                            if (targetWorld != null)
-                            {
-                                if (targetWorld.getEnvironment().equals(World.Environment.NORMAL))
-                                {
-                                    worldName = "overworld";
-                                }else if (targetWorld.getEnvironment().equals(World.Environment.THE_END))
-                                {
-                                    worldName = "the_end";
-                                }else if (targetWorld.getEnvironment().equals(World.Environment.NETHER))
-                                {
-                                    worldName = "the_nether";
-                                }
-                            }
-                            ///execute in the_end run tp <player> <location>
-                            clickable2.setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/execute in " +worldName + " run tp " + player.getName() + " " + x + " " + y + " " + z)); // set click event to text component
+                            String substr = pair.getValue().substring(worldStart+6 , pair.getValue().length());
+
+                            clickable2.setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/riverland teleport" + " " + substr +" " +  x + " " + y + " " + z)); // set click event to text component
 
                             // compile json string
                             id.addExtra(strSeperator);
                             id.addExtra(nameMessageCombo);
-                            id.addExtra(clickable2);
-                            id.addExtra(clickable1);
+                            if (((Player)sender).isOp())
+                            {
+                                id.addExtra(clickable2);
+                                id.addExtra(clickable1);
+                            }
                             player.sendMessage(id); // output json string
 
                         }
@@ -117,13 +119,14 @@ public class OPAdminHelp implements CommandExecutor
                     }
                     // end ticket dump..
                 }
-            }else if (args[0].equalsIgnoreCase("Remove"))
+            }else if (args[0].equalsIgnoreCase("Remove") && ((Player)sender).isOp() )
             {
                 if (args.length > 1)
                 {
                     if (tryParseInt(args[1]))
                     {
                         Player player = (Player)sender;
+
                         Integer target = Integer.parseInt(args[1]);
                         Riverland._InstanceRiverLandTicket.removeDataBaseIssueID.add(target);
                         player.sendMessage(ChatColor.GREEN+"Removing Ticket Issue: " + ChatColor.DARK_RED+target);
@@ -138,7 +141,7 @@ public class OPAdminHelp implements CommandExecutor
                         }
                     }
                 }
-            }else if (args[0].equalsIgnoreCase("RemoveALL"))
+            }else if (args[0].equalsIgnoreCase("RemoveALL") && ((Player)sender).isOp())
             {
                 Player player = (Player)sender;
                 // remove all entries..

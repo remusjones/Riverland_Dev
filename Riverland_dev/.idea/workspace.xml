@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="fe7ed87a-2c1c-4eab-95c6-e39192a29135" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,8 +38,25 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/riverland/dev/riverland" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="riverland.dev.riverland" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="groovy.util.GroovyTestCase" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Riverland_dev build" type="MavenRunConfiguration" factoryName="Maven">
@@ -80,29 +100,66 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="3306" height="413" key="GridCell.Tab.0.bottom" timestamp="1581683696069">
+    <state x="638" y="257" key="#com.intellij.ide.util.MemberChooser" timestamp="1582075740831">
+      <screen x="0" y="0" width="1445" height="864" />
+    </state>
+    <state x="638" y="257" key="#com.intellij.ide.util.MemberChooser/0.0.1445.864@0.0.1445.864" timestamp="1582075740831" />
+    <state x="1479" y="429" key="#com.intellij.ide.util.MemberChooser/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582024675675" />
+    <state x="1432" y="582" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1582088629651">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="413" key="GridCell.Tab.0.bottom/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581683696069" />
-    <state width="3306" height="413" key="GridCell.Tab.0.center" timestamp="1581683696069">
+    <state x="1432" y="582" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582088629651" />
+    <state x="1633" y="565" key="FileChooserDialogImpl" timestamp="1582086275911">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="413" key="GridCell.Tab.0.center/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581683696069" />
-    <state width="3306" height="413" key="GridCell.Tab.0.left" timestamp="1581683696069">
+    <state x="1633" y="565" key="FileChooserDialogImpl/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582086275911" />
+    <state width="3306" height="317" key="GridCell.Tab.0.bottom" timestamp="1582492994531">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="413" key="GridCell.Tab.0.left/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581683696069" />
-    <state width="3306" height="413" key="GridCell.Tab.0.right" timestamp="1581683696069">
+    <state width="1402" height="52" key="GridCell.Tab.0.bottom/0.0.1445.864@0.0.1445.864" timestamp="1582075925442" />
+    <state width="3306" height="317" key="GridCell.Tab.0.bottom/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582492994531" />
+    <state width="3306" height="317" key="GridCell.Tab.0.center" timestamp="1582492994530">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state width="3306" height="413" key="GridCell.Tab.0.right/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581683696069" />
+    <state width="1402" height="52" key="GridCell.Tab.0.center/0.0.1445.864@0.0.1445.864" timestamp="1582075925442" />
+    <state width="3306" height="317" key="GridCell.Tab.0.center/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582492994530" />
+    <state width="3306" height="317" key="GridCell.Tab.0.left" timestamp="1582492994530">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state width="1402" height="52" key="GridCell.Tab.0.left/0.0.1445.864@0.0.1445.864" timestamp="1582075925441" />
+    <state width="3306" height="317" key="GridCell.Tab.0.left/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582492994530" />
+    <state width="3306" height="317" key="GridCell.Tab.0.right" timestamp="1582492994530">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state width="1402" height="52" key="GridCell.Tab.0.right/0.0.1445.864@0.0.1445.864" timestamp="1582075925442" />
+    <state width="3306" height="317" key="GridCell.Tab.0.right/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582492994530" />
+    <state x="1204" y="375" key="Maven.ArtifactSearchDialog" timestamp="1582092690975">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state x="1204" y="375" key="Maven.ArtifactSearchDialog/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582092690975" />
     <state x="1175" y="362" key="SettingsEditor" timestamp="1581600790643">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
     <state x="1175" y="362" key="SettingsEditor/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581600790643" />
-    <state x="1337" y="325" width="672" height="678" key="search.everywhere.popup" timestamp="1581639964715">
+    <state x="1483" y="637" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1582185970769">
       <screen x="0" y="0" width="3349" height="1440" />
     </state>
-    <state x="1337" y="325" width="672" height="678" key="search.everywhere.popup/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581639964715" />
+    <state x="1483" y="637" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582185970769" />
+    <state x="1445" y="423" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1582092996526">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state x="1445" y="423" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582092996526" />
+    <state x="1057" y="390" key="new project wizard" timestamp="1581777451284">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state x="1057" y="390" key="new project wizard/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1581777451284" />
+    <state x="1331" y="340" key="run.anything.popup" timestamp="1582246614152">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state x="1331" y="340" key="run.anything.popup/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582246614152" />
+    <state x="1337" y="325" width="672" height="678" key="search.everywhere.popup" timestamp="1582415933731">
+      <screen x="0" y="0" width="3349" height="1440" />
+    </state>
+    <state x="1337" y="325" width="672" height="678" key="search.everywhere.popup/0.0.3349.1440/3440.563.1536.824@0.0.3349.1440" timestamp="1582415933731" />
   </component>
 </project>

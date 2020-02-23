@@ -11,15 +11,45 @@
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/sandstone_slab": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/tools/wooden_axe": {
     "criteria": {
       "has_stick": "2020-02-14 00:00:15 +1100"
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/smooth_sandstone": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/redstone/lever": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/building_blocks/purple_concrete_powder": {
     "criteria": {
       "has_sand": "2020-02-13 16:48:22 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cobblestone_stairs_from_cobblestone_stonecutting": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cut_sandstone_slab_from_cut_sandstone_stonecutting": {
+    "criteria": {
+      "has_cut_sandstone": "2020-02-15 21:21:49 +1100"
     },
     "done": true
   },
@@ -53,9 +83,33 @@
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/stone": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
+  "minecraft:story/mine_stone": {
+    "criteria": {
+      "get_stone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/tools/diamond_axe": {
     "criteria": {
       "has_diamond": "2020-02-13 16:56:24 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cut_sandstone_from_sandstone_stonecutting": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/furnace": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
     },
     "done": true
   },
@@ -65,11 +119,24 @@
     },
     "done": true
   },
+  "minecraft:recipes/misc/green_dye": {
+    "criteria": {
+      "has_cactus": "2020-02-15 22:39:58 +1100"
+    },
+    "done": true
+  },
   "minecraft:adventure/adventuring_time": {
     "criteria": {
       "minecraft:forest": "2020-02-13 16:35:04 +1100",
+      "minecraft:mountains": "2020-02-15 21:52:07 +1100",
+      "minecraft:desert_hills": "2020-02-15 21:06:28 +1100",
+      "minecraft:desert": "2020-02-15 21:06:03 +1100",
+      "minecraft:savanna_plateau": "2020-02-15 09:34:32 +1100",
       "minecraft:beach": "2020-02-13 16:35:47 +1100",
-      "minecraft:savanna": "2020-02-14 12:24:23 +1100"
+      "minecraft:river": "2020-02-15 21:19:34 +1100",
+      "minecraft:swamp": "2020-02-15 21:52:08 +1100",
+      "minecraft:savanna": "2020-02-14 12:24:23 +1100",
+      "minecraft:plains": "2020-02-15 21:29:13 +1100"
     },
     "done": false
   },
@@ -109,6 +176,12 @@
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/cobblestone_slab_from_cobblestone_stonecutting": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/decorations/ladder": {
     "criteria": {
       "has_stick": "2020-02-14 00:00:15 +1100"
@@ -133,6 +206,18 @@
     },
     "done": true
   },
+  "minecraft:recipes/combat/stone_sword": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/cobblestone_wall": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/building_blocks/green_concrete_powder": {
     "criteria": {
       "has_sand": "2020-02-13 16:48:22 +1100"
@@ -145,9 +230,21 @@
     },
     "done": true
   },
+  "minecraft:recipes/misc/red_dye_from_poppy": {
+    "criteria": {
+      "has_red_flower": "2020-02-15 09:36:00 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/transportation/acacia_boat": {
     "criteria": {
       "in_water": "2020-02-14 11:39:53 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/tools/stone_pickaxe": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
     },
     "done": true
   },
@@ -160,6 +257,12 @@
   "minecraft:adventure/root": {
     "criteria": {
       "killed_by_something": "2020-02-13 16:48:45 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/coal_block": {
+    "criteria": {
+      "has_coal": "2020-02-15 23:26:02 +1100"
     },
     "done": true
   },
@@ -181,6 +284,12 @@
     },
     "done": true
   },
+  "minecraft:recipes/decorations/cobblestone_wall_from_cobblestone_stonecutting": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/building_blocks/white_concrete_powder": {
     "criteria": {
       "has_sand": "2020-02-13 16:48:22 +1100"
@@ -190,6 +299,12 @@
   "minecraft:recipes/combat/wooden_sword": {
     "criteria": {
       "has_stick": "2020-02-14 00:00:15 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/tools/stone_shovel": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
     },
     "done": true
   },
@@ -208,6 +323,12 @@
   "minecraft:recipes/building_blocks/diamond_block": {
     "criteria": {
       "has_diamond": "2020-02-13 16:56:24 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/tools/stone_hoe": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
     },
     "done": true
   },
@@ -269,9 +390,27 @@
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/sandstone_stairs": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/tools/wooden_hoe": {
     "criteria": {
       "has_stick": "2020-02-14 00:00:15 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cobblestone_slab": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cut_sandstone_slab_from_sandstone_stonecutting": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
     },
     "done": true
   },
@@ -287,9 +426,33 @@
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/cobblestone_stairs": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/building_blocks/black_concrete_powder": {
     "criteria": {
       "has_sand": "2020-02-13 16:48:22 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/sandstone_wall": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/chiseled_sandstone_from_sandstone_stonecutting": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cut_sandstone": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
     },
     "done": true
   },
@@ -302,6 +465,12 @@
   "minecraft:story/mine_diamond": {
     "criteria": {
       "diamond": "2020-02-13 16:56:24 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/sandstone_stairs_from_sandstone_stonecutting": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
     },
     "done": true
   },
@@ -329,6 +498,12 @@
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/sandstone_slab_from_sandstone_stonecutting": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
+    },
+    "done": true
+  },
   "minecraft:recipes/building_blocks/light_gray_concrete_powder": {
     "criteria": {
       "has_sand": "2020-02-13 16:48:22 +1100"
@@ -338,6 +513,18 @@
   "minecraft:recipes/building_blocks/light_blue_concrete_powder": {
     "criteria": {
       "has_sand": "2020-02-13 16:48:22 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/tools/stone_axe": {
+    "criteria": {
+      "has_cobblestone": "2020-02-15 09:16:39 +1100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/sandstone_wall_from_sandstone_stonecutting": {
+    "criteria": {
+      "has_sandstone": "2020-02-15 21:21:49 +1100"
     },
     "done": true
   },
