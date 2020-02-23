@@ -17,19 +17,19 @@ settings:
   warn-on-overload: true
   permissions-file: permissions.yml
   update-folder: update
-  plugin-profiling: false
-  connection-throttle: 4000
+  plugin-profiling: true
+  connection-throttle: -1
   query-plugins: true
   deprecated-verbose: default
-  shutdown-message: Server closed
+  shutdown-message: Riverland is restarting!
   minimum-api: none
 spawn-limits:
-  monsters: 70
-  animals: 10
-  water-animals: 15
-  ambient: 15
+  monsters: 30
+  animals: 800
+  water-animals: 300
+  ambient: 100
 chunk-gc:
-  period-in-ticks: 600
+  period-in-ticks: 300
 ticks-per:
   animal-spawns: 400
   monster-spawns: 1

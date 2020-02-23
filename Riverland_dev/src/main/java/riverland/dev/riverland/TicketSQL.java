@@ -126,7 +126,7 @@ while (result.next()) {
                         Riverland._Instance.getLogger().log(Level.INFO, "Sending: " + map.size() + " pairs..");
                         for(Player player : Bukkit.getOnlinePlayers())
                         {
-                            if (player.isOp())
+                            if (player.isOp() || player.hasPermission("riverland.OpAdminHelp"))
                             {
                                 net.md_5.bungee.api.chat.TextComponent message = new net.md_5.bungee.api.chat.TextComponent( "New Ticket(s) in AdminHelp " );
                                 message.setColor( ChatColor.GOLD );
