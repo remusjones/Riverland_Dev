@@ -2,6 +2,7 @@ package riverland.dev.riverland;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
 import net.minecraft.server.v1_15_R1.EntityTypes;
 import net.minecraft.server.v1_15_R1.IRegistry;
 import org.bukkit.Location;
@@ -34,8 +35,16 @@ public final class Riverland extends JavaPlugin {
     public static CustomEntityType GiantTypeInstance;
     public static CustomEntityType CreeperTypeInstance;
     public static CustomEntityType BabyZombieTypeInstance;
+
+
     public Location giantBossStartLocation = null;
     public Location giantBossEndLocation = null;
+
+    public Location playerWatchLocation = null;
+    public Location player1Location = null;
+    public Location player2Location = null;
+
+
     public ArrayList<String> randomNameList = new ArrayList<>();
     public SpecatorMode spectatorMode;
     Gson gsonObj = new Gson();
@@ -67,8 +76,6 @@ public final class Riverland extends JavaPlugin {
         tntRadiusLow = config.getDouble("TNT_ExplosionRadiusLow"); // get config
         tntBunkerBusterRange = config.getDouble("TNT_BunkerBusterRange");
         tntBreakChance = config.getDouble("TNT_BreakChance");
-        giantBossStartLocation = config.getLocation("Event_THUMBUSLocationStart");
-        giantBossEndLocation = config.getLocation("Event_THUMBUSLocationSpawn");
 
     }
     public void UpdateConfig()
@@ -79,10 +86,8 @@ public final class Riverland extends JavaPlugin {
         config.set("TNT_BunkerBusterRange", tntBunkerBusterRange);
         config.set("TNT_BreakChance", tntBreakChance);
         config.set("TNT_BunkerBusterIgnoresWater", IgnoreWater);
-        if (giantBossEndLocation != null)
-            config.set("Event_THUMBUSLocationSpawn", giantBossEndLocation);
-        if (giantBossStartLocation != null)
-            config.set("Event_THUMBUSLocationStart", giantBossStartLocation);
+        SaveLocations();
+        saveConfig();
     }
     @Override
     public void onLoad()
@@ -202,16 +207,11 @@ public final class Riverland extends JavaPlugin {
         config.addDefault("TNT_BunkerBusterRange", 1.5);
         config.addDefault("TNT_BreakChance", 0.5);
         config.addDefault("TNT_BunkerBusterIgnoresWater", false);
-        config.options().copyDefaults(true);
+        //config.options().copyDefaults(true);
         saveConfig();
         spectatorMode = new SpecatorMode();
-
-        // try unregister
-        UnRegisterEntities();
         // register
         RegisterEntities();
-
-
 
         try
         {
@@ -266,39 +266,34 @@ public final class Riverland extends JavaPlugin {
         this.getCommand("AdminHelp").setExecutor(new AdminHelp());
         this.getCommand("OPAdminHelp").setExecutor(new OPAdminHelp());
         this.getCommand("Riverland").setExecutor(new RiverlandCommands());
+        PVPEvent event = new PVPEvent();
+        this.getCommand("PVPArena").setExecutor(event);
 
         AIArenaEvent riverlandEvent = new AIArenaEvent();
         this.getCommand("ArenaEvent").setExecutor(riverlandEvent);
-        this.getCommand("leave").setExecutor(riverlandEvent);
+
         CommandTabCompletion commandTab = new CommandTabCompletion();
         getCommand("Riverland").setTabCompleter(commandTab);
         getCommand("OpAdminHelp").setTabCompleter(commandTab);
         getCommand("AdminHelp").setTabCompleter(commandTab);
         // register join listener..
         getServer().getPluginManager().registerEvents(new RiverLandEventListener(), this);
-
+        getServer().getPluginManager().registerEvents(event, this);
         tntRadiusDefault = config.getDouble("TNT_ExplosionRadius");
         tntRadiusLow =    config.getDouble("TNT_ExplosionRadiusLow");
         tntRadiusHigh =    config.getDouble("TNT_ExplosionRadiusHigh");
         tntBunkerBusterRange = config.getDouble("TNT_BunkerBusterRange");
         tntBreakChance = config.getDouble("TNT_BreakChance");
         IgnoreWater = config.getBoolean("TNT_BunkerBusterIgnoresWater");
+        LoadLocations();
 
-        try {
-            giantBossStartLocation = config.getLocation("Event_THUMBUSLocationStart");
-            giantBossEndLocation  = config.getLocation("Event_THUMBUSLocationSpawn");
-
-        }
-        catch (Exception exc)
-        {
-            getLogger().log(Level.WARNING,"Failed Loading Event Locations..");
-        }
         if (!Riverland._InstanceRiverLandTicket._IsTaskRunning) // check if server is running an async sql thingo..
         {
             getLogger().log(Level.INFO,"Starting SQL Thread..");
             Riverland._InstanceRiverLandTicket.WriteSQLData.runTaskTimerAsynchronously(Riverland._Instance,0,25);
         }
     }
+
     public void ClearTNTMemory()
     {
         try
@@ -325,14 +320,136 @@ public final class Riverland extends JavaPlugin {
         this.tntPositions.clear();
     }
 
+    public void LoadLocations()
+    {
+        try
+        {
+
+            folder = this.getDataFolder();
+            f= new File(folder,"EventLocations.yml");
+
+            if (f!=null)
+            {
+                if(!f.exists())
+                {
+                    f.createNewFile();
+                    getLogger().log(Level.WARNING,"Creating Json File.. ");
+                }
+
+                // try load..
+                if(f.length() > 3 )
+                {
+                    getLogger().log(Level.WARNING,"Loading Json.. ");
+                    String data = "";
+                    Scanner myReader = new Scanner(f);
+                    while (myReader.hasNextLine())
+                    {
+                        data += myReader.nextLine();
+                    }
+
+                    //            SerializableLocation loc1 = new SerializableLocation();
+                    //            loc1.Set(giantBossStartLocation);
+                    //            SerializableLocation loc2 = new SerializableLocation();
+                    //            loc2.Set(giantBossEndLocation);
+                    //            list.add(loc1);
+                    //            list.add(loc2);
+                    // try load json
+                    Type type = new TypeToken<
+                            ArrayList<SerializableLocation>>(){}.getType();
+
+                    tntPositions.clear();
+                    ArrayList<SerializableLocation> tmp = gsonObj.fromJson(data, type);
+                    if (tmp.size() == 2)
+                    {
+                        giantBossStartLocation = tmp.get(0).Get();
+                        giantBossEndLocation = tmp.get(1).Get();
+                    }
+                    if (tmp.size() > 2)
+                    {
+                        giantBossStartLocation = tmp.get(0).Get();
+                        giantBossEndLocation = tmp.get(1).Get();
+                        playerWatchLocation = tmp.get(2).Get();
+                        player1Location = tmp.get(3).Get();
+                        player2Location = tmp.get(4).Get();
+                    }
+                    myReader.close();
+                }
+
+            }
+
+        } catch (Exception exc)
+        {
+            getLogger().log(Level.WARNING,"Could not set event positions" + exc.toString());
+        }
+    }
+    public void SaveLocations()
+    {
+        if (giantBossStartLocation == null || giantBossEndLocation == null)
+        {
+            if (giantBossEndLocation == null)
+                getLogger().log(Level.WARNING,"Boss location was null.. " );
+            if (giantBossStartLocation == null)
+                getLogger().log(Level.WARNING,"start location was null.. " );
+            return;
+        }else
+        {
+            getLogger().log(Level.WARNING,"start location: " + giantBossStartLocation.toString() );
+            getLogger().log(Level.WARNING,"boss location: " + giantBossEndLocation.toString() );
+        }
+
+
+
+        try {
+            folder = this.getDataFolder();
+            f = new File(folder, "EventLocations.yml");
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+        }
+        try
+        {
+            getLogger().log(Level.WARNING,"Saving Json.. " );
+            gsonObj = new Gson();
+            FileWriter myWriter = new FileWriter(f);
+            ArrayList<SerializableLocation> list = new ArrayList<>();
+            SerializableLocation loc1 = new SerializableLocation();
+            loc1.Set(giantBossStartLocation);
+            SerializableLocation loc2 = new SerializableLocation();
+            loc2.Set(giantBossEndLocation);
+
+            SerializableLocation loc3 = new SerializableLocation();
+            loc3.Set(playerWatchLocation);
+            SerializableLocation loc4 = new SerializableLocation();
+            loc4.Set(player1Location);
+            SerializableLocation loc5 = new SerializableLocation();
+            loc5.Set(player2Location);
+
+            list.add(loc1);
+            list.add(loc2);
+            list.add(loc3);
+            list.add(loc4);
+            list.add(loc5);
+
+            String str = gsonObj.toJson(list);
+            if (str.length() > 3)
+            {
+                myWriter.write(str);
+                getLogger().log(Level.WARNING,"Writing Json.." );
+            }
+            myWriter.close();
+        }
+        catch (Exception exc)
+        {
+            getLogger().log(Level.WARNING,"Could not save event locations" + exc.toString());
+        }
+    }
+
     @Override
     public void onDisable() {
 
-        if (giantBossEndLocation != null)
-            config.set("Event_THUMBUSLocationSpawn", giantBossEndLocation);
-        if (giantBossStartLocation != null)
-            config.set("Event_THUMBUSLocationStart", giantBossStartLocation);
-        saveConfig();
+        getLogger().log(Level.WARNING,"Saving event locations.. " );
+        SaveLocations();
         try {
             UnRegisterEntities();
         }
@@ -340,11 +457,8 @@ public final class Riverland extends JavaPlugin {
         {
 
         }
-        if (f == null || folder == null)
-        {
-            f = new File(folder, "TNTWorldPositions.yml");
-            folder = this.getDataFolder();
-        }
+        f = new File(folder, "TNTWorldPositions.yml");
+        folder = this.getDataFolder();
         try
         {
             getLogger().log(Level.WARNING,"Saving Json.. " );
@@ -360,8 +474,6 @@ public final class Riverland extends JavaPlugin {
                 list.add(tnt);
             }
             String str = gsonObj.toJson(list);
-            getLogger().log(Level.WARNING,"String Contents: " + str);
-
 
             if (str.length() > 3)
             {
