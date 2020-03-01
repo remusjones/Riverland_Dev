@@ -4,11 +4,13 @@ import com.destroystokyo.paper.event.block.TNTPrimeEvent;
 import com.destroystokyo.paper.event.entity.CreeperIgniteEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.minecraft.server.v1_15_R1.EntityLiving;
+import net.minecraft.server.v1_15_R1.EntityTypes;
 import net.minecraft.server.v1_15_R1.SpawnerCreature;
 import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.type.TNT;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCreeper;
@@ -29,6 +31,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
+import org.bukkit.event.EventPriority;
+import sun.tools.java.Environment;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -43,8 +47,18 @@ public class RiverLandEventListener implements Listener
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        if (event != null && event.getItem()!=null) {
+        if (event != null && event.getItem()!=null)
+        {
 
+            if (event.getPlayer().getWorld().getEnvironment() == World.Environment.NETHER && event.getClickedBlock().getType() != null && event.getClickedBlock().getType() == Material.SPAWNER)
+            {
+                CreatureSpawner spawner = (CreatureSpawner) event.getClickedBlock().getState();
+                if (spawner != null && spawner.getSpawnedType() == EntityType.BLAZE)
+                {
+                    event.getPlayer().sendMessage("You cannot do that here.");
+                    event.setCancelled(true);
+                }
+            }
             if (event.getItem().getType() == Material.EGG && event.getItem().containsEnchantment(Enchantment.DAMAGE_ALL)) {
                 // egg has been yeeted
                 if (event.getAction().compareTo(Action.RIGHT_CLICK_AIR) == 0 || event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) == 0) {
@@ -63,7 +77,34 @@ public class RiverLandEventListener implements Listener
                 }
             }
         }
+
     }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerPlaceEgg(PlayerInteractEvent event)
+    {
+        if (event != null && event.getPlayer().getInventory().getItemInMainHand() != null)
+        {
+            ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+
+            if (item.getType() == Material.PIG_SPAWN_EGG)
+            {
+                if (event.getPlayer().getWorld().getEnvironment() == World.Environment.NETHER && event.getClickedBlock().getType() == Material.SPAWNER)
+                {
+                    event.getPlayer().sendMessage("You cannot do that here.");
+                    event.setCancelled(true);
+                }
+
+               Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Riverland._Instance, new Runnable(){
+                    public void run(){
+                        item.setAmount(item.getAmount() - 1);
+                    }
+                }, 1);
+                // sched change
+            }
+        }
+    }
+
     @EventHandler
     public void onEggLand(ProjectileHitEvent event)
     {
@@ -155,31 +196,19 @@ public class RiverLandEventListener implements Listener
         }
 
     }
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event)
-    {
-        if (event.getMessage().toLowerCase().contains("wb"))
-        {
-            String msg = event.getMessage();
-            msg = msg.replaceAll("(?i)wb", " ");
-            event.setMessage(msg);
-        }
-    }
-
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e)
     {
-
         //if (event.getItemInHand().getType() == Material.TNT && event.getItemInHand().getItemMeta().hasLore() && ((String)event.getItemInHand().getItemMeta().getLore().get(0)).contains("Explosive")) {
-        Material block = e.getBlock().getType();
-        if (block == Material.TNT)
-        {
-            int test = e.getItemInHand().getEnchantmentLevel(Enchantment.DAMAGE_ALL);
-            if (test != 0)
-            {
-                e.getBlockPlaced().setMetadata("TNTType", new FixedMetadataValue(Riverland._Instance, "Explosive"+test));
-                Riverland._Instance.tntPositions.put(e.getBlockPlaced().getLocation(), test);
+        if (e != null && e.getBlock() != null) {
+            Material block = e.getBlock().getType();
+            if (block == Material.TNT) {
+                int test = e.getItemInHand().getEnchantmentLevel(Enchantment.DAMAGE_ALL);
+                if (test != 0) {
+                    e.getBlockPlaced().setMetadata("TNTType", new FixedMetadataValue(Riverland._Instance, "Explosive" + test));
+                    Riverland._Instance.tntPositions.put(e.getBlockPlaced().getLocation(), test);
+                }
             }
         }
 
@@ -190,48 +219,13 @@ public class RiverLandEventListener implements Listener
                 if (e.getItemInHand().containsEnchantment(Enchantment.DAMAGE_ALL)) {
                     CreatureSpawner spawner = (CreatureSpawner) e.getBlock().getState();
                     CraftEntity entity = (CraftEntity) Riverland.BabyZombieTypeInstance.spawn(e.getPlayer().getLocation());
-                    spawner.setSpawnedType(entity.getType());
+                    //spawner.setSpawnedType(((EntityType) (EntityTypes < CustomEntityBabyZombies >));
                     spawner.update(true);
                     entity.remove();
                 }
             }
         }
-        //if (e.getBlock().getType() == Material.SPAWNER)
-        //{
-        //    e.getPlayer().sendMessage("Spawner set with custom limit");
-        //    CreatureSpawner spawner = (CreatureSpawner)e.getBlock().getState();
-        //    // get base spawner cap..
-        //    List<Block> spawnersNearby = RiverlandCommands.getNearbyBlocks(e.getBlock().getLocation(), 20);
-        //    ArrayList<CreatureSpawner> updateTypeSpawner = new ArrayList<>();
-        //    Integer baseMultiplier = 5;
-        //    Integer count = 1;
-        //    for (Block spawnerBlock : spawnersNearby)
-        //    {
-        //        CreatureSpawner oldSpawner = (CreatureSpawner)spawnerBlock;
-        //        if (oldSpawner.getSpawnedType() == spawner.getSpawnedType() && oldSpawner != spawner)
-        //        {
-        //            count++;
-        //            updateTypeSpawner.add(oldSpawner);
-        //        }
-        //    }
-//
-        //    for(CreatureSpawner oldSpawners : updateTypeSpawner)
-        //    {
-        //        if ((count * 5) > 50) {
-        //            oldSpawners.setMaxNearbyEntities(50);
-        //        }
-        //        else {
-        //            oldSpawners.setMaxNearbyEntities(count * 5);
-        //        }
-        //        oldSpawners.update(true);
-        //    }
-        //    if (count * 5 > 50)
-        //        spawner.setMaxNearbyEntities(50);
-        //    else
-        //        spawner.setMaxNearbyEntities(count * 5);
-//
-        //    spawner.update(true);
-        //}
+
     }
     public void DestroyObsidian(Location loc){
         Block b = loc.getBlock();
@@ -342,73 +336,7 @@ public class RiverLandEventListener implements Listener
     @EventHandler
     public void onPlayerAttack(EntityDamageByEntityEvent event)
     {
-        if ((event.getDamager().isOp() && event.getDamager() instanceof Player) || event.getDamager().hasPermission("essentials.togglejail"))
-        {
-            // see if damage is stick..
-            Player player = (Player)event.getDamager();
-            if (event.getEntity() instanceof Player)
-            {
-                // get the damaged entity..
-                if (player.getInventory().getItemInMainHand().getType() == Material.STICK)
-                {
 
-                    if (player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.DAMAGE_ALL))
-                    {
-                        Player vic = (Player)event.getEntity();
-                        int vanishingCurseLevel = player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.DAMAGE_ALL);
-                        // 1m 15m 1d 1h 1mo 1w 1y 3h
-                        ///jail Tripinary spawnjail 1m
-                        // create string..
-                        net.md_5.bungee.api.chat.TextComponent name = new net.md_5.bungee.api.chat.TextComponent(player.getName()); // put name
-                        name.setColor(net.md_5.bungee.api.ChatColor.DARK_BLUE); // set blue
-                        net.md_5.bungee.api.chat.TextComponent middle = new net.md_5.bungee.api.chat.TextComponent(" Has just jailed "); // put name
-                        middle.setColor(net.md_5.bungee.api.ChatColor.GREEN); // set blue
-                        net.md_5.bungee.api.chat.TextComponent vicName = new net.md_5.bungee.api.chat.TextComponent(vic.getName()); // put name
-                        vicName.setColor(net.md_5.bungee.api.ChatColor.RED); // set blue
-                        net.md_5.bungee.api.chat.TextComponent endWord = new net.md_5.bungee.api.chat.TextComponent(" For "); // put name
-                        endWord.setColor(net.md_5.bungee.api.ChatColor.GREEN); // set blue
-                        net.md_5.bungee.api.chat.TextComponent time = new net.md_5.bungee.api.chat.TextComponent("1m"); // put name
-                        time.setColor(net.md_5.bungee.api.ChatColor.GOLD); // set blue
-
-                        boolean success = !vic.isOp() || event.getDamager().hasPermission("essentials.jail.exempt") == false;
-                        if (success) {
-                            if (vanishingCurseLevel == 1) {
-                                ///jail Tripinary spawnjail
-                                player.getServer().dispatchCommand(player.getServer().getConsoleSender(), "jail " + vic.getName() + " spawnJail " + " 1m");
-                                time.setText("1m");
-                            } else if (vanishingCurseLevel == 2) {
-                                ///jail Tripinary spawnjail
-
-                                player.getServer().dispatchCommand(player.getServer().getConsoleSender(), "jail " + vic.getName() + " spawnJail " + " 15m");
-                                time.setText("15m");
-                            } else if (vanishingCurseLevel == 3) {
-                                ///jail Tripinary spawnjail
-                                player.getServer().dispatchCommand(player.getServer().getConsoleSender(), "jail " + vic.getName() + " spawnJail " + " 1h");
-                                time.setText("1h");
-                            } else if (vanishingCurseLevel > 3) {
-                                ///jail Tripinary spawnjail
-                                player.getServer().dispatchCommand(player.getServer().getConsoleSender(), "jail " + vic.getName() + " spawnJail " + " 3h");
-                                time.setText("3h");
-                            }
-
-                            // construct string
-                            // player
-                            // play sound ..
-                            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 100, 4);
-                            vic.getWorld().playSound(vic.getLocation(), Sound.ENTITY_ITEM_PICKUP, 100, 4);
-                            name.addExtra(middle); // has just jailed
-                            name.addExtra(vicName); // victim name
-                            name.addExtra(endWord); // for
-                            name.addExtra(time); // time
-                            player.getServer().broadcast(name);
-                        } else
-                        {
-                            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_HURT, 100, 4);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @EventHandler
@@ -428,8 +356,6 @@ public class RiverLandEventListener implements Listener
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event)
     {
-
-
 
         if (event.getEntity() instanceof TNTPrimed)
         {
@@ -509,7 +435,20 @@ public class RiverLandEventListener implements Listener
             pos.getWorld().dropItem(pos, testEnchant);
             event.setDropItems(false);
             Riverland._Instance.tntPositions.remove(event.getBlock().getLocation());
+        }else if (event.getPlayer().getGameMode() == GameMode.SURVIVAL && event.getBlock().getType().compareTo(Material.SPAWNER) == 0 && event.getPlayer().getWorld().getEnvironment() == World.Environment.NETHER)
+        {
+           // if (!event.getPlayer().isOp())
+            {
+                CreatureSpawner type = ((CreatureSpawner) event.getBlock().getState());
+                if (type.getSpawnedType() == EntityType.BLAZE)
+                {
+                    event.getPlayer().sendMessage("You cant mine this spawner in the Nether!");
+                    event.setCancelled(true);
+                }
+            }
         }
+
+
     }
 
     @EventHandler
@@ -532,6 +471,7 @@ public class RiverLandEventListener implements Listener
        // }
     }
 
+
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event)
     {
@@ -540,7 +480,7 @@ public class RiverLandEventListener implements Listener
         event.getEntity().sendMessage(message);
 
 
-        if (AIArenaEvent.activePlayers.contains(event.getEntity()) || AIArenaEvent.joinedPlayers.containsKey(event.getEntity())) {
+        if (AIArenaEvent.hasBegunRun == true && (AIArenaEvent.activePlayers.contains(event.getEntity()) || AIArenaEvent.joinedPlayers.containsKey(event.getEntity()))) {
 
 
             AIArenaEvent.blackListedPlayers.add(event.getEntity());

@@ -33,7 +33,7 @@ public class AIArenaEvent implements CommandExecutor
 {
     public boolean hasBeenAsyncd = false;
     public boolean hasAnnouncedInitialJoin = false;
-    public boolean hasBegunRun = false;
+    public static boolean hasBegunRun = false;
     public boolean hasInitRunAnnouncer = false;
     public Location BossSpawnLocation = null;
 
@@ -74,9 +74,13 @@ public class AIArenaEvent implements CommandExecutor
     Integer runTimer = 300;
     Integer eventTimer = 300;
 
+
     private Integer announcerStartID = 0;
     private Integer announcerJoinID = 0;
     private Integer announcerRunID = 0;
+    private Integer EventActiveLoopID = 0;
+    private Integer EventMainCountdownID = 0;
+    private Integer EventStartStopAnnouncerID = 0;
 
     private Integer loopOneID = 0;
     private Integer loopTwoID = 0;
@@ -115,7 +119,7 @@ public class AIArenaEvent implements CommandExecutor
 
 
     }
-    public BukkitRunnable EventStartStopAnnouncer = new BukkitRunnable() {
+    public Runnable EventStartStopAnnouncer = new BukkitRunnable() {
         @Override
         public void run()
         {
@@ -263,7 +267,7 @@ public class AIArenaEvent implements CommandExecutor
     }
 
     // main event run loop
-    public BukkitRunnable EventMainCountdown = new BukkitRunnable() {
+    public Runnable EventMainCountdown = new BukkitRunnable() {
         @Override
         public void run()
         {
@@ -564,7 +568,7 @@ public class AIArenaEvent implements CommandExecutor
                     Riverland._Instance.spectatorMode.SetSpecatorAvaiable(true);
                    // Riverland._Instance.spectatorMode.UpdateSpectatorPlayers(activePlayers);
                 }
-                if (boss == null)
+                if (boss == null || boss.isDead())
                 {
                     if (!hasDroppedExperience)
                     {
@@ -639,22 +643,23 @@ public class AIArenaEvent implements CommandExecutor
 
         //if (Riverland._Instance.getServer().getScheduler().isCurrentlyRunning(announcerStartID))
         try {
+            Riverland._Instance.getServer().getScheduler().cancelTask( EventActiveLoopID);
+            Riverland._Instance.getServer().getScheduler().cancelTask(EventMainCountdownID);
+            Riverland._Instance.getServer().getScheduler().cancelTask(EventStartStopAnnouncerID);
             Riverland._Instance.getServer().getScheduler().cancelTask(announcerStartID);
-
-            //if (Riverland._Instance.getServer().getScheduler()(announcerJoinID))
             Riverland._Instance.getServer().getScheduler().cancelTask(announcerJoinID);
-            // if (Riverland._Instance.getServer().getScheduler().isCurrentlyRunning(announcerRunID))
             Riverland._Instance.getServer().getScheduler().cancelTask(announcerRunID);
-
-            // if (Riverland._Instance.getServer().getScheduler().isCurrentlyRunning(bossBarID))
             Riverland._Instance.getServer().getScheduler().cancelTask(bossBarID);
         }catch (Exception e)
         {
 
         }
-        if (boss != null && !boss.isDead()) {
 
+
+        if (boss != null && !boss.isDead()) {
             ((Giant) boss).setHealth(0);
+            boss.remove();
+
             for(Player p : activeBossMusicPlayers)
             {
                 p.stopSound(bossSound);
@@ -667,8 +672,8 @@ public class AIArenaEvent implements CommandExecutor
 
             }
             activeRunMusicPlayers.clear();
+            boss = null;
 
-            ((Giant)boss).remove();
         }
         hasAnnouncedInitialJoin = false;
         hasBegunRun = false;
@@ -747,13 +752,23 @@ public class AIArenaEvent implements CommandExecutor
             {
                 // generate random based on max size
                 int index = new Random().nextInt(copy.size());
+
+                boolean hasGottenGarbage = false;
                 if (copy.get(index).getType() == Material.POTION)
-                    randomItem ++;
-                else if (copy.get(index).getType() == Material.ZOMBIE_HEAD)
-                    randomItem++;
-                // add our index
+                {
+                    actualRewards.add(copy.get(index));
+                    copy.remove(index);
+                    hasGottenGarbage = true;
+                }
+                else if (copy.get(index).getType() == Material.ZOMBIE_HEAD) {
+                    actualRewards.add(copy.get(index));
+                    copy.remove(index);
+                    hasGottenGarbage = true;
+                }
+                if (hasGottenGarbage)
+                    index = new Random().nextInt(copy.size());
+
                 actualRewards.add(copy.get(index));
-                // remove from this players reward pool
                 copy.remove(index);
             }
 
@@ -994,7 +1009,7 @@ public class AIArenaEvent implements CommandExecutor
     }
 
 
-    public BukkitRunnable EventActiveLoop = new BukkitRunnable() {
+    public Runnable EventActiveLoop = new BukkitRunnable() {
         @Override
         public void run()
         {
@@ -1163,10 +1178,6 @@ public class AIArenaEvent implements CommandExecutor
                         message2.setColor(ChatColor.LIGHT_PURPLE);
                         sender.sendMessage(message2);
                     }
-
-
-
-
                 }
                 return true;
             }
@@ -1177,25 +1188,15 @@ public class AIArenaEvent implements CommandExecutor
                 {
                     eventLocation = ((Player)sender).getLocation();
                     Riverland._Instance.giantBossStartLocation = eventLocation;
-                    if (Riverland._Instance.giantBossStartLocation==null)
-                    {
-                        //config.addDefault("Event_THUMBUSLocationStart", Locat);
-                        Riverland._Instance.config.addDefault("Event_THUMBUSLocationStart", eventLocation);
-                        Riverland._Instance.saveConfig();
-                    }
-
-
-
-                    Riverland._Instance.giantBossStartLocation = eventLocation;
-                    Riverland._Instance.UpdateConfig();
                     ((Player)sender).sendMessage("Event Location set..");
-
+                    Riverland._Instance.SaveLocations();
                     return true;
                 }else  if (args.length > 0 && args[0].equalsIgnoreCase("start"))
                 {
 
-                    eventLocation = Riverland._Instance.config.getLocation("Event_THUMBUSLocationStart");
-                    BossSpawnLocation  = Riverland._Instance.config.getLocation("Event_THUMBUSLocationSpawn");
+                    // attempt to set //
+                    eventLocation = Riverland._Instance.giantBossStartLocation;
+                    BossSpawnLocation = Riverland._Instance.giantBossEndLocation;
 
                     if (eventLocation == null || BossSpawnLocation == null)
                         ((Player)sender).sendMessage("Event Location Not Set..");
@@ -1203,14 +1204,12 @@ public class AIArenaEvent implements CommandExecutor
                         UpdateEvent(eventLocation, true);
                         ((Player) sender).sendMessage("Event starting..");
                         hasAnnouncedInitialJoin = true;
-                        if (!hasBeenAsyncd)
-                        {
+                        BukkitScheduler scheduler = Riverland._Instance.getServer().getScheduler();
+                        EventActiveLoopID           = scheduler.scheduleSyncRepeatingTask(Riverland._Instance, EventActiveLoop, 0, 25);
+                        EventMainCountdownID        = scheduler.scheduleSyncRepeatingTask(Riverland._Instance, EventMainCountdown, 0, 40);
+                        EventStartStopAnnouncerID   = scheduler.scheduleSyncRepeatingTask(Riverland._Instance, EventStartStopAnnouncer, 0, 100);
 
-                            this.EventActiveLoop.runTaskTimerAsynchronously(Riverland._Instance, 0, 25);
-                            this.EventMainCountdown.runTaskTimerAsynchronously(Riverland._Instance, 0, 40);
-                            this.EventStartStopAnnouncer.runTaskTimerAsynchronously(Riverland._Instance, 25, 100);
-                            hasBeenAsyncd = true;
-                        }
+                        hasBeenAsyncd = true;
                     }
                     return true;
                 }else  if (args.length > 0 && args[0].equalsIgnoreCase("stop"))
@@ -1231,24 +1230,16 @@ public class AIArenaEvent implements CommandExecutor
 
                     BossSpawnLocation = ((Player)sender).getLocation();
                     ((Player)sender).sendMessage("Event Location set..");
-                    if (Riverland._Instance.giantBossEndLocation==null)
-                    {
-                        //config.addDefault("Event_THUMBUSLocationStart", Locat);
-                        Riverland._Instance.config.addDefault("Event_THUMBUSLocationSpawn", BossSpawnLocation);
-                        Riverland._Instance.saveConfig();
-                    }
                     Riverland._Instance.giantBossEndLocation = BossSpawnLocation;
-                    Riverland._Instance.UpdateConfig();
+                    Riverland._Instance.SaveLocations();
                     return true;
                 }else if (args.length > 0 && args[0].equalsIgnoreCase("testmob") && sender.isOp())
                 {
                     Player p = (Player)sender;
-                    //                 Player p = (Player)sender;
                     ArrayList<Player> t = new ArrayList<>();
                     t.add(((Player)sender));
 
                     Entity Myzombie = Riverland.GiantTypeInstance.spawn(new Location(p.getLocation().getWorld(), p.getLocation().getX(),p.getLocation().getY(),p.getLocation().getZ()));
-
 
                     Myzombie.setCustomName("THUMBUS");
                     Myzombie.setCustomNameVisible(true);
@@ -1296,18 +1287,7 @@ public class AIArenaEvent implements CommandExecutor
 
                         }
                     }
-                }else if (args.length > 0 && args[0].equalsIgnoreCase("sound") && sender.isOp())
-                {
-                    if (args.length > 1) {
-                        Player p = Riverland._Instance.getServer().getPlayer(args[1]);
-                        p.playSound(p.getLocation(), Sound.MUSIC_DISC_13 , 100f, 1);
-
-                        return true;
-                    }
-                    else return false;
                 }
-
-
             }
         return false;
     }

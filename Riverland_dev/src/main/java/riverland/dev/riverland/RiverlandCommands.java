@@ -1,8 +1,12 @@
 package riverland.dev.riverland;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import com.google.gson.*;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.Command;
@@ -14,8 +18,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.w3c.dom.Text;
+import sun.jvm.hotspot.oops.Metadata;
 
-
+import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -228,6 +235,56 @@ public class RiverlandCommands implements CommandExecutor
                     player.sendMessage("Err: " + exc.toString());
 
                 }
+
+            }else if (args[0].equalsIgnoreCase("SpamVote") && sender.isOp())
+            {
+                net.md_5.bungee.api.chat.TextComponent message1 = new net.md_5.bungee.api.chat.TextComponent("Oh");
+                message1.setColor(net.md_5.bungee.api.ChatColor.GREEN);
+                net.md_5.bungee.api.chat.TextComponent message2 = new net.md_5.bungee.api.chat.TextComponent(" wow");
+                message2.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+                net.md_5.bungee.api.chat.TextComponent message3 = new net.md_5.bungee.api.chat.TextComponent(" nice");
+                message3.setColor(net.md_5.bungee.api.ChatColor.RED);
+                net.md_5.bungee.api.chat.TextComponent message4 = new net.md_5.bungee.api.chat.TextComponent(" VOTE");
+                message4.setColor(net.md_5.bungee.api.ChatColor.AQUA);
+                message4.setBold(true);
+                message4.setItalic(true);
+                message4.setUnderlined(true);
+                ClickEvent eventOnClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/vote");
+                HoverEvent eventOnHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click me").create());
+
+                message4.setClickEvent(eventOnClick);
+                message4.setHoverEvent(eventOnHover);
+                net.md_5.bungee.api.chat.TextComponent message5 = new net.md_5.bungee.api.chat.TextComponent("!");
+                message5.setObfuscated(true);
+                message5.setColor(net.md_5.bungee.api.ChatColor.DARK_PURPLE);
+                net.md_5.bungee.api.chat.TextComponent message6 = new net.md_5.bungee.api.chat.TextComponent("!");
+                message6.setBold(true);
+                message6.setColor(net.md_5.bungee.api.ChatColor.LIGHT_PURPLE);
+                net.md_5.bungee.api.chat.TextComponent message7 = new net.md_5.bungee.api.chat.TextComponent("!");
+                message7.setObfuscated(true);
+                message7.setColor(net.md_5.bungee.api.ChatColor.DARK_PURPLE);
+
+                net.md_5.bungee.api.chat.TextComponent messageFinal = new net.md_5.bungee.api.chat.TextComponent();
+                messageFinal.addExtra(message1);
+                messageFinal.addExtra(message2);
+                messageFinal.addExtra(message3);
+                messageFinal.addExtra(message4);
+                messageFinal.addExtra(message5);
+                messageFinal.addExtra(message6);
+                messageFinal.addExtra(message7);
+
+                Riverland._Instance.getServer().broadcast(messageFinal);
+            }else if (args[0].equalsIgnoreCase("HandItem") && sender.isOp())
+            {
+                Player player = (Player)sender;
+                ItemStack items = ((Player) sender).getInventory().getItemInMainHand();
+                ItemMeta meta = items.getItemMeta();
+                meta.setDisplayName(args[1]);
+                items.setItemMeta(meta);
+                player.sendMessage( ((Player) sender).getActiveItem().getItemMeta().toString());
+            }
+            else if (args[0].equalsIgnoreCase("SetLastItemName"))
+            {
 
             }
         }
