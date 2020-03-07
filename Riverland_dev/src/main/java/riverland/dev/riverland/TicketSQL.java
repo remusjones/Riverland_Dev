@@ -44,14 +44,6 @@ public class TicketSQL
         password = _password;
         maxIssuesPerPlayer = maxIssuesOpen;
     }
-/*
-ResultSet result = statement.executeQuery("SELECT * FROM PlayerData WHERE BALANCE = 0;");
-List<String> bankruptPlayers = new ArrayList<String>();
-while (result.next()) {
-    String name = result.getString("PLAYERNAME");
-    bankruptPlayers.add(name);
-}
- */
     // User 1
     // user report, user pos, status = Status.Working
     // user report 2, user pos 2, status = Status.Unassigned

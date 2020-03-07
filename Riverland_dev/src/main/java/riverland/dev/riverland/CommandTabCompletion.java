@@ -9,6 +9,25 @@ import java.util.List;
 
 public class CommandTabCompletion implements TabCompleter
 {
+
+    String pickup = "pickup";
+    String Reload = "reload";
+    String TNTSmall = "tntsmall";
+    String TNTMedium = "tntmedium";
+    String TNTLarge = "tntlarge";
+    String TNTBuster = "tntbuster";
+    String CustomTNT1 = "customtnt1";
+    String CustomTNT2 = "customtnt2";
+    String CustomTNT3 = "customtnt3";
+    String CustomTNT4 = "customtnt4";
+    String ObsidianBreakChance = "obsidianbreakchance";
+    String TNTIgnoreWater = "tntignorewater";
+    String Display = "display";
+    String Remove = "remove";
+    String RemoveAll = "removeall";
+    String ThumbusSpawn = "setthumbusspawn";
+    String ThumbusBoss = "setthumbusboss";
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
@@ -18,18 +37,14 @@ public class CommandTabCompletion implements TabCompleter
         {
             if (args.length == 1)
             {
-                String pickup = "pickup";
-                String Reload = "reload";
-                String TNTSmall = "tntsmall";
-                String TNTMedium = "tntmedium";
-                String TNTLarge = "tntlarge";
-                String TNTBuster = "tntbuster";
-                String CustomTNT1 = "customtnt1";
-                String CustomTNT2 = "customtnt2";
-                String CustomTNT3 = "customtnt3";
-                String CustomTNT4 = "customtnt4";
-                String ObsidianBreakChance = "obsidianbreakchance";
-                String TNTIgnoreWater = "tntignorewater";
+                if (ThumbusSpawn.contains(args[0].toLowerCase()))
+                {
+                    l.add("setThumbusSpawn");
+                }
+                if (ThumbusBoss.contains(args[0].toLowerCase()))
+                {
+                    l.add("setThumbusBoss");
+                }
                 if (pickup.contains(args[0].toLowerCase()))
                     l.add("Pickup");
                 if (TNTIgnoreWater.contains(args[0].toLowerCase()))
@@ -97,9 +112,7 @@ public class CommandTabCompletion implements TabCompleter
         {
             if (args.length == 1)
             {
-                String Display = "display";
-                String Remove = "remove";
-                String RemoveAll = "removeall";
+
 
                 if (Display.contains(args[0].toLowerCase()))
                     l.add("Display");
