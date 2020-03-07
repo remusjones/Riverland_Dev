@@ -1,46 +1,32 @@
 package riverland.dev.riverland;
 
-import com.destroystokyo.paper.event.block.TNTPrimeEvent;
-import com.destroystokyo.paper.event.entity.CreeperIgniteEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.minecraft.server.v1_15_R1.EntityLiving;
-import net.minecraft.server.v1_15_R1.EntityTypes;
-import net.minecraft.server.v1_15_R1.SpawnerCreature;
-import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.data.type.TNT;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCreeper;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.entity.minecart.SpawnerMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 import org.bukkit.event.EventPriority;
-import sun.tools.java.Environment;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 
 public class RiverLandEventListener implements Listener
 {
 
+    static public boolean isRunningMaintenance = false;
     ArrayList<UUID> customExplodingCreepers = new ArrayList<>();
     ArrayList<Egg> thrownCreeperEggs = new ArrayList<>();
 
@@ -50,7 +36,7 @@ public class RiverLandEventListener implements Listener
         if (event != null && event.getItem()!=null)
         {
 
-            if (event.getPlayer().getWorld().getEnvironment() == World.Environment.NETHER && event.getClickedBlock().getType() != null && event.getClickedBlock().getType() == Material.SPAWNER)
+            if (event.getPlayer().getWorld().getEnvironment() == World.Environment.NETHER && event.getClickedBlock() != null&& event.getClickedBlock().getType() != null && event.getClickedBlock().getType() == Material.SPAWNER)
             {
                 CreatureSpawner spawner = (CreatureSpawner) event.getClickedBlock().getState();
                 if (spawner != null && spawner.getSpawnedType() == EntityType.BLAZE)
@@ -135,6 +121,12 @@ public class RiverLandEventListener implements Listener
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if (isRunningMaintenance)
+        {
+            event.getPlayer().sendMessage(" Welcome " + event.getPlayer().getName()+" you have joined in a scheduled maintenance period\nExpect Lag - Generating Map - Wild Stacker disabled temporarily" );
+        }
+
+
         if (player.isOp())
         {
             // check if tickting is running..
@@ -451,16 +443,6 @@ public class RiverLandEventListener implements Listener
 
     }
 
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent player)
-    {
-        if (AIArenaEvent.activePlayers.contains(player.getPlayer()))
-        {
-            AIArenaEvent.blackListedPlayers.add(player.getPlayer());
-            AIArenaEvent.activePlayers.remove(player.getPlayer());
-            AIArenaEvent.joinedPlayers.remove(player.getPlayer());
-        }
-    }
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent respawn)
@@ -478,29 +460,6 @@ public class RiverLandEventListener implements Listener
         Block pos = event.getEntity().getLocation().getBlock();
         String message = ChatColor.RED + "Oops, you've died at: " + ChatColor.GOLD.toString() + "(X = " + pos.getX() + "," + " Y = " + pos.getY() + ", Z = " + pos.getZ() + ")";
         event.getEntity().sendMessage(message);
-
-
-        if (AIArenaEvent.hasBegunRun == true && (AIArenaEvent.activePlayers.contains(event.getEntity()) || AIArenaEvent.joinedPlayers.containsKey(event.getEntity()))) {
-
-
-            AIArenaEvent.blackListedPlayers.add(event.getEntity());
-            AIArenaEvent.activePlayers.remove(event.getEntity());
-            AIArenaEvent.joinedPlayers.remove(event.getEntity());
-
-
-            for (Player p : AIArenaEvent.activePlayers) {
-                net.md_5.bungee.api.chat.TextComponent message2 = new net.md_5.bungee.api.chat.TextComponent("Player " + event.getEntity().getName() + " Has been defeated");
-                message2.setColor(net.md_5.bungee.api.ChatColor.DARK_RED);
-                p.sendMessage(message2);
-
-                if (AIArenaEvent.activePlayers.size() <= 5) {
-                    net.md_5.bungee.api.chat.TextComponent message3 = new net.md_5.bungee.api.chat.TextComponent((AIArenaEvent.activePlayers.size()) + " Players Remain");
-                    message3.setColor(net.md_5.bungee.api.ChatColor.DARK_AQUA);
-                    p.sendMessage(message3);
-
-                }
-            }
-        }
 
 
         // loop players on server..

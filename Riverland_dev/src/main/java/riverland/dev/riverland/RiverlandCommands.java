@@ -1,52 +1,50 @@
 package riverland.dev.riverland;
 
-import com.google.gson.*;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.w3c.dom.Text;
-import sun.jvm.hotspot.oops.Metadata;
+import org.bukkit.scheduler.BukkitScheduler;
 
-import java.awt.*;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RiverlandCommands implements CommandExecutor
 {
-    public static List<Block> getNearbyBlocks(Location location, int radius) {
-        List<Block> blocks = new ArrayList<Block>();
-        for(int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {
-            for(int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++) {
-                for(int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
-                    Block block = location.getWorld().getBlockAt(x, y, z);
-                    if (block.getType() == Material.SPAWNER)
-                        blocks.add(block);
-                }
-            }
-        }
-        return blocks;
-    }
+    Integer currBlockX = 0;
+    Integer currBlockZ = 0;
+    World targetWorld = null;
+    Player vic = null;
+    Integer loadBlockID = 0;
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (!sender.isOp())
              return false;
 
+        if (args.length > 0 && args[0].equalsIgnoreCase("setThumbusBoss"))
+        {
+            ((Player)sender).sendMessage("Event Location set..");
+            Riverland._Instance.giantBossEndLocation = ((Player)sender).getLocation();
+            Riverland._Instance.SaveLocations();
+            return true;
+        }
+        if (args.length > 0 && args[0].equalsIgnoreCase("setThumbusSpawn"))
+        {
+            ((Player)sender).sendMessage("Event Location set..");
+            Riverland._Instance.giantBossStartLocation = ((Player)sender).getLocation();
+            Riverland._Instance.SaveLocations();
+            return true;
+        }
         if (args.length > 0)
         {
             if (args[0].equalsIgnoreCase("reload"))
@@ -283,9 +281,12 @@ public class RiverlandCommands implements CommandExecutor
                 items.setItemMeta(meta);
                 player.sendMessage( ((Player) sender).getActiveItem().getItemMeta().toString());
             }
-            else if (args[0].equalsIgnoreCase("SetLastItemName"))
+            else if ( sender.isOp() && args[0].equalsIgnoreCase("fill"))
             {
 
+                RiverLandEventListener.isRunningMaintenance = !RiverLandEventListener.isRunningMaintenance;
+                if (sender instanceof  Player)
+                    ((Player)sender).sendMessage("Maintenance Set: " + RiverLandEventListener.isRunningMaintenance);
             }
         }
         return true;

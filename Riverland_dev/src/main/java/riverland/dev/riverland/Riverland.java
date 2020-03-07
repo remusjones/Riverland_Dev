@@ -1,20 +1,15 @@
 package riverland.dev.riverland;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import net.minecraft.server.v1_15_R1.EntityTypes;
-import net.minecraft.server.v1_15_R1.IRegistry;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Giant;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Level;
@@ -35,6 +30,7 @@ public final class Riverland extends JavaPlugin {
     public static CustomEntityType GiantTypeInstance;
     public static CustomEntityType CreeperTypeInstance;
     public static CustomEntityType BabyZombieTypeInstance;
+    public RiverlandEventManager riverlandEventManager = null;
 
 
     public Location giantBossStartLocation = null;
@@ -189,8 +185,6 @@ public final class Riverland extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
-        // set an instance of this, to this.
         _Instance = this;
         // config.yml setup
         config.addDefault("WelcomeMessage", "Welcome to Riverlands!");
@@ -212,10 +206,8 @@ public final class Riverland extends JavaPlugin {
         spectatorMode = new SpecatorMode();
         // register
         RegisterEntities();
-
         try
         {
-
             folder = this.getDataFolder();
             f= new File(folder,"TNTWorldPositions.yml");
 
@@ -258,9 +250,10 @@ public final class Riverland extends JavaPlugin {
         {
                 getLogger().log(Level.WARNING,"Could not load TNT Json" + exc.toString());
         }
+
         // setup ticketer info
         _InstanceRiverLandTicket = new TicketSQL(config.getString("SQL_Host"), config.getInt("SQL_Port"),config.getString("SQL_TablePrefix"),config.getString("SQL_Database"),config.getString("SQL_Username"),config.getString("SQL_Password"),config.getInt("SQL_MaxTicketIssuesPerPlayer"));
-
+        riverlandEventManager = new RiverlandEventManager();
         getLogger().log(Level.INFO,"Riverland Plugin Enabled");
         // register command against plugin.yml commands list..
         this.getCommand("AdminHelp").setExecutor(new AdminHelp());
@@ -268,9 +261,9 @@ public final class Riverland extends JavaPlugin {
         this.getCommand("Riverland").setExecutor(new RiverlandCommands());
         PVPEvent event = new PVPEvent();
         this.getCommand("PVPArena").setExecutor(event);
+        this.getCommand("EventManager").setExecutor(new RiverlandEventManagerListener());
 
-        AIArenaEvent riverlandEvent = new AIArenaEvent();
-        this.getCommand("ArenaEvent").setExecutor(riverlandEvent);
+
 
         CommandTabCompletion commandTab = new CommandTabCompletion();
         getCommand("Riverland").setTabCompleter(commandTab);
@@ -279,12 +272,15 @@ public final class Riverland extends JavaPlugin {
         // register join listener..
         getServer().getPluginManager().registerEvents(new RiverLandEventListener(), this);
         getServer().getPluginManager().registerEvents(event, this);
+
+        // setup tnt from config file
         tntRadiusDefault = config.getDouble("TNT_ExplosionRadius");
         tntRadiusLow =    config.getDouble("TNT_ExplosionRadiusLow");
         tntRadiusHigh =    config.getDouble("TNT_ExplosionRadiusHigh");
         tntBunkerBusterRange = config.getDouble("TNT_BunkerBusterRange");
         tntBreakChance = config.getDouble("TNT_BreakChance");
         IgnoreWater = config.getBoolean("TNT_BunkerBusterIgnoresWater");
+        // load all stored locations..
         LoadLocations();
 
         if (!Riverland._InstanceRiverLandTicket._IsTaskRunning) // check if server is running an async sql thingo..
@@ -294,7 +290,7 @@ public final class Riverland extends JavaPlugin {
         }
     }
 
-    public void ClearTNTMemory()
+    public void ClearTNTMemory() // call this to clear all saved tnt
     {
         try
         {
@@ -320,7 +316,7 @@ public final class Riverland extends JavaPlugin {
         this.tntPositions.clear();
     }
 
-    public void LoadLocations()
+    public void LoadLocations() // loads event locations yml json
     {
         try
         {
@@ -346,13 +342,6 @@ public final class Riverland extends JavaPlugin {
                     {
                         data += myReader.nextLine();
                     }
-
-                    //            SerializableLocation loc1 = new SerializableLocation();
-                    //            loc1.Set(giantBossStartLocation);
-                    //            SerializableLocation loc2 = new SerializableLocation();
-                    //            loc2.Set(giantBossEndLocation);
-                    //            list.add(loc1);
-                    //            list.add(loc2);
                     // try load json
                     Type type = new TypeToken<
                             ArrayList<SerializableLocation>>(){}.getType();
@@ -382,7 +371,7 @@ public final class Riverland extends JavaPlugin {
             getLogger().log(Level.WARNING,"Could not set event positions" + exc.toString());
         }
     }
-    public void SaveLocations()
+    public void SaveLocations() // saves stored event locations
     {
         if (giantBossStartLocation == null || giantBossEndLocation == null)
         {

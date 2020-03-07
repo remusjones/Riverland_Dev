@@ -3,11 +3,7 @@ package riverland.dev.riverland;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
-import org.apache.commons.lang.math.RandomUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -17,23 +13,22 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
-public class AIArenaEvent implements CommandExecutor
+public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
 {
     public boolean hasBeenAsyncd = false;
     public boolean hasAnnouncedInitialJoin = false;
-    public static boolean hasBegunRun = false;
+    public boolean hasBegunRun = false;
     public boolean hasInitRunAnnouncer = false;
     public Location BossSpawnLocation = null;
 
@@ -48,18 +43,18 @@ public class AIArenaEvent implements CommandExecutor
     private boolean hasAnnouncedCountdown = false;
     private boolean hasDroppedExperience = false;
     public int playerEventRadius = 150;
-    public int minimumPlayers = 3;
+    public int minimumPlayers = 2;
     public Location lastBossLocation = null;
-    public static boolean hasSuccededRun = false;
+    public boolean hasSuccededRun = false;
 
 
     BossBar bar = null;
 
     // players inside the event.
-    public static ArrayList<Player> activePlayers = new ArrayList<>();
-    public static Map<Player, Location> joinedPlayers = new HashMap<>();
+    public ArrayList<Player> activePlayers = new ArrayList<>();
+    public Map<Player, Location> joinedPlayers = new HashMap<>();
     // players outside the event.
-    public static ArrayList<Player> blackListedPlayers = new ArrayList<>(); // update list while running the event..
+    public ArrayList<Player> blackListedPlayers = new ArrayList<>(); // update list while running the event..
     public List<Player> activeBossMusicPlayers = new ArrayList<>();
     public List<Player> activeRunMusicPlayers = new ArrayList<>();
     private Sound runSound = Sound.MUSIC_DISC_WARD;
@@ -88,6 +83,35 @@ public class AIArenaEvent implements CommandExecutor
     Integer bossBarID = 0;
     Entity boss;
     public boolean isTesting = false;
+    public ThumbusEventListener thumbusEventListener=  null;
+
+    public ThumbusEvent(RiverlandEventManager manager) {
+        super(manager);
+    }
+    @Override
+    public boolean RiverlandEventInit()
+    {
+        // attempt to set //
+        eventLocation = Riverland._Instance.giantBossStartLocation;
+        BossSpawnLocation = Riverland._Instance.giantBossEndLocation;
+
+        if (eventLocation == null || BossSpawnLocation == null)
+            return false;
+        else {
+            UpdateEvent(eventLocation, true);
+            hasAnnouncedInitialJoin = true;
+            BukkitScheduler scheduler = Riverland._Instance.getServer().getScheduler();
+            EventActiveLoopID           = scheduler.scheduleSyncRepeatingTask(Riverland._Instance, EventActiveLoop, 0, 25);
+            EventMainCountdownID        = scheduler.scheduleSyncRepeatingTask(Riverland._Instance, EventMainCountdown, 0, 40);
+            EventStartStopAnnouncerID   = scheduler.scheduleSyncRepeatingTask(Riverland._Instance, EventStartStopAnnouncer, 0, 100);
+            hasBeenAsyncd = true;
+            Riverland._Instance.getCommand("ArenaEvent").setExecutor(this);
+            //thumbusEvent
+            thumbusEventListener = new ThumbusEventListener(this);
+            Riverland._Instance.getServer().getPluginManager().registerEvents(thumbusEventListener, Riverland._Instance);
+        }
+        return true;
+    }
 
     public void UpdateEvent(Location portLoc, boolean isRunning)
     {
@@ -103,20 +127,6 @@ public class AIArenaEvent implements CommandExecutor
                 // we are stopping..
                 isEventJoin = false;
             }
-
-        // add server broadcast..
-
-        //                        net.md_5.bungee.api.chat.TextComponent name = new net.md_5.bungee.api.chat.TextComponent(player.getName()); // put name
-        //                        name.setColor(net.md_5.bungee.api.ChatColor.DARK_BLUE); // set blue
-        //                        net.md_5.bungee.api.chat.TextComponent middle = new net.md_5.bungee.api.chat.TextComponent(" Has just jailed "); // put name
-        //                        middle.setColor(net.md_5.bungee.api.ChatColor.GREEN); // set blue
-        //                        net.md_5.bungee.api.chat.TextComponent vicName = new net.md_5.bungee.api.chat.TextComponent(vic.getName()); // put name
-        //                        vicName.setColor(net.md_5.bungee.api.ChatColor.RED); // set blue
-        //                        net.md_5.bungee.api.chat.TextComponent endWord = new net.md_5.bungee.api.chat.TextComponent(" For "); // put name
-        //                        endWord.setColor(net.md_5.bungee.api.ChatColor.GREEN); // set blue
-        //                        net.md_5.bungee.api.chat.TextComponent time = new net.md_5.bungee.api.chat.TextComponent("1m"); // put name
-        //                        time.setColor(net.md_5.bungee.api.ChatColor.GOLD); // set blue
-
 
     }
     public Runnable EventStartStopAnnouncer = new BukkitRunnable() {
@@ -482,6 +492,7 @@ public class AIArenaEvent implements CommandExecutor
                             }
                             TeleportPlayersHome(joinedPlayers);
                             Reset();
+
                             Riverland._Instance.getServer().getScheduler().cancelTask(announcerRunID);
 
                         }
@@ -643,7 +654,7 @@ public class AIArenaEvent implements CommandExecutor
 
         //if (Riverland._Instance.getServer().getScheduler().isCurrentlyRunning(announcerStartID))
         try {
-            Riverland._Instance.getServer().getScheduler().cancelTask( EventActiveLoopID);
+            Riverland._Instance.getServer().getScheduler().cancelTask(EventActiveLoopID);
             Riverland._Instance.getServer().getScheduler().cancelTask(EventMainCountdownID);
             Riverland._Instance.getServer().getScheduler().cancelTask(EventStartStopAnnouncerID);
             Riverland._Instance.getServer().getScheduler().cancelTask(announcerStartID);
@@ -720,7 +731,10 @@ public class AIArenaEvent implements CommandExecutor
          announcerStartID = 0;
         announcerJoinID = 0;
         announcerRunID = 0;
-         bossBarID = 0;
+        bossBarID = 0;
+        HandlerList.unregisterAll(thumbusEventListener); // cleanup event listener
+        this.InvokeManagerEventFinish();
+
 
     }
     public void GiveRewards(ArrayList<Player> players, ArrayList<ItemStack> rewardsList)
@@ -1291,6 +1305,4 @@ public class AIArenaEvent implements CommandExecutor
             }
         return false;
     }
-
-
 }

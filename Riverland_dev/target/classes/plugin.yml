@@ -34,6 +34,11 @@ commands:
     permission: Riverland.PVPArena
     permission-message: You do not have permission!
     usage: /<command>
+  EventManager:
+    description: Leaves Specator Mode
+    permission: Riverland.EventManager
+    permission-message: You do not have permission!
+    usage: /<command>
 
 permissions:
   Riverland.AdminHelp:
@@ -52,5 +57,8 @@ permissions:
     description: Riverland plugin management
     default: true
   Riverland.PVPArena:
+    description: none
+    default: op
+  Riverland.EventManager:
     description: none
     default: op

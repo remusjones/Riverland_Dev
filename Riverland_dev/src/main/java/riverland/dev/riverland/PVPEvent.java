@@ -352,6 +352,7 @@ public class PVPEvent implements CommandExecutor, Listener
             {
                 if (joinedPlayers.size() < 2) {
                     AnnouncePlainRed("PvP Event Cancelled, not enough players!");
+                    Riverland._Instance.getServer().getScheduler().cancelTask(eventStartID);
                     RestartEvent();
                 }
                 isJoinable = false;
@@ -463,6 +464,7 @@ public class PVPEvent implements CommandExecutor, Listener
 
             if (currRoundWait == 0)
             {
+                AnnouncePlainWithJoin("Spectate now! ");
                 AnnouncePlainRed("Fight!");
                 StartRound();
                 currRoundWait = roundWait;
@@ -665,7 +667,10 @@ public class PVPEvent implements CommandExecutor, Listener
                 }
             }
             else{
-                ((Player)sender).sendMessage("You can't join right now.");
+                if (!combatingPlayers.contains(((Player)sender))) {
+                    ((Player) sender).sendMessage("You are assigned as spectator");
+                    ((Player) sender).teleport(spectating);
+                }
             }
 
             return true;
