@@ -30,7 +30,7 @@ commands:
     permission-message: You do not have permission!
     usage: /<command>
   PVPArena:
-    description: Leaves Specator Mode
+    description: PVP Arena
     permission: Riverland.PVPArena
     permission-message: You do not have permission!
     usage: /<command>
@@ -39,6 +39,11 @@ commands:
     permission: Riverland.EventManager
     permission-message: You do not have permission!
     usage: /<command>
+  DonationEventManager:
+    description: triggers dono events
+    permission: Riverland.EventDonator
+    permission-message: Consider donating to use this permission
+    usage: /DonationEventManager ThumbusEventDonator
 
 permissions:
   Riverland.AdminHelp:
@@ -61,4 +66,13 @@ permissions:
     default: op
   Riverland.EventManager:
     description: none
+    default: op
+  Riverland.ThumbusEventDonator:
+    description: Trigger Thumbus event for everybody
+    default: op
+  Riverland.PVPEventDonator:
+    description: Trigger 1v1 PvP event for everybody
+    default: op
+  Riverland.EventDonator:
+    description: Trigger events
     default: op

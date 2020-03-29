@@ -26,6 +26,8 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PVPEvent implements CommandExecutor, Listener
@@ -353,12 +355,18 @@ public class PVPEvent implements CommandExecutor, Listener
                 if (joinedPlayers.size() < 2) {
                     AnnouncePlainRed("PvP Event Cancelled, not enough players!");
                     Riverland._Instance.getServer().getScheduler().cancelTask(eventStartID);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+                    date.setTime(1000999);
+                    Riverland._Instance.config.set("THUMBUS_LASTSTART", dateFormat.format(date));
+                    Riverland._Instance.saveConfig();
                     RestartEvent();
                 }
                 isJoinable = false;
                 for(Player player : joinedPlayers)
                 {
                     player.teleport(spectating);
+                    player.setGameMode(GameMode.SURVIVAL);
                 }
                 BeginRoundCountdown();
                 Riverland._Instance.getServer().getScheduler().cancelTask(eventStartID);
@@ -527,6 +535,7 @@ public class PVPEvent implements CommandExecutor, Listener
 
             combatingPlayers.get(0).setGameMode(GameMode.SURVIVAL);
             combatingPlayers.get(1).setGameMode(GameMode.SURVIVAL);
+
             // Teleport Players
             combatingPlayers.get(0).teleport(playerStart1);
             combatingPlayers.get(1).teleport(playerStart2);
@@ -644,7 +653,10 @@ public class PVPEvent implements CommandExecutor, Listener
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (args[0].equalsIgnoreCase("start"))
+        if (args.length==0)
+            return false;
+
+        if (args[0].equalsIgnoreCase("start") && sender.isOp())
         {
             playerStart1 = Riverland._Instance.player1Location;
             playerStart2 = Riverland._Instance.player2Location;
@@ -670,6 +682,7 @@ public class PVPEvent implements CommandExecutor, Listener
                 if (!combatingPlayers.contains(((Player)sender))) {
                     ((Player) sender).sendMessage("You are assigned as spectator");
                     ((Player) sender).teleport(spectating);
+                    ((Player)sender).setGameMode(GameMode.SURVIVAL);
                 }
             }
 
@@ -679,17 +692,20 @@ public class PVPEvent implements CommandExecutor, Listener
             if (args[0].equalsIgnoreCase("set1")) {
                 playerStart1 = ((Player) (sender)).getLocation();
                 Riverland._Instance.player1Location = playerStart1;
+                ((Player)(sender)).sendMessage("Set player 1 spawn loc..");
                 Riverland._Instance.SaveLocations();
                 return true;
             }
             if (args[0].equalsIgnoreCase("set2")) {
                 playerStart2 = ((Player) (sender)).getLocation();
                 Riverland._Instance.player2Location = playerStart2;
+                ((Player)(sender)).sendMessage("Set player 2 spawn loc..");
                 Riverland._Instance.SaveLocations();
                 return true;
             }
             if (args[0].equalsIgnoreCase("watch")) {
                 spectating = ((Player) (sender)).getLocation();
+                ((Player)(sender)).sendMessage("Set Watch..");
                 Riverland._Instance.playerWatchLocation = spectating;
                 Riverland._Instance.SaveLocations();
                 return true;

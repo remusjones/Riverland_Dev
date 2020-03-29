@@ -4,6 +4,7 @@ package riverland.dev.riverland;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 //Handles events and commands.
 public class RiverlandEventManagerListener implements CommandExecutor
@@ -30,13 +31,12 @@ public class RiverlandEventManagerListener implements CommandExecutor
 
                         RiverlandEventType event = RiverlandEventType.valueOf(args[1].toUpperCase()); // cast as enum safely
                         boolean success = riverlandEventManager.BeginEvent(event); // start event.
+
                         if (event == null)
                         {
-                            Riverland._Instance.getServer().broadcastMessage("Could not find event");
-                        }else {
-                            Riverland._Instance.getServer().broadcastMessage("success: " + success + " does not match: " + " " +  RiverlandEventType.THUMBUS.toString() + " | " + event.toString());
+                            if (sender instanceof  Player)
+                                ((Player)sender).sendMessage("Could not find event");
                         }
-
                     }
 
                     return true;
@@ -44,7 +44,6 @@ public class RiverlandEventManagerListener implements CommandExecutor
                 }
             }
         }
-        Riverland._Instance.getServer().broadcastMessage("Test false");
         // should only be executed by an event driven protocol
         return false;
     }

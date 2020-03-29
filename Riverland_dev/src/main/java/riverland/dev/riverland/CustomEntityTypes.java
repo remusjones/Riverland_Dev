@@ -82,17 +82,6 @@ class CustomEntityType<T extends EntityLiving> {
         }
     }
 
-    // Add custom entity to data fixers map with parent entity's data fixer
-   //Map<Object, Type<?>> dataTypes = (Map<Object, Type<?>>)DataConverterRegistry.a()
-   //        .getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion()))
-   //        .findChoiceType(DataConverterTypes.ENTITY_TREE).types(); // DataConverterTypes.ENTITY in < 1.15.2
-   //    dataTypes.put(key.toString(), dataTypes.get(parentType.h().toString().replace("entity/", "")));
-   //// Add our custom entity to the entity registry map
-   //EntityTypes.a<T> a = EntityTypes.a.a(maker, EnumCreatureType.CREATURE);
-   //entityType = a.a(key.getKey());
-   //    IRegistry.a(IRegistry.ENTITY_TYPE, key.getKey(), entityType);
-   //registered = true;
-
     @SuppressWarnings("unchecked")
     public void unregister() throws IllegalStateException {
         if (!registered) {

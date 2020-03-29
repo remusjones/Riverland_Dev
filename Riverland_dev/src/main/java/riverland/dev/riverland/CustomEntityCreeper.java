@@ -31,6 +31,7 @@ public class CustomEntityCreeper extends EntityCreeper
         super.initAttributes();
 
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(2);
+        this.persistent = true;
     }
     @Override
     public boolean damageEntity(DamageSource damagesource, float f)

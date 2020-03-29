@@ -31,6 +31,7 @@ riverland\dev\riverland\CustomEntityGiant$PathfinderGoalGiantAttack.class
 riverland\dev\riverland\RiverlandCommands.class
 riverland\dev\riverland\Riverland$2.class
 riverland\dev\riverland\Riverland.class
+riverland\dev\riverland\DonatorEventCommands.class
 riverland\dev\riverland\CustomEntityGiant$GroupDataZombie.class
 riverland\dev\riverland\ThumbusEvent.class
 riverland\dev\riverland\SpecatorMode.class

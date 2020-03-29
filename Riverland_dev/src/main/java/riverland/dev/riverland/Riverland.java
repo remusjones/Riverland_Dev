@@ -6,16 +6,21 @@ import net.minecraft.server.v1_15_R1.EntityTypes;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 public final class Riverland extends JavaPlugin {
 
 
+    // last death pair
+    public static Map<String, Inventory> playerLastDeathMap = new HashMap<>();
     FileConfiguration config = getConfig();
     static public TicketSQL _InstanceRiverLandTicket;
     static public Riverland _Instance;
@@ -201,6 +206,17 @@ public final class Riverland extends JavaPlugin {
         config.addDefault("TNT_BunkerBusterRange", 1.5);
         config.addDefault("TNT_BreakChance", 0.5);
         config.addDefault("TNT_BunkerBusterIgnoresWater", false);
+        config.addDefault("THUMBUS_DONATION_COOLDOWN", 12);
+        config.addDefault("PVP_DONATION_COOLDOWN", 12);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date d = new Date();
+
+
+
+        config.addDefault("THUMBUS_LASTSTART", dateFormat.format(d));
+        config.addDefault("PVP_LASTSTART", dateFormat.format(d));
+
         //config.options().copyDefaults(true);
         saveConfig();
         spectatorMode = new SpecatorMode();
@@ -262,13 +278,14 @@ public final class Riverland extends JavaPlugin {
         PVPEvent event = new PVPEvent();
         this.getCommand("PVPArena").setExecutor(event);
         this.getCommand("EventManager").setExecutor(new RiverlandEventManagerListener());
-
+        this.getCommand("DonationEventManager").setExecutor(new DonatorEventCommands());
 
 
         CommandTabCompletion commandTab = new CommandTabCompletion();
         getCommand("Riverland").setTabCompleter(commandTab);
         getCommand("OpAdminHelp").setTabCompleter(commandTab);
         getCommand("AdminHelp").setTabCompleter(commandTab);
+        getCommand("donationeventmanager").setTabCompleter(commandTab);
         // register join listener..
         getServer().getPluginManager().registerEvents(new RiverLandEventListener(), this);
         getServer().getPluginManager().registerEvents(event, this);
@@ -407,18 +424,23 @@ public final class Riverland extends JavaPlugin {
             SerializableLocation loc2 = new SerializableLocation();
             loc2.Set(giantBossEndLocation);
 
-            SerializableLocation loc3 = new SerializableLocation();
-            loc3.Set(playerWatchLocation);
-            SerializableLocation loc4 = new SerializableLocation();
-            loc4.Set(player1Location);
-            SerializableLocation loc5 = new SerializableLocation();
-            loc5.Set(player2Location);
-
             list.add(loc1);
             list.add(loc2);
-            list.add(loc3);
-            list.add(loc4);
-            list.add(loc5);
+
+            boolean arenaValid = false;
+
+            if (playerWatchLocation != null && player1Location != null && player2Location != null)
+            {
+                SerializableLocation loc3 = new SerializableLocation();
+                loc3.Set(playerWatchLocation);
+                SerializableLocation loc4 = new SerializableLocation();
+                loc4.Set(player1Location);
+                SerializableLocation loc5 = new SerializableLocation();
+                loc5.Set(player2Location);
+                list.add(loc3);
+                list.add(loc4);
+                list.add(loc5);
+            }
 
             String str = gsonObj.toJson(list);
             if (str.length() > 3)
@@ -475,8 +497,5 @@ public final class Riverland extends JavaPlugin {
         {
             getLogger().log(Level.WARNING,"Could not load TNT Json" + exc.toString());
         }
-
-
     }
-
 }

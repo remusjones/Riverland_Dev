@@ -5,16 +5,24 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class RiverlandCommands implements CommandExecutor
@@ -198,6 +206,7 @@ public class RiverlandCommands implements CommandExecutor
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
                     player.setCanPickupItems(!player.getCanPickupItems());
+                    
 
                     if (player.getCanPickupItems())
                         player.sendMessage(ChatColor.GREEN + "You can now pickup items");
@@ -287,6 +296,50 @@ public class RiverlandCommands implements CommandExecutor
                 RiverLandEventListener.isRunningMaintenance = !RiverLandEventListener.isRunningMaintenance;
                 if (sender instanceof  Player)
                     ((Player)sender).sendMessage("Maintenance Set: " + RiverLandEventListener.isRunningMaintenance);
+            }
+            else if (sender.isOp() && args[0].equalsIgnoreCase("deathsee") && args.length > 1)
+            {
+                Player target = Riverland._Instance.getServer().getPlayer(args[1]);
+                if (target != null)
+                {
+                    Player requester = ((Player)sender);
+                    if (Riverland._Instance.playerLastDeathMap.containsKey(target.getName()))
+                    {
+                        requester.openInventory(Riverland._Instance.playerLastDeathMap.get(target.getName()));
+                    }
+                }
+            }
+            else if (sender.isOp() && args[0].equalsIgnoreCase("deathrefund") && args.length > 1)
+            {
+                Player target = Riverland._Instance.getServer().getPlayer(args[1]);
+                if (target != null) {
+                    if (Riverland._Instance.playerLastDeathMap.containsKey(target.getName()))
+                    {
+                        Inventory oldInventory = Riverland._Instance.playerLastDeathMap.get(target.getName());
+                        for(ItemStack item : oldInventory.getContents())
+                        {
+                            if (item != null)
+                                target.getWorld().dropItemNaturally(target.getLocation(), item);
+                        }
+                        Riverland._Instance.playerLastDeathMap.get(target.getName()).clear();
+                    }
+                }
+            }//else if (sender.hasPermission(""))
+
+           //Riverland.ThumbusEventDonator:
+           //description: Trigger Thumbus event for everybody
+           //default: op
+           //    Riverland.PVPEventDonator:
+           //    description: Trigger 1v1 PvP event for everybody
+           //default: op
+            if (sender.isOp() && args[0].equalsIgnoreCase("ThumbusEventResetTime"))
+            {
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Date date = new Date();
+                date.setTime(1000999);
+                Riverland._Instance.config.set("THUMBUS_LASTSTART", dateFormat.format(date));
+                Riverland._Instance.saveConfig();
+                sender.sendMessage("Time reset");
             }
         }
         return true;

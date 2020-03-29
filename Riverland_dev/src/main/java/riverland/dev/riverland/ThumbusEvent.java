@@ -22,6 +22,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
@@ -43,7 +45,7 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
     private boolean hasAnnouncedCountdown = false;
     private boolean hasDroppedExperience = false;
     public int playerEventRadius = 150;
-    public int minimumPlayers = 2;
+    public int minimumPlayers = 1;
     public Location lastBossLocation = null;
     public boolean hasSuccededRun = false;
 
@@ -96,7 +98,16 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
         BossSpawnLocation = Riverland._Instance.giantBossEndLocation;
 
         if (eventLocation == null || BossSpawnLocation == null)
+        {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            date.setTime(1000999);
+            Riverland._Instance.getServer().broadcastMessage("There was an issue with the event, please notify an Admin");
+            Riverland._Instance.config.set("THUMBUS_LASTSTART", dateFormat.format(date));
+            Riverland._Instance.saveConfig();
+
             return false;
+        }
         else {
             UpdateEvent(eventLocation, true);
             hasAnnouncedInitialJoin = true;
@@ -182,6 +193,13 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
 
 
                                 Entity Myzombie = Riverland.GiantTypeInstance.spawn(new Location(BossSpawnLocation.getWorld(), BossSpawnLocation.getX(),BossSpawnLocation.getY(),BossSpawnLocation.getZ()));
+                                if (Myzombie == null)
+                                {
+                                    Riverland._Instance.getServer().broadcastMessage("There was an issue with the Event, notify an Admin: Error Code: 12");
+                                }
+
+
+
                                 // ArrayList<Entity> nearbyEntites = p.getLocation().getWorld().getNearbyEntities(p.getLocation(), 8, 8, 8);
 
                                 ItemStack sword = new ItemStack(Material.GOLDEN_SWORD,1);
@@ -245,7 +263,14 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
                                 awaitingStart = false;
                                 isEventJoin = false;
 
+                                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                                Date date = new Date();
+                                date.setTime(1000999);
+                                Riverland._Instance.config.set("THUMBUS_LASTSTART", dateFormat.format(date));
+                                Riverland._Instance.saveConfig();
+
                                 Riverland._Instance.getServer().getScheduler().cancelTask(announcerStartID);
+
                             }
 
                         }
@@ -538,11 +563,11 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
                 }
                 if (activePlayers.size() == 0)
                     bar.removeAll();
-                if (boss == null)
+                if (boss == null || boss.isDead())
                     bar.removeAll();
 
 
-                if (boss!=null &&boss.isDead())
+                if (boss==null || boss.isDead())
                 {
                     for(Player player : activeBossMusicPlayers)
                     {
@@ -583,11 +608,11 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
                 {
                     if (!hasDroppedExperience)
                     {
-                        for(int exp = 0; exp < 3; exp++ )
-                        {
-                            ExperienceOrb orb= (ExperienceOrb)lastBossLocation.getWorld().spawnEntity(lastBossLocation, EntityType.EXPERIENCE_ORB);
-                            orb.setExperience(5000);
-                        }
+                        //for(int exp = 0; exp < 3; exp++ )
+                        //{
+                        //    ExperienceOrb orb = (ExperienceOrb)lastBossLocation.getWorld().spawnEntity(lastBossLocation, EntityType.EXPERIENCE_ORB);
+                        //    orb.setExperience(5000);
+                        //}
                         hasDroppedExperience = true;
                     }
                     hasSuccededRun = true;

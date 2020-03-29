@@ -3,6 +3,7 @@ package riverland.dev.riverland;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,28 +28,26 @@ public class CommandTabCompletion implements TabCompleter
     String RemoveAll = "removeall";
     String ThumbusSpawn = "setthumbusspawn";
     String ThumbusBoss = "setthumbusboss";
+    String deathSee = "deathsee";
+    String deathRefund = "deathrefund";
+    String dontationEventThumbus = "thumbuseventdonator";
+    String donationEventPVP = "pvpeventdonator";
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
-    {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> l = new ArrayList<>();
         // riverland commands..
-        if(command.getName().equalsIgnoreCase("riverland") && args.length >= 0)
-        {
-            if (args.length == 1)
-            {
-                if (ThumbusSpawn.contains(args[0].toLowerCase()))
-                {
+        if (command.getName().equalsIgnoreCase("riverland") && args.length >= 0) {
+            if (args.length == 1) {
+                if (ThumbusSpawn.contains(args[0].toLowerCase())) {
                     l.add("setThumbusSpawn");
                 }
-                if (ThumbusBoss.contains(args[0].toLowerCase()))
-                {
+                if (ThumbusBoss.contains(args[0].toLowerCase())) {
                     l.add("setThumbusBoss");
                 }
                 if (pickup.contains(args[0].toLowerCase()))
                     l.add("Pickup");
-                if (TNTIgnoreWater.contains(args[0].toLowerCase()))
-                {
+                if (TNTIgnoreWater.contains(args[0].toLowerCase())) {
                     l.add("TNTIgnoreWater");
                 }
                 if (Reload.contains(args[0].toLowerCase()))
@@ -63,7 +62,7 @@ public class CommandTabCompletion implements TabCompleter
                 if (TNTLarge.contains(args[0].toLowerCase()))
                     l.add("TNTLarge");
 
-                if ( TNTBuster.contains(args[0].toLowerCase()))
+                if (TNTBuster.contains(args[0].toLowerCase()))
                     l.add("TNTBuster");
 
                 if (CustomTNT1.contains(args[0].toLowerCase()))
@@ -80,38 +79,45 @@ public class CommandTabCompletion implements TabCompleter
 
                 if (ObsidianBreakChance.contains(args[0].toLowerCase()))
                     l.add("ObsidianBreakChance");
+
+                if (deathRefund.contains(args[0].toLowerCase()))
+                    l.add("deathrefund");
+                if (deathSee.contains(args[0].toLowerCase()))
+                    l.add("deathsee");
             }
-            if (args.length == 2)
-            {
-                if (args[0].equalsIgnoreCase("TNTSmall"))
-                {
+            if (args.length == 2) {
+                if (args[0].equalsIgnoreCase("TNTSmall")) {
                     l.add("Size");
-                }
-                else if (args[0].equalsIgnoreCase("TNTMedium"))
-                {
+                } else if (args[0].equalsIgnoreCase("TNTMedium")) {
                     l.add("Size");
-                }
-                else if (args[0].equalsIgnoreCase("TNTLarge"))
-                {
+                } else if (args[0].equalsIgnoreCase("TNTLarge")) {
                     l.add("Size");
-                }
-                else if (args[0].equalsIgnoreCase("TNTBuster"))
-                {
+                } else if (args[0].equalsIgnoreCase("TNTBuster")) {
                     l.add("Size");
-                } else if (args[0].equalsIgnoreCase("ObsidianBreakChance"))
-                {
+                } else if (args[0].equalsIgnoreCase("ObsidianBreakChance")) {
                     l.add("chance [float]");
                 }
-                if (args[0].equalsIgnoreCase("TNTIgnoreWater"))
-                {
+                if (args[0].equalsIgnoreCase("TNTIgnoreWater")) {
                     l.add("True|False");
                 }
+                if (args[0].equalsIgnoreCase("deathsee") || args[0].equalsIgnoreCase("deathrefund")) {
+                    if (args[1].length() == 0) {
+                        for (Player player : Riverland._Instance.getServer().getOnlinePlayers()) {
+                            l.add(player.getName());
+                        }
+                    } else {
+                        for (Player player : Riverland._Instance.getServer().getOnlinePlayers()) {
+                            if (player.getName().toLowerCase().contains(args[1])) {
+                                l.add(player.getName());
+                            }
+                        }
+                    }
+                }
+
 
             }
-        }else if (command.getName().equalsIgnoreCase("opadminhelp")&& args.length >= 0)
-        {
-            if (args.length == 1)
-            {
+        } else if (command.getName().equalsIgnoreCase("opadminhelp") && args.length >= 0) {
+            if (args.length == 1) {
 
 
                 if (Display.contains(args[0].toLowerCase()))
@@ -121,18 +127,29 @@ public class CommandTabCompletion implements TabCompleter
                 if (RemoveAll.contains(args[0].toLowerCase()))
                     l.add("RemoveAll");
 
-            }else if (args.length == 2 && args[0].equalsIgnoreCase("remove"))
-            {
+            } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
                 l.add("ID");
             }
-        }else if (command.getName().equalsIgnoreCase("adminhelp")&& args.length >= 0)
-        {
-            if (args.length == 1)
-            {
+        } else if (command.getName().equalsIgnoreCase("adminhelp") && args.length >= 0) {
+            if (args.length == 1) {
                 l.add("Message");
             }
         }
-
+        else if (command.getName().equalsIgnoreCase("donationeventmanager") && args.length >= 0) {
+            if (args.length == 1) {
+                if (sender.hasPermission("riverland.thumbuseventdonator")) {
+                    if (dontationEventThumbus.contains(args[0].toLowerCase())) {
+                        l.add("ThumbusEventDonator");
+                    }
+                }
+                if (sender.hasPermission("Riverland.pvpeventdonator")) {
+                    if (donationEventPVP.contains(args[0].toLowerCase()))
+                    {
+                        l.add("PVPEventDonator");
+                    }
+                }
+            }
+        }
         return l;
     }
 }

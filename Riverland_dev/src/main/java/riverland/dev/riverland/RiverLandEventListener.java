@@ -1,9 +1,11 @@
 package riverland.dev.riverland;
 
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.minecraft.server.v1_15_R1.BlockShulkerBox;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCreeper;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
@@ -12,14 +14,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SpawnEggMeta;
+import org.bukkit.material.SpawnEgg;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 import org.bukkit.event.EventPriority;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -29,6 +41,8 @@ public class RiverLandEventListener implements Listener
     static public boolean isRunningMaintenance = false;
     ArrayList<UUID> customExplodingCreepers = new ArrayList<>();
     ArrayList<Egg> thrownCreeperEggs = new ArrayList<>();
+
+
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
@@ -87,6 +101,68 @@ public class RiverLandEventListener implements Listener
                     }
                 }, 1);
                 // sched change
+            }
+        }
+    }
+
+  // @EventHandler
+  // public void onShulkerPlace(BlockPlaceEvent block)
+  // {
+  //     Block placedBlock = block.getBlockPlaced();
+
+  //     if (placedBlock.getState() instanceof ShulkerBox) {
+
+  //         ShulkerBox box = (ShulkerBox)placedBlock.getState();
+  //         Inventory shulkerInventory = box.getInventory();
+  //         if (shulkerInventory.getContents().length > 0)
+  //         {
+  //             for(ItemStack item : shulkerInventory.getContents())
+  //             {
+  //                 if (item != null)
+  //                     placedBlock.getLocation().getWorld().dropItemNaturally(placedBlock.getLocation(), item);
+  //             }
+  //         }
+  //         if (block.getPlayer() != null) {
+  //             block.getPlayer().sendMessage("Whoops, you shouldn't have that! The item will be confiscated.");
+  //         }
+  //         placedBlock.setType(Material.AIR);
+  //         placedBlock.getLocation().getWorld().createExplosion(placedBlock.getLocation(), 0);
+  //         placedBlock.getLocation().getWorld().strikeLightningEffect(placedBlock.getLocation());
+  //     }
+
+  // }
+    @EventHandler
+    public void onShulkEnderchest(InventoryClickEvent event)
+    {
+        // check if the player is moving from current chest to ender
+        if (event != null)
+        {
+            Inventory playerInv = event.getClickedInventory();
+            Inventory chestInv = event.getInventory();
+            if (chestInv.getType().equals(InventoryType.ENDER_CHEST))
+            {
+
+                if(event.getAction() == InventoryAction.HOTBAR_SWAP)
+                {
+                    event.setCancelled(true);
+                }
+                if (event.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD)
+                {
+                    event.setCancelled(true);
+                }
+
+                if (playerInv == chestInv) // ignore?
+                    return;
+
+               if (event.getCurrentItem() != null) {
+                   ItemStack clicked = event.getCurrentItem();
+                   String clickMaterialString = clicked.getType().toString().toLowerCase();
+
+                   if (clickMaterialString.contains("shulker")) // force cancel
+                   {
+                       event.setCancelled(true);
+                   }
+               }
             }
         }
     }
@@ -375,16 +451,23 @@ public class RiverLandEventListener implements Listener
                     return;
                 }else if (compare.contains("Explosive4"))
                 {
-                    if (Riverland._Instance.IgnoreWater) {
-                        tnt.getLocation().getWorld().createExplosion(tnt.getLocation(), (float) Riverland._Instance.tntRadiusLow);
-                        ArrayList<Block> blocks = GetObsidianBlocks((int) Riverland._Instance.tntBunkerBusterRange, tnt.getLocation(), event.blockList());
+                    if (Riverland._Instance.IgnoreWater)
+                    {
+                        BukkitScheduler scheduler = Riverland._Instance.getServer().getScheduler();
+                        scheduler.scheduleSyncDelayedTask(Riverland._Instance, () ->
                         {
-                            for (Block block : blocks) {
-                                // roll chance..
-                                if (randomBoolean())
-                                    block.setType(Material.AIR);
+
+                            tnt.getLocation().getWorld().createExplosion(tnt.getLocation(), (float) Riverland._Instance.tntRadiusLow);
+                            ArrayList<Block> blocks = GetObsidianBlocks((int) Riverland._Instance.tntBunkerBusterRange, tnt.getLocation(), event.blockList());
+                            {
+                                for (Block block : blocks) {
+                                    // roll chance..
+                                    if (randomBoolean())
+                                        block.setType(Material.AIR);
+                                }
                             }
-                        }
+
+                        },1L);
                     }
                     else {
                         tnt.getLocation().getWorld().createExplosion(tnt.getLocation(), 0);
@@ -452,7 +535,13 @@ public class RiverLandEventListener implements Listener
        //     respawn.getPlayer().sendMessage("You have been added to Spectator, type /leave to return back to survival");
        // }
     }
-
+   // @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+   // public void onShulkerDeath(EntityDeathEvent e)
+   // {
+   //     if (e.getEntityType() == EntityType.SHULKER) {
+   //         e.getDrops().clear();
+   //     }
+   // }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event)
@@ -461,16 +550,34 @@ public class RiverLandEventListener implements Listener
         String message = ChatColor.RED + "Oops, you've died at: " + ChatColor.GOLD.toString() + "(X = " + pos.getX() + "," + " Y = " + pos.getY() + ", Z = " + pos.getZ() + ")";
         event.getEntity().sendMessage(message);
 
-
+        if (Riverland._Instance.playerLastDeathMap.containsKey(event.getEntity().getPlayer().getName()))
+        {
+            Player player = event.getEntity().getPlayer();
+            Inventory copy = Bukkit.createInventory(null, 54, player.getName() + " Lossed Inventory");
+            copy.setContents(player.getInventory().getContents());
+            Riverland._Instance.playerLastDeathMap.replace(player.getName(), copy);
+        }else
+        {
+            Player player = event.getEntity().getPlayer();
+            Inventory copy = Bukkit.createInventory(null, 54, player.getName() + " Lossed Inventory");
+            copy.setContents(player.getInventory().getContents());
+            Riverland._Instance.playerLastDeathMap.put(player.getName(), copy);
+        }
         // loop players on server..
         for(Player player : Bukkit.getOnlinePlayers())
         {
             if (player.isOp()) // check if player is operator
             {
-                net.md_5.bungee.api.chat.TextComponent message2 = new net.md_5.bungee.api.chat.TextComponent( "Player " + event.getEntity().getName()  + " Has Died  " );
+
+                net.md_5.bungee.api.chat.TextComponent message2 = new net.md_5.bungee.api.chat.TextComponent( "Player " + event.getEntity().getName()  + " Has Died");
                 message2.setColor( net.md_5.bungee.api.ChatColor.GOLD );
 
                 net.md_5.bungee.api.chat.TextComponent click = new net.md_5.bungee.api.chat.TextComponent( " [Click to Teleport]" );
+
+
+                net.md_5.bungee.api.chat.TextComponent clickDeathSee = new net.md_5.bungee.api.chat.TextComponent( " [Click to View Losses]" );
+                clickDeathSee.setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/riverland deathsee" + " " + event.getEntity().getPlayer().getName())); // if the user clicks the message, tp them to the coords
+                clickDeathSee.setColor(net.md_5.bungee.api.ChatColor.AQUA);
 
                 player.sendMessage("World Named: " + event.getEntity().getPlayer().getWorld().getName());
                 // tp command
@@ -478,6 +585,7 @@ public class RiverLandEventListener implements Listener
 
                 click.setColor( net.md_5.bungee.api.ChatColor.AQUA );
                 message2.addExtra( click );
+                message2.addExtra(clickDeathSee);
 
                 player.sendMessage(message2);
             }
