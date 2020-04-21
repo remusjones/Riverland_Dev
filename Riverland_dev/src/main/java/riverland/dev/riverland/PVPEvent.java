@@ -29,7 +29,13 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+/*
+#
+#
+# MADE REDUNDANT KEEPING HERE FOR REFERENCE ONLY
+#
+#
+ */
 public class PVPEvent implements CommandExecutor, Listener
 {
 
@@ -653,64 +659,64 @@ public class PVPEvent implements CommandExecutor, Listener
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (args.length==0)
-            return false;
-
-        if (args[0].equalsIgnoreCase("start") && sender.isOp())
-        {
-            playerStart1 = Riverland._Instance.player1Location;
-            playerStart2 = Riverland._Instance.player2Location;
-            spectating = Riverland._Instance.playerWatchLocation;
-            RestartEvent();
-            // start
-            BeginEvent();
-            isJoinable = true;
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("join"))
-        {
-            if ( isJoinable) {
-                if (!joinedPlayers.contains((Player) sender)) {
-                    joinedPlayers.add((Player) sender);
-                    AnnouncePlainDarkPurple(((Player) sender).getName() + " has joined the event!");
-                }else
-                {
-                    ((Player)sender).sendMessage("You've already joined the event");
-                }
-            }
-            else{
-                if (!combatingPlayers.contains(((Player)sender))) {
-                    ((Player) sender).sendMessage("You are assigned as spectator");
-                    ((Player) sender).teleport(spectating);
-                    ((Player)sender).setGameMode(GameMode.SURVIVAL);
-                }
-            }
-
-            return true;
-        }
-        if (sender.isOp()) {
-            if (args[0].equalsIgnoreCase("set1")) {
-                playerStart1 = ((Player) (sender)).getLocation();
-                Riverland._Instance.player1Location = playerStart1;
-                ((Player)(sender)).sendMessage("Set player 1 spawn loc..");
-                Riverland._Instance.SaveLocations();
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("set2")) {
-                playerStart2 = ((Player) (sender)).getLocation();
-                Riverland._Instance.player2Location = playerStart2;
-                ((Player)(sender)).sendMessage("Set player 2 spawn loc..");
-                Riverland._Instance.SaveLocations();
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("watch")) {
-                spectating = ((Player) (sender)).getLocation();
-                ((Player)(sender)).sendMessage("Set Watch..");
-                Riverland._Instance.playerWatchLocation = spectating;
-                Riverland._Instance.SaveLocations();
-                return true;
-            }
-        }
+        //if (args.length==0)
+        //    return false;
+//
+        //if (args[0].equalsIgnoreCase("start") && sender.isOp())
+        //{
+        //    playerStart1 = Riverland._Instance.player1Location;
+        //    playerStart2 = Riverland._Instance.player2Location;
+        //    spectating = Riverland._Instance.playerWatchLocation;
+        //    RestartEvent();
+        //    // start
+        //    BeginEvent();
+        //    isJoinable = true;
+        //    return true;
+        //}
+        //if (args[0].equalsIgnoreCase("join"))
+        //{
+        //    if ( isJoinable) {
+        //        if (!joinedPlayers.contains((Player) sender)) {
+        //            joinedPlayers.add((Player) sender);
+        //            AnnouncePlainDarkPurple(((Player) sender).getName() + " has joined the event!");
+        //        }else
+        //        {
+        //            ((Player)sender).sendMessage("You've already joined the event");
+        //        }
+        //    }
+        //    else{
+        //        if (!combatingPlayers.contains(((Player)sender))) {
+        //            ((Player) sender).sendMessage("You are assigned as spectator");
+        //            ((Player) sender).teleport(spectating);
+        //            ((Player)sender).setGameMode(GameMode.SURVIVAL);
+        //        }
+        //    }
+//
+        //    return true;
+        //}
+        //if (sender.isOp()) {
+        //    if (args[0].equalsIgnoreCase("set1")) {
+        //        playerStart1 = ((Player) (sender)).getLocation();
+        //        Riverland._Instance.player1Location = playerStart1;
+        //        ((Player)(sender)).sendMessage("Set player 1 spawn loc..");
+        //        Riverland._Instance.SaveLocations();
+        //        return true;
+        //    }
+        //    if (args[0].equalsIgnoreCase("set2")) {
+        //        playerStart2 = ((Player) (sender)).getLocation();
+        //        Riverland._Instance.player2Location = playerStart2;
+        //        ((Player)(sender)).sendMessage("Set player 2 spawn loc..");
+        //        Riverland._Instance.SaveLocations();
+        //        return true;
+        //    }
+        //    if (args[0].equalsIgnoreCase("watch")) {
+        //        spectating = ((Player) (sender)).getLocation();
+        //        ((Player)(sender)).sendMessage("Set Watch..");
+        //        Riverland._Instance.playerWatchLocation = spectating;
+        //        Riverland._Instance.SaveLocations();
+        //        return true;
+        //    }
+        //}
         return false;
     }
 }

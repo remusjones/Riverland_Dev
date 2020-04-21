@@ -10,6 +10,7 @@ import net.minecraft.server.v1_15_R1.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.type.Fire;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCreeper;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftZombie;
@@ -21,14 +22,25 @@ import org.bukkit.event.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+/*
+#
+#
+# MADE REDUNDANT KEEPING HERE FOR REFERENCE ONLY
+#
+#
+ */
+@Deprecated
 public class CustomEntityGiant extends EntityGiantZombie {
     private ArrayList<Player> playerList = new ArrayList<>();
 
@@ -52,7 +64,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
         this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true, true));
+       // this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true, true));
 
         ItemStack testSword = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.IRON_SWORD, 1));
     }
@@ -68,6 +80,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(1);
         this.setHealth(maxHP);
     }
+
 
 
     public CustomEntityGiant(World world, EntityTypes<? extends EntityGiantZombie> entityType) {
@@ -97,28 +110,35 @@ public class CustomEntityGiant extends EntityGiantZombie {
     protected void initPathfinder() {
         this.goalSelector.a(4, new CustomEntityGiant.a(this, 1.0D, 3));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
+        this.persistent = true;
+        this.persist = true;
+        this.setPersistent();
         this.l();
     }
 
     protected void l()
     {
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(100D);
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(1000);
+    //    this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(0.1D);
+
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(2000);
         this.getAttributeInstance(GenericAttributes.KNOCKBACK_RESISTANCE).setValue(100);
+       // this.getAttributeInstance(GenericAttributes.ARMOR).setValue(16);
         this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a(new Class[]{EntityPlayer.class}));
         this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a(new Class[]{EntityPigZombie.class}));
+      //  this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
-        this.targetSelector.a(2, new PathfinderGoalGiantAttack(this, 1.5D, false));
+        this.targetSelector.a(2, new PathfinderGoalGiantAttack(this, 1.0D, false));
     }
 
+    @Override
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(35.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2);
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(45.0D);
-        this.getAttributeInstance(GenericAttributes.ARMOR).setValue(2.0D);
-        this.getAttributeInstance(GenericAttributes.ATTACK_KNOCKBACK).setValue(10);
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(1000);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.3);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(300.0D);
+       // this.getAttributeInstance(GenericAttributes.ARMOR).setValue(2.0D);
+        this.getAttributeInstance(GenericAttributes.ATTACK_KNOCKBACK).setValue(3);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(2000);
     }
 
     protected int getExpValue(EntityHuman entityhuman) {
@@ -190,7 +210,38 @@ public class CustomEntityGiant extends EntityGiantZombie {
         }
 
     }
-
+    //public boolean r(Entity entity)
+    //{
+    //    float f = (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+    //    int i = 0;
+//
+    //    boolean flag = entity.damageEntity(DamageSource.mobAttack(this), f);
+//
+    //    if (flag) {
+    //      // if (i > 0) {
+    //      //     entity.g((double) (-MathHelper.sin(this.yaw * 3.1415927F / 180.0F) * (float) i * 0.5F), 0.1D, (double) (MathHelper.cos(this.yaw * 3.1415927F / 180.0F) * (float) i * 0.5F));
+    //      //     this.setMot(this.getMot().x * 0.6D, );;
+    //      //     this.motZ *= 0.6D;
+    //      // }
+//
+    //        int j = EnchantmentManager.getFireAspectEnchantmentLevel(this);
+//
+    //        if (j > 0) {
+    //            // CraftBukkit start - Call a combust event when somebody hits with a fire enchanted item
+    //            EntityCombustByEntityEvent combustEvent = new EntityCombustByEntityEvent(this.getBukkitEntity(), entity.getBukkitEntity(), j * 4);
+    //            org.bukkit.Bukkit.getPluginManager().callEvent(combustEvent);
+//
+    //            if (!combustEvent.isCancelled()) {
+    //                entity.setOnFire(combustEvent.getDuration());
+    //            }
+    //            // CraftBukkit end
+    //        }
+//
+    //        this.a((EntityLiving) this, entity);
+    //    }
+//
+    //    return flag;
+    //}
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
@@ -337,7 +388,14 @@ public class CustomEntityGiant extends EntityGiantZombie {
         } else {
 
             if (damagesource.getEntity() instanceof EntityLiving) {
-                this.setGoalTarget(((EntityLiving) damagesource.j()));
+                try
+                {
+                    if (damagesource.getEntity().isAlive())
+                        this.setGoalTarget(((EntityLiving) damagesource.getEntity()));
+                }catch (Exception exc)
+                {
+
+                }
                 if (this.getHealth() <= (getMaxHealth() / 1.75)) {
                     currHitsAfterMaxHealth++;
 
@@ -363,7 +421,8 @@ public class CustomEntityGiant extends EntityGiantZombie {
             } else if (damagesource.j() instanceof EntityArrow) {
 
                 if (damagesource.getEntity().isAlive()) {
-                    this.setGoalTarget(((EntityLiving) damagesource.j()));
+                    if (damagesource.getEntity() != null)
+                        this.setGoalTarget(((EntityLiving) damagesource.getEntity()), EntityTargetEvent.TargetReason.TARGET_ATTACKED_ENTITY,false);
                 }
                 if (this.getHealth() <= (getMaxHealth() / 1.75)) {
                     currHitsAfterMaxHealth++;
@@ -458,6 +517,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
         super.a(difficultydamagescaler);
+
         if (this.random.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F)) {
             int i = this.random.nextInt(3);
             if (i == 0) {
@@ -604,7 +664,6 @@ public class CustomEntityGiant extends EntityGiantZombie {
                 }
             }
         }
-
     }
 
     protected ItemStack es() {
@@ -651,6 +710,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
         private CustomEntityGiant d = null;
         private int e;
         private int fireball = 40;
+        private int levitation = 0;
 
         public PathfinderGoalGiantAttack(CustomEntityGiant var0, double var1, boolean var3) {
             super(var0, var1, var3);
@@ -681,18 +741,67 @@ public class CustomEntityGiant extends EntityGiantZombie {
                 Vec3D vec3d = this.d.f(1.0F);
                 ++this.e;
                 ++this.fireball;
+                ++this.levitation;
 
-                if (fireball > 80) {
 
-                    double d2 = entityliving.locX() - (this.d.locX() + vec3d.x * 4.0D);
-                    double d3 = entityliving.e(0.5D) - (0.5D + this.d.e(0.5D));
-                    double d4 = entityliving.locZ() - (this.d.locZ() + vec3d.z * 4.0D);
+                if (fireball > 60) {
 
-                    EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.d, d2, d3, d4);
-                    entitylargefireball.bukkitYield = (float) (entitylargefireball.yield = 5);
-                    entitylargefireball.setPosition(this.d.locX() + vec3d.x * 4.0D, this.d.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
-                    entitylargefireball.forceExplosionKnockback = true;
-                    world.addEntity(entitylargefireball);
+                    // create locatio
+
+                    CraftWorld w = world.getWorld();
+                   // this.d.locX(), this.d.locY(), this.d.locZ()
+                    Location loc = new Location(w,this.d.locX(), this.d.locY(), this.d.locZ()); //defines new location
+                    Collection<Player> players = w.getNearbyPlayers(loc, 50);
+
+                    // apply thumbus debuff
+
+                    int i = 0;
+                    for(Player player : players)
+                    {
+                      //  if (levitation >= 1200)
+                      //  {
+                      //      // apply levitation effect
+                      //          player.addPotionEffect(new MobEffect(MobEffects.LEVITATION, 100, 3, false, false));
+//
+                      //  }
+
+                        if (i <=3) {
+
+                            Location playerLoc = player.getLocation();
+                            // get target direction between player and thumbus
+                            double d2 = playerLoc.getX() - (this.d.locX() + vec3d.x * 4.0D);
+                            double d3 = entityliving.e(0.5D) - (0.5D + this.d.e(0.5D));
+                            double d4 = playerLoc.getZ() - (this.d.locZ() + vec3d.z * 4.0D);
+
+                            EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.d, d2, d3, d4);
+                            entitylargefireball.bukkitYield = (float) (entitylargefireball.yield = 5);
+
+                            entitylargefireball.setPosition(this.d.locX() + vec3d.x * 4.0D, this.d.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
+                            entitylargefireball.forceExplosionKnockback = true;
+                            entitylargefireball.isIncendiary = true;
+                            entitylargefireball.fireTicks = 40;
+                            world.addEntity(entitylargefireball);
+                        }
+
+                        i++;
+                    }
+
+
+
+
+
+
+
+                   //double d2 = entityliving.locX() - (this.d.locX() + vec3d.x * 4.0D);
+                   //double d3 = entityliving.e(0.5D) - (0.5D + this.d.e(0.5D));
+                   //double d4 = entityliving.locZ() - (this.d.locZ() + vec3d.z * 4.0D);
+
+                   //EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.d, d2, d3, d4);
+                   //entitylargefireball.bukkitYield = (float) (entitylargefireball.yield = 5);
+
+                   //entitylargefireball.setPosition(this.d.locX() + vec3d.x * 4.0D, this.d.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
+                   //entitylargefireball.forceExplosionKnockback = true;
+                   //world.addEntity(entitylargefireball);
                     fireball = 0;
                 }
 

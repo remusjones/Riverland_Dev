@@ -32,6 +32,8 @@ public class CommandTabCompletion implements TabCompleter
     String deathRefund = "deathrefund";
     String dontationEventThumbus = "thumbuseventdonator";
     String donationEventPVP = "pvpeventdonator";
+    String thumbusCooldownReset = "thumbuseventresetTime";
+    String thumbusDisplayLastRan = "thumbuslastran";
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -79,11 +81,6 @@ public class CommandTabCompletion implements TabCompleter
 
                 if (ObsidianBreakChance.contains(args[0].toLowerCase()))
                     l.add("ObsidianBreakChance");
-
-                if (deathRefund.contains(args[0].toLowerCase()))
-                    l.add("deathrefund");
-                if (deathSee.contains(args[0].toLowerCase()))
-                    l.add("deathsee");
             }
             if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("TNTSmall")) {
@@ -99,19 +96,6 @@ public class CommandTabCompletion implements TabCompleter
                 }
                 if (args[0].equalsIgnoreCase("TNTIgnoreWater")) {
                     l.add("True|False");
-                }
-                if (args[0].equalsIgnoreCase("deathsee") || args[0].equalsIgnoreCase("deathrefund")) {
-                    if (args[1].length() == 0) {
-                        for (Player player : Riverland._Instance.getServer().getOnlinePlayers()) {
-                            l.add(player.getName());
-                        }
-                    } else {
-                        for (Player player : Riverland._Instance.getServer().getOnlinePlayers()) {
-                            if (player.getName().toLowerCase().contains(args[1])) {
-                                l.add(player.getName());
-                            }
-                        }
-                    }
                 }
 
 

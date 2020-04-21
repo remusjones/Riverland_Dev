@@ -2,11 +2,17 @@ package riverland.dev.riverland;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.flags.Flag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
+import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -50,6 +56,11 @@ public final class Riverland extends JavaPlugin {
     public SpecatorMode spectatorMode;
     Gson gsonObj = new Gson();
 
+    LootTable thumbusRewardsPool = new LootTable();
+
+    public static StateFlag CustomExplosionFlag;
+
+    public ArrayList<ItemStack> ThumbusLoot = new ArrayList<>();
 
     private File folder;
     private File f;
@@ -119,6 +130,24 @@ public final class Riverland extends JavaPlugin {
         randomNameList.add("Margaret");
         randomNameList.add("Jason");
         randomNameList.add("Karen");
+
+        FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
+        try {
+            // create a flag with the name "my-custom-flag", defaulting to true
+            StateFlag flag = new StateFlag("RiverlandExplosion", true);
+            registry.register(flag);
+            CustomExplosionFlag = flag; // only set our field if there was no error
+        } catch (FlagConflictException e) {
+            // some other plugin registered a flag by the same name already.
+            // you can use the existing flag, but this may cause conflicts - be sure to check type
+            Flag<?> existing = registry.get("RiverlandExplosion");
+            if (existing instanceof StateFlag) {
+                CustomExplosionFlag = (StateFlag) existing;
+            } else {
+                // types don't match - this is bad news! some other plugin conflicts with you
+                // hopefully this never actually happens
+            }
+        }
     }
     public void SetEntityRandomName(Entity entity)
     {
@@ -188,8 +217,46 @@ public final class Riverland extends JavaPlugin {
         }
     }
 
+
+    public void SaveThumbusRewardsPool()
+    {
+        try {
+            folder = this.getDataFolder();
+            f = new File(folder, "ThumbusLootTable.json");
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+        }
+        try
+        {
+            getLogger().log(Level.WARNING,"Saving Json.. " );
+            gsonObj = new Gson();
+            FileWriter myWriter = new FileWriter(f);
+
+
+            String str = gsonObj.toJson(thumbusRewardsPool);
+            if (str.length() > 3)
+            {
+                myWriter.write(str);
+                getLogger().log(Level.WARNING,"Writing Json.." );
+            }
+            myWriter.close();
+        }
+        catch (Exception exc)
+        {
+            getLogger().log(Level.WARNING,"Could not save Thumbus Rewards" + exc.toString());
+        }
+    }
+
     @Override
     public void onEnable() {
+
+        //thumbusRewardsPool.PopulateDefaultFallbackItems();
+        //thumbusRewardsPool.PopulateDefaultFallbackItems();
+
+
+
         _Instance = this;
         // config.yml setup
         config.addDefault("WelcomeMessage", "Welcome to Riverlands!");
@@ -206,20 +273,13 @@ public final class Riverland extends JavaPlugin {
         config.addDefault("TNT_BunkerBusterRange", 1.5);
         config.addDefault("TNT_BreakChance", 0.5);
         config.addDefault("TNT_BunkerBusterIgnoresWater", false);
-        config.addDefault("THUMBUS_DONATION_COOLDOWN", 12);
         config.addDefault("PVP_DONATION_COOLDOWN", 12);
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date d = new Date();
 
 
-
-        config.addDefault("THUMBUS_LASTSTART", dateFormat.format(d));
-        config.addDefault("PVP_LASTSTART", dateFormat.format(d));
-
-        //config.options().copyDefaults(true);
         saveConfig();
-        spectatorMode = new SpecatorMode();
         // register
         RegisterEntities();
         try
@@ -297,6 +357,8 @@ public final class Riverland extends JavaPlugin {
         tntBunkerBusterRange = config.getDouble("TNT_BunkerBusterRange");
         tntBreakChance = config.getDouble("TNT_BreakChance");
         IgnoreWater = config.getBoolean("TNT_BunkerBusterIgnoresWater");
+        //ThumbusLoot = ((ArrayList<ItemStack>)config.get("Thumbus.LootTable"));
+        //InventoryUtil.ThumbusLootTable = CreateInventoryFromConfig();
         // load all stored locations..
         LoadLocations();
 
@@ -335,129 +397,16 @@ public final class Riverland extends JavaPlugin {
 
     public void LoadLocations() // loads event locations yml json
     {
-        try
-        {
 
-            folder = this.getDataFolder();
-            f= new File(folder,"EventLocations.yml");
-
-            if (f!=null)
-            {
-                if(!f.exists())
-                {
-                    f.createNewFile();
-                    getLogger().log(Level.WARNING,"Creating Json File.. ");
-                }
-
-                // try load..
-                if(f.length() > 3 )
-                {
-                    getLogger().log(Level.WARNING,"Loading Json.. ");
-                    String data = "";
-                    Scanner myReader = new Scanner(f);
-                    while (myReader.hasNextLine())
-                    {
-                        data += myReader.nextLine();
-                    }
-                    // try load json
-                    Type type = new TypeToken<
-                            ArrayList<SerializableLocation>>(){}.getType();
-
-                    tntPositions.clear();
-                    ArrayList<SerializableLocation> tmp = gsonObj.fromJson(data, type);
-                    if (tmp.size() == 2)
-                    {
-                        giantBossStartLocation = tmp.get(0).Get();
-                        giantBossEndLocation = tmp.get(1).Get();
-                    }
-                    if (tmp.size() > 2)
-                    {
-                        giantBossStartLocation = tmp.get(0).Get();
-                        giantBossEndLocation = tmp.get(1).Get();
-                        playerWatchLocation = tmp.get(2).Get();
-                        player1Location = tmp.get(3).Get();
-                        player2Location = tmp.get(4).Get();
-                    }
-                    myReader.close();
-                }
-
-            }
-
-        } catch (Exception exc)
-        {
-            getLogger().log(Level.WARNING,"Could not set event positions" + exc.toString());
-        }
     }
     public void SaveLocations() // saves stored event locations
     {
-        if (giantBossStartLocation == null || giantBossEndLocation == null)
-        {
-            if (giantBossEndLocation == null)
-                getLogger().log(Level.WARNING,"Boss location was null.. " );
-            if (giantBossStartLocation == null)
-                getLogger().log(Level.WARNING,"start location was null.. " );
-            return;
-        }else
-        {
-            getLogger().log(Level.WARNING,"start location: " + giantBossStartLocation.toString() );
-            getLogger().log(Level.WARNING,"boss location: " + giantBossEndLocation.toString() );
-        }
-
-
-
-        try {
-            folder = this.getDataFolder();
-            f = new File(folder, "EventLocations.yml");
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace();
-        }
-        try
-        {
-            getLogger().log(Level.WARNING,"Saving Json.. " );
-            gsonObj = new Gson();
-            FileWriter myWriter = new FileWriter(f);
-            ArrayList<SerializableLocation> list = new ArrayList<>();
-            SerializableLocation loc1 = new SerializableLocation();
-            loc1.Set(giantBossStartLocation);
-            SerializableLocation loc2 = new SerializableLocation();
-            loc2.Set(giantBossEndLocation);
-
-            list.add(loc1);
-            list.add(loc2);
-
-            boolean arenaValid = false;
-
-            if (playerWatchLocation != null && player1Location != null && player2Location != null)
-            {
-                SerializableLocation loc3 = new SerializableLocation();
-                loc3.Set(playerWatchLocation);
-                SerializableLocation loc4 = new SerializableLocation();
-                loc4.Set(player1Location);
-                SerializableLocation loc5 = new SerializableLocation();
-                loc5.Set(player2Location);
-                list.add(loc3);
-                list.add(loc4);
-                list.add(loc5);
-            }
-
-            String str = gsonObj.toJson(list);
-            if (str.length() > 3)
-            {
-                myWriter.write(str);
-                getLogger().log(Level.WARNING,"Writing Json.." );
-            }
-            myWriter.close();
-        }
-        catch (Exception exc)
-        {
-            getLogger().log(Level.WARNING,"Could not save event locations" + exc.toString());
-        }
     }
 
     @Override
     public void onDisable() {
+
+        saveConfig();
 
         getLogger().log(Level.WARNING,"Saving event locations.. " );
         SaveLocations();

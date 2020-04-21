@@ -3,6 +3,8 @@ package riverland.dev.riverland;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.minecraft.server.v1_15_R1.EntityLiving;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -11,6 +13,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.HandlerList;
@@ -25,7 +28,14 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+/*
+#
+#
+# MADE REDUNDANT KEEPING HERE FOR REFERENCE ONLY
+#
+#
+ */
+@Deprecated
 public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
 {
     public boolean hasBeenAsyncd = false;
@@ -45,10 +55,10 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
     private boolean hasAnnouncedCountdown = false;
     private boolean hasDroppedExperience = false;
     public int playerEventRadius = 150;
-    public int minimumPlayers = 1;
+    public int minimumPlayers = 2;
     public Location lastBossLocation = null;
     public boolean hasSuccededRun = false;
-
+    public boolean hasGivenLoot = false;
 
     BossBar bar = null;
 
@@ -217,6 +227,14 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
 
 
                                 boss = Myzombie;
+                                net.minecraft.server.v1_15_R1.Entity nmsEntity = ((CraftEntity) Myzombie).getHandle();
+
+                                NBTTagCompound tag = new NBTTagCompound();
+                                nmsEntity.c(tag);
+                                tag.setBoolean("PersistenceRequired", true);
+                                EntityLiving el = (EntityLiving) nmsEntity;
+                                el.a(tag);
+
                                 boss.setCustomNameVisible(true);
                                 boss.setCustomName("THUMBUS");
 
@@ -234,7 +252,7 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
                                     public void run()
                                     {
                                         if (((Giant)boss).getHealth() > 0)
-                                            bar.setProgress(((Giant) boss).getHealth() < 0 ? 0D : ((Giant) boss).getHealth() / 1000);
+                                            bar.setProgress(((Giant) boss).getHealth() < 0 ? 0D : ((Giant) boss).getHealth() / 2000);
                                         if (boss.isDead() || boss == null || hasSuccededRun)
                                         {
 
@@ -486,12 +504,19 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
                                 ArrayList<Player> rewardedPlayers = new ArrayList<>();
                                 for(Player p : activePlayers)
                                 {
-                                    if (p.getLocation().distanceSquared(boss.getLocation()) <= 750) // do a final check
+                                    if (p.getWorld() == boss.getLocation().getWorld())
                                     {
-                                        rewardedPlayers.add(p);
+                                        if (p.getLocation().distanceSquared(boss.getLocation()) <= 750) // do a final check
+                                        {
+                                            rewardedPlayers.add(p);
+                                        }
                                     }
                                 }
-                                GiveRewards(rewardedPlayers, items);
+                                if (!hasGivenLoot)
+                                {
+                                    GiveRewards(rewardedPlayers, items);
+                                    hasGivenLoot = true;
+                                }
                             }
                             hasEarlyEnded = true;
 
@@ -644,40 +669,6 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
     }
     public void Reset()
     {
-        //hasDroppedExperience = false;
-        //hasBeenAsyncd = false;
-        //hasAnnouncedInitialJoin = false;
-        //hasBegunRun = false;
-        //hasInitRunAnnouncer = false;
-        //hasExitedEvent = false;
-//
-        //isEventJoin = false;
-        //hasInitialisedEventData = false;
-        //hasStartedEvent = false;
-        //hasEarlyEnded = false;
-        //awaitingStart = false;
-        //hasAnnouncedCountdown = false;
-        //boss = null;
-        //playerEventRadius = 150;
-        //minimumPlayers = 3;
-//
-        //boolean hasSuccededRun = false;
-//
-//
-//
-        //// players inside the event.
-        //activePlayers.clear();
-        //// players outside the event.
-        //blackListedPlayers.clear(); // update list while running the event..
-        //joinedPlayers.clear();
-        //timer = EventFinalCountdownJoin;
-        //joinTimer = eventTeleportTimer;
-        //Integer runTimer = 300;
-        //runTimer = 300;
-        //_____________
-
-
-        //if (Riverland._Instance.getServer().getScheduler().isCurrentlyRunning(announcerStartID))
         try {
             Riverland._Instance.getServer().getScheduler().cancelTask(EventActiveLoopID);
             Riverland._Instance.getServer().getScheduler().cancelTask(EventMainCountdownID);
@@ -692,8 +683,21 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
         }
 
 
-        if (boss != null && !boss.isDead()) {
+        // slay any non-player entities around the boss location to force cleanup
+        Collection<Entity> nearbyEntites = Riverland._Instance.giantBossEndLocation.getWorld().getNearbyEntities(Riverland._Instance.giantBossEndLocation, 16, 16, 16);
+        for(Entity e : nearbyEntites)
+        {
+            if (e.getType() == EntityType.PLAYER)
+                continue;
+            else
+                e.remove();
+        }
+
+
+
+        if (boss != null) {
             ((Giant) boss).setHealth(0);
+            ((Giant) boss).damage(20000);
             boss.remove();
 
             for(Player p : activeBossMusicPlayers)
@@ -709,7 +713,6 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
             }
             activeRunMusicPlayers.clear();
             boss = null;
-
         }
         hasAnnouncedInitialJoin = false;
         hasBegunRun = false;
@@ -730,6 +733,7 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
         //minimumPlayers = 3;
         lastBossLocation = null;
         hasSuccededRun = false;
+        hasGivenLoot = false;
 
 
         if (bar != null)
@@ -764,97 +768,135 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
     }
     public void GiveRewards(ArrayList<Player> players, ArrayList<ItemStack> rewardsList)
     {
-        Integer randomItem = 3;
-        Integer potionMultiplier = 3;
-        Integer expOrbs = 25;
-
-
+        int rerollMax = 0;
+        float rewardChancePerItem = 0.07f;
         for (Player p : players)
         {
-            for(int exp = 0; exp < expOrbs; exp++ )
-            {
-
-                Location loc = p.getLocation();
-                ExperienceOrb e = ((ExperienceOrb) p.getLocation().getWorld().spawn(loc, ExperienceOrb.class));
-                e.setExperience(250);
-            }
-            for(int exp = 0; exp <expOrbs; exp++ )
-            {
-                p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.EXPERIENCE_ORB);
-            }
-            // store our rewards for this player
             ArrayList<ItemStack> actualRewards = new ArrayList<>();
-            // a copy of our rewards list to modify
-            ArrayList<ItemStack> copy = new ArrayList<>(rewardsList);
-            // iterate through reward count
-            for (int i = 0; i < randomItem; i++)
-            {
-                // generate random based on max size
-                int index = new Random().nextInt(copy.size());
+                for (ItemStack item : InventoryUtil.ThumbusLootTable.getContents()) {
+                    if (item == null)
+                        continue;
+                    double perc = Math.random();
+                    if (perc <= rewardChancePerItem && !actualRewards.contains(item)) {
+                        actualRewards.add(item);
+                    }
 
-                boolean hasGottenGarbage = false;
-                if (copy.get(index).getType() == Material.POTION)
-                {
-                    actualRewards.add(copy.get(index));
-                    copy.remove(index);
-                    hasGottenGarbage = true;
-                }
-                else if (copy.get(index).getType() == Material.ZOMBIE_HEAD) {
-                    actualRewards.add(copy.get(index));
-                    copy.remove(index);
-                    hasGottenGarbage = true;
-                }
-                if (hasGottenGarbage)
-                    index = new Random().nextInt(copy.size());
-
-                actualRewards.add(copy.get(index));
-                copy.remove(index);
+                rerollMax ++;
             }
-
-
-
             int freeSlots = 32;
             for(ItemStack item : p.getInventory().getStorageContents())
             {
                 if (item!= null)
                     freeSlots--;
             }
-            // create random
-            for (ItemStack i : actualRewards)
+            int rewardMaxCount = 3;
+            int currReward = 0;
+            for(ItemStack reward : actualRewards)
             {
-                if (freeSlots <= 0)
-                {
-                    if (i.getType() == Material.POTION)
-                    {
-                        for(int it = 0; it < potionMultiplier; it++)
-                        {
-                            p.getLocation().getWorld().dropItem(p.getLocation(), i);
-                        }
-                    }else
-                        p.getLocation().getWorld().dropItem(p.getLocation(), i);
-                }
-                else {
-
-                    if (i.getType() == Material.POTION) {
-                        for (int it = 0; it < potionMultiplier; it++) {
-
-                            if (freeSlots <= 0)
-                            {
-                                p.getLocation().getWorld().dropItem(p.getLocation(), i);
-                            }else {
-                                    p.getInventory().addItem(i);
-                                    freeSlots--;
-                            }
-                        }
-                    }
-                    else {
-                        p.getInventory().addItem(i);
-                        freeSlots--;
-                    }
-                }
-
+                if (currReward >=3)
+                    break;
+                currReward++;
+                if (freeSlots > 0)
+                    p.getInventory().addItem(reward);
+                else
+                    p.getWorld().dropItemNaturally(p.getLocation(), reward);
+                freeSlots--;
             }
         }
+
+
+
+       // Integer randomItem = 3;
+       // Integer potionMultiplier = 3;
+       // Integer expOrbs = 25;
+
+
+       // for (Player p : players)
+       // {
+       //     for(int exp = 0; exp < expOrbs; exp++ )
+       //     {
+//
+       //         Location loc = p.getLocation();
+       //         ExperienceOrb e = ((ExperienceOrb) p.getLocation().getWorld().spawn(loc, ExperienceOrb.class));
+       //         e.setExperience(250);
+       //     }
+       //     for(int exp = 0; exp <expOrbs; exp++ )
+       //     {
+       //         p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.EXPERIENCE_ORB);
+       //     }
+       //     // store our rewards for this player
+//
+       //     // a copy of our rewards list to modify
+       //     ArrayList<ItemStack> copy = new ArrayList<>(rewardsList);
+       //     // iterate through reward count
+       //     for (int i = 0; i < randomItem; i++)
+       //     {
+       //         // generate random based on max size
+       //         int index = new Random().nextInt(copy.size());
+//
+       //         boolean hasGottenGarbage = false;
+       //         if (copy.get(index).getType() == Material.POTION)
+       //         {
+       //             actualRewards.add(copy.get(index));
+       //             copy.remove(index);
+       //             hasGottenGarbage = true;
+       //         }
+       //         else if (copy.get(index).getType() == Material.ZOMBIE_HEAD) {
+       //             actualRewards.add(copy.get(index));
+       //             copy.remove(index);
+       //             hasGottenGarbage = true;
+       //         }
+       //         if (hasGottenGarbage)
+       //             index = new Random().nextInt(copy.size());
+//
+       //         actualRewards.add(copy.get(index));
+       //         copy.remove(index);
+       //     }
+
+
+
+        //   int freeSlots = 32;
+        //   for(ItemStack item : p.getInventory().getStorageContents())
+        //   {
+        //       if (item!= null)
+        //           freeSlots--;
+        //   }
+        //   // create random
+        //   for (ItemStack i : actualRewards)
+        //   {
+        //       if (freeSlots <= 0)
+        //       {
+        //           if (i.getType() == Material.POTION)
+        //           {
+        //               for(int it = 0; it < potionMultiplier; it++)
+        //               {
+        //                   p.getLocation().getWorld().dropItem(p.getLocation(), i);
+        //               }
+        //           }else
+        //               p.getLocation().getWorld().dropItem(p.getLocation(), i);
+        //       }
+        //       else {
+
+        //           if (i.getType() == Material.POTION) {
+        //               for (int it = 0; it < potionMultiplier; it++) {
+
+        //                   if (freeSlots <= 0)
+        //                   {
+        //                       p.getLocation().getWorld().dropItem(p.getLocation(), i);
+        //                   }else {
+        //                           p.getInventory().addItem(i);
+        //                           freeSlots--;
+        //                   }
+        //               }
+        //           }
+        //           else {
+        //               p.getInventory().addItem(i);
+        //               freeSlots--;
+        //           }
+        //       }
+
+        //   }
+
     }
 
     public void GiveRewardsToMe(Player player)
@@ -1123,7 +1165,24 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
 
                 for (Player p : activePlayers)
                 {
-                    if (p.getLocation().distanceSquared(eventLocation) > (playerEventRadius * playerEventRadius))
+                    if (p.getWorld() != eventLocation.getWorld())
+                    {
+                        p.sendMessage("You have left the event, you will not receive rewards.");
+                        blackListedPlayers.add(p);
+                        activePlayers.remove(p);
+                        joinedPlayers.remove(p);
+                        if (activeBossMusicPlayers.contains(p))
+                        {
+                            p.stopSound(bossSound);
+                            activeBossMusicPlayers.remove(p);
+                        }
+                        if (activeRunMusicPlayers.contains(p))
+                        {
+                            p.stopSound(runSound);
+                            activeRunMusicPlayers.remove(p);
+                        }
+                        continue;
+                    }else if (p.getLocation().distanceSquared(eventLocation) > (playerEventRadius * playerEventRadius))
                     {
                         p.sendMessage("You have left the event, you will not receive rewards.");
                         blackListedPlayers.add(p);
@@ -1279,12 +1338,12 @@ public class ThumbusEvent extends RiverlandEvent implements CommandExecutor
                     t.add(((Player)sender));
 
                     Entity Myzombie = Riverland.GiantTypeInstance.spawn(new Location(p.getLocation().getWorld(), p.getLocation().getX(),p.getLocation().getY(),p.getLocation().getZ()));
-
                     Myzombie.setCustomName("THUMBUS");
                     Myzombie.setCustomNameVisible(true);
-                    ItemStack sword = new ItemStack(Material.GOLDEN_SWORD,1);
+                    ItemStack sword = new ItemStack(Material.DIAMOND_SWORD,1);
                     ItemMeta meta = sword.getItemMeta();
-                    meta.addEnchant(Enchantment.DAMAGE_ALL, 6, true);
+                    meta.addEnchant(Enchantment.DAMAGE_ALL, 4, true);
+                    meta.addEnchant(Enchantment.PIERCING, 3, true);
                     meta.setDisplayName("THUMBUS' GOLDEN SWORD");
 
                     sword.setItemMeta(meta);

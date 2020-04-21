@@ -2,6 +2,14 @@ package riverland.dev.riverland;
 import net.minecraft.server.v1_15_R1.*;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 
+/*
+#
+#
+# USED FOR CUSTOM EGG CREEPERS
+#
+#
+ */
+
 public class CustomEntityCreeper extends EntityCreeper
 {
 
@@ -11,7 +19,6 @@ public class CustomEntityCreeper extends EntityCreeper
         super(EntityTypes.CREEPER, world);
         // override our attributes here
     }
-
 
     @Override
     protected void initPathfinder() {

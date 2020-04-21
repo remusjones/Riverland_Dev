@@ -4,7 +4,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class SpecatorMode
 {
     boolean isSpectatorAvailable = false;

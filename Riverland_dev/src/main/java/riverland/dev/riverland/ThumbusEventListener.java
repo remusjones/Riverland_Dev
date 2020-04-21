@@ -5,7 +5,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
+/*
+#
+#
+# MADE REDUNDANT KEEPING HERE FOR REFERENCE ONLY
+#
+#
+ */
+@Deprecated
 public class ThumbusEventListener implements Listener
 {
 

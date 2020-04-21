@@ -3,12 +3,20 @@ package riverland.dev.riverland;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import riverland.dev.riverland.Riverland;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+/*
+#
+#
+# MADE REDUNDANT KEEPING HERE FOR REFERENCE ONLY
+#
+#
+ */
+@Deprecated
 public class DonatorEventCommands implements CommandExecutor
 {
     @Override

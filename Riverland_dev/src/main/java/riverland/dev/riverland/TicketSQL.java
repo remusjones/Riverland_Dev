@@ -44,12 +44,6 @@ public class TicketSQL
         password = _password;
         maxIssuesPerPlayer = maxIssuesOpen;
     }
-    // User 1
-    // user report, user pos, status = Status.Working
-    // user report 2, user pos 2, status = Status.Unassigned
-    // User 2
-    // user report. user pos, status = Status.Finished
-
 
     public BukkitRunnable WriteSQLData = new BukkitRunnable()
     {
@@ -176,7 +170,14 @@ public class TicketSQL
             }
 
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
+            String url = "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database;
+            Properties props = new Properties();
+            props.setProperty("user",this.username);
+            props.setProperty("password",this.password);
+            props.setProperty("ssl","false");
+            connection = DriverManager.getConnection(url, props);
+            //connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
+
         }
     }
 }

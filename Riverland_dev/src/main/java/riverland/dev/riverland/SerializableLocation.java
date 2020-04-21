@@ -3,9 +3,17 @@ package riverland.dev.riverland;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.bukkit.Location;
+import riverland.dev.riverland.Riverland;
 
 import java.io.Serializable;
-
+/*
+#
+#
+# MADE REDUNDANT KEEPING HERE FOR REFERENCE ONLY
+#
+#
+ */
+@Deprecated
 public class SerializableLocation
 {
 

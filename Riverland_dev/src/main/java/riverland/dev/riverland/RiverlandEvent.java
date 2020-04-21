@@ -1,5 +1,6 @@
 package riverland.dev.riverland;
 
+@Deprecated
 public class RiverlandEvent
 {
     protected RiverlandEventManager riverlandEventManager = null;

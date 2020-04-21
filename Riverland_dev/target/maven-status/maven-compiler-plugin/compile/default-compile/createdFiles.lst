@@ -7,6 +7,7 @@ riverland\dev\riverland\AdminHelp.class
 riverland\dev\riverland\SerializableLocation.class
 riverland\dev\riverland\RiverlandEventType.class
 riverland\dev\riverland\CustomEntityCreeper.class
+riverland\dev\riverland\InventoryUtil.class
 riverland\dev\riverland\ThumbusEvent$2.class
 riverland\dev\riverland\RiverlandEventManager$1.class
 riverland\dev\riverland\TicketSQL.class
@@ -22,6 +23,7 @@ riverland\dev\riverland\TicketSQL$1.class
 riverland\dev\riverland\ThumbusEvent$2$1.class
 riverland\dev\riverland\CustomEntityGiant.class
 riverland\dev\riverland\RiverlandEventManager.class
+riverland\dev\riverland\LootTable.class
 riverland\dev\riverland\ThumbusEvent$1$1.class
 riverland\dev\riverland\RiverlandEvent.class
 riverland\dev\riverland\ThumbusEvent$3.class
@@ -29,7 +31,6 @@ riverland\dev\riverland\EntityTypesCustom.class
 riverland\dev\riverland\ThumbusEvent$1$1$1.class
 riverland\dev\riverland\CustomEntityGiant$PathfinderGoalGiantAttack.class
 riverland\dev\riverland\RiverlandCommands.class
-riverland\dev\riverland\Riverland$2.class
 riverland\dev\riverland\Riverland.class
 riverland\dev\riverland\DonatorEventCommands.class
 riverland\dev\riverland\CustomEntityGiant$GroupDataZombie.class

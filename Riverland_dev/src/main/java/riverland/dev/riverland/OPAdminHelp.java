@@ -45,6 +45,7 @@ public class OPAdminHelp implements CommandExecutor
                         player.sendMessage(ChatColor.RED.toString() + "______________________________________"); // add seperator string
                         for (Map.Entry<Integer, String> pair : map)
                         {
+                            player.sendMessage("----------------------");
                             net.md_5.bungee.api.chat.TextComponent id = new net.md_5.bungee.api.chat.TextComponent(pair.getKey().toString()); // get id
                             id.setColor(net.md_5.bungee.api.ChatColor.RED); // set red..
 
@@ -100,17 +101,19 @@ public class OPAdminHelp implements CommandExecutor
                             String substr = pair.getValue().substring(worldStart+6 , pair.getValue().length());
 
                             clickable2.setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/riverland teleport" + " " + substr +" " +  x + " " + y + " " + z)); // set click event to text component
-
+                            net.md_5.bungee.api.chat.TextComponent id2 = new net.md_5.bungee.api.chat.TextComponent();
                             // compile json string
                             id.addExtra(strSeperator);
                             id.addExtra(nameMessageCombo);
                             if (((Player)sender).isOp())
                             {
-                                id.addExtra(clickable2);
-                                id.addExtra(clickable1);
+
+                                id2.addExtra(clickable2);
+                                id2.addExtra(clickable1);
                             }
                             player.sendMessage(id); // output json string
-
+                            player.sendMessage(id2);
+                            player.sendMessage("----------------------");
                         }
                         player.sendMessage(ChatColor.RED.toString() + "______________________________________");
                     }
@@ -136,7 +139,8 @@ public class OPAdminHelp implements CommandExecutor
                         {
                             if (plr != player)
                             {
-                                plr.sendMessage( ChatColor.AQUA + player.getName() + " Is "+ChatColor.GREEN+"Removing Ticket Issue: " + ChatColor.DARK_RED+target);
+                                if (plr.isOp())
+                                    plr.sendMessage( ChatColor.AQUA + player.getName() + " Is "+ChatColor.GREEN+"Removing Ticket Issue: " + ChatColor.DARK_RED+target);
                             }
                         }
                     }

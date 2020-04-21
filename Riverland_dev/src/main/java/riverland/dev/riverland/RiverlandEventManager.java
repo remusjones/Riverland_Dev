@@ -1,7 +1,14 @@
 package riverland.dev.riverland;
 
 import java.util.ArrayList;
-
+/*
+#
+#
+# MADE REDUNDANT KEEPING HERE FOR REFERENCE ONLY
+#
+#
+ */
+@Deprecated
 public class RiverlandEventManager
 {
     ArrayList<RiverlandEvent> activeRiverlandEvents = new ArrayList<>();
