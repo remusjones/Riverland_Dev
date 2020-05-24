@@ -9,3 +9,6 @@ Riverlands Testing Environment/
 RiverLands Testing Environment/world/
 Riverland_dev/.idea/libraries/OpenInv.xml
 Riverland_dev/src/main/java/riverland/dev/riverland/MobLocationHelperUtil.java
+Riverland_dev/Spigot/
+Riverland_dev/CraftBukkit/
+Riverland_dev/BuildData/
