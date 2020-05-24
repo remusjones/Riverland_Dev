@@ -1,0 +1,14 @@
+TNT_BunkerBusterIgnoresWater: false
+TNT_BreakChance: 0.5
+TNT_BunkerBusterRange: 1.5
+TNT_ExplosionRadiusLow: 3.0
+TNT_ExplosionRadiusHigh: 9.0
+TNT_ExplosionRadius: 0.5
+SQL_MaxTicketIssuesPerPlayer: 5
+SQL_Host: sql12.freemysqlhosting.net
+SQL_Port: 3306
+SQL_Database: sql12322586
+SQL_Username: sql12322586
+SQL_Password: CF8Lqj5kiS
+SQL_TablePrefix: TICKET_
+WelcomeMessage: Welcome to Riverlands!

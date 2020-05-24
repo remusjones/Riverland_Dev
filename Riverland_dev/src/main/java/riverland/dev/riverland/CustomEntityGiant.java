@@ -10,7 +10,10 @@ import net.minecraft.server.v1_15_R1.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.type.Fire;
+<<<<<<< HEAD
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCreeper;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftZombie;
@@ -22,14 +25,18 @@ import org.bukkit.event.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
+<<<<<<< HEAD
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Collection;
 import java.util.List;
 
@@ -41,6 +48,10 @@ import java.util.List;
 #
  */
 @Deprecated
+=======
+import java.util.List;
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 public class CustomEntityGiant extends EntityGiantZombie {
     private ArrayList<Player> playerList = new ArrayList<>();
 
@@ -64,7 +75,11 @@ public class CustomEntityGiant extends EntityGiantZombie {
         this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
+<<<<<<< HEAD
        // this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true, true));
+=======
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true, true));
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 
         ItemStack testSword = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.IRON_SWORD, 1));
     }
@@ -76,13 +91,20 @@ public class CustomEntityGiant extends EntityGiantZombie {
     public void CreateZombieConfigs(ArrayList<Player> players, int maxHP) {
         playerList = players;
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(maxHP);
+<<<<<<< HEAD
+=======
+        //this.getAttributeInstance(GenericAttributes.ATTACK_SPEED).setValue(1);
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
         this.getAttributeInstance(GenericAttributes.ATTACK_KNOCKBACK).setValue(10);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(1);
         this.setHealth(maxHP);
     }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     public CustomEntityGiant(World world, EntityTypes<? extends EntityGiantZombie> entityType) {
         this(world);
 
@@ -90,6 +112,11 @@ public class CustomEntityGiant extends EntityGiantZombie {
         this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
+<<<<<<< HEAD
+=======
+        //this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
+        // this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true, true));
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
 
     }
@@ -98,6 +125,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
 
     }
 
+<<<<<<< HEAD
     // Construct our entity with our super class, and make persistent.
     public CustomEntityGiant(EntityTypes<CustomEntityGiant> customEntityGiantEntityTypes, World world) {
 
@@ -139,12 +167,129 @@ public class CustomEntityGiant extends EntityGiantZombie {
        // this.getAttributeInstance(GenericAttributes.ARMOR).setValue(2.0D);
         this.getAttributeInstance(GenericAttributes.ATTACK_KNOCKBACK).setValue(3);
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(2000);
+=======
+    public CustomEntityGiant(EntityTypes<CustomEntityGiant> customEntityGiantEntityTypes, World world) {
+
+        super(EntityTypes.GIANT, world);
+        //      List goalB = (List)getPrivateField("b", PathfinderGoal.class, goalSelector); goalB.clear();
+        //   List goalC = (List) getPrivateField("c", PathfinderGoalSelector.class, goalSelector); goalC.clear();
+        //   List targetB = (List)getPrivateField("b", PathfinderGoalSelector.class, targetSelector); targetB.clear();
+        //  List targetC = (List)getPrivateField("c", PathfinderGoalSelector.class, targetSelector); targetC.clear();
+//
+//
+        //  this.goalSelector.a(0, new PathfinderGoalFloat(this));
+        // //    this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
+        //  this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
+        //  this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityPlayer.class, 8.0F));
+        ////  this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
+        // // this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityPlayer.class, false, true));
+        // // this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityVillager.class, false, false));
+        //  this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, HumanEntity.class, false, false));
+
+        // this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this,EntitySkeleton.class, 1.0D, true));
+        l();
+        this.persistent = true;
+
+
+    }
+
+    protected void initPathfinder() {
+        this.goalSelector.a(4, new CustomEntityGiant.a(this, 1.0D, 3));
+        this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
+
+        //  this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
+        this.l();
+    }
+
+    protected void l() {
+
+        //this.getAttributeInstance(GenericAttributes.ATT).setValue(2);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(100D);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(1000);
+        this.getAttributeInstance(GenericAttributes.KNOCKBACK_RESISTANCE).setValue(100);
+        this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a(new Class[]{EntityPlayer.class}));
+
+        //    this.goalSelector.a(2, new PathfinderGoalZombieAttack(this, 1.0D, false));
+        // this.goalSelector.a(7, new PathfinderGoalRandomStrollLand(this, 1.0D));
+        this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a(new Class[]{EntityPigZombie.class}));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
+        /// if (this.world.spigotConfig.zombieAggressiveTowardsVillager) {
+        //    this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityVillagerAbstract.class, false));
+        /// }
+
+        // this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityIronGolem.class, true));
+        // this.targetSelector.a(5, new PathfinderGoalNearestAttackableTarget(this, EntityTurtle.class, 10, true, false, EntityTurtle.bw));
+        this.targetSelector.a(2, new PathfinderGoalGiantAttack(this, 1.5D, false));
+    }
+
+    protected void initAttributes() {
+        super.initAttributes();
+        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(35.0D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(45.0D);
+        this.getAttributeInstance(GenericAttributes.ARMOR).setValue(2.0D);
+        this.getAttributeInstance(GenericAttributes.ATTACK_KNOCKBACK).setValue(10);
+        //this.getAttributeInstance(GenericAttributes.ATT).setValue(2);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(1000);
+
+        // bukkit items..
+        //org.bukkit.inventory.ItemStack weapon = new org.bukkit.inventory.ItemStack(org.bukkit.Material.GOLDEN_SWORD, 1);
+        //ItemMeta itemData = weapon.getItemMeta();
+        //itemData.addEnchant(org.bukkit.enchantments.Enchantment.DAMAGE_ALL, 4,true);
+        //itemData.addEnchant(Enchantment.KNOCKBACK, 10,true);
+        //weapon.setItemMeta(itemData);
+
+        //org.bukkit.inventory.ItemStack chest = new org.bukkit.inventory.ItemStack(org.bukkit.Material.CHAINMAIL_CHESTPLATE, 1);
+        //ItemMeta chestItem = chest.getItemMeta();
+        //chest.setItemMeta(chestItem);
+
+
+        //org.bukkit.inventory.ItemStack boots = new org.bukkit.inventory.ItemStack(org.bukkit.Material.CHAINMAIL_BOOTS, 1);
+        //ItemMeta bootsItem = boots.getItemMeta();
+        //boots.setItemMeta(bootsItem);
+
+        //org.bukkit.inventory.ItemStack Legs = new org.bukkit.inventory.ItemStack(org.bukkit.Material.CHAINMAIL_LEGGINGS, 1);
+        //ItemMeta LegsItem = Legs.getItemMeta();
+        //Legs.setItemMeta(LegsItem);
+
+
+        //org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(org.bukkit.Material.CHAINMAIL_LEGGINGS, 1);
+        //// enchant here
+        //ItemMeta headItem = head.getItemMeta();
+        //head.setItemMeta(headItem);
+
+        //org.bukkit.inventory.ItemStack offHand = new org.bukkit.inventory.ItemStack(org.bukkit.Material.SHIELD, 1);
+        //// enchant here
+        //ItemMeta offHandItem = offHand.getItemMeta();
+        //offHand.setItemMeta(offHandItem);
+
+        // this.setEquipment(EnumItemSlot.MAINHAND, testSword);
+        //ItemStack cpySword =  CraftItemStack.asNMSCopy(weapon);
+        //ItemStack cpyChest = CraftItemStack.asNMSCopy(chest);
+        //ItemStack cpyBoots = CraftItemStack.asNMSCopy(boots);
+        //ItemStack cpyLegs = CraftItemStack.asNMSCopy(Legs);
+        //ItemStack cpyHead = CraftItemStack.asNMSCopy(head);
+        //ItemStack cpyOffhand = CraftItemStack.asNMSCopy(chest);
+
+        //this.setEquipment(EnumItemSlot.MAINHAND,cpySword);
+        //this.setEquipment(EnumItemSlot.CHEST,cpyChest);
+        //this.setEquipment(EnumItemSlot.FEET,cpyBoots);
+        //this.setEquipment(EnumItemSlot.LEGS,cpyLegs);
+        //this.setEquipment(EnumItemSlot.HEAD,cpyHead);
+        //this.setEquipment(EnumItemSlot.OFFHAND,cpyOffhand);
+        //this.sete
+        // this.getAttributeInstance(GenericAttributes.).setValue(1000);
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     }
 
     protected int getExpValue(EntityHuman entityhuman) {
         if (this.isBaby()) {
             this.f = (int) ((float) this.f * 2.5F);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
         return super.getExpValue(entityhuman);
     }
 
@@ -210,6 +355,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
         }
 
     }
+<<<<<<< HEAD
     //public boolean r(Entity entity)
     //{
     //    float f = (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
@@ -242,6 +388,9 @@ public class CustomEntityGiant extends EntityGiantZombie {
 //
     //    return flag;
     //}
+=======
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
@@ -267,6 +416,21 @@ public class CustomEntityGiant extends EntityGiantZombie {
             return super.a(entityhuman, enumhand);
         }
     }
+<<<<<<< HEAD
+=======
+
+    //  public boolean shouldBurnInDay() {
+    //      return this.K_();
+    //  }
+
+    // protected boolean K_() {
+    //     return this.shouldBurnInDay;
+    // }
+
+    // public void setShouldBurnInDay(boolean shouldBurnInDay) {
+    //     this.shouldBurnInDay = shouldBurnInDay;
+    // }
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     public void ForceAI()
     {
         this.setNoAI(false);
@@ -315,6 +479,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
             creeperNames.add("Jason");
             creeperNames.add("Karen");
 
+<<<<<<< HEAD
             try {
                 for (int i = 0; i < creepersPackSpawn; i++) {
                     try {
@@ -333,6 +498,20 @@ public class CustomEntityGiant extends EntityGiantZombie {
                     {
 
                     }
+=======
+
+            try {
+                for (int i = 0; i < creepersPackSpawn; i++) {
+                    //creeperPack.setPosition(this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5));
+                    CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+//
+                    // EntityCreeper creeperPack = new EntityCreeper(EntityTypes.CREEPER,world);
+                    IChatBaseComponent chatBase = new ChatMessage(creeperNames.get(i));
+                    myCreeper.setCustomName(creeperNames.get(i));
+                    myCreeper.setCustomNameVisible(true);
+                    myCreeper.setPowered(true);
+                    myCreeper.setMaxFuseTicks(60);
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                 }
             }
             catch (Exception exc)
@@ -362,7 +541,11 @@ public class CustomEntityGiant extends EntityGiantZombie {
 
                     for (int i = 0; i < ZombiePackCount; i++) {
 
+<<<<<<< HEAD
                      //   CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+=======
+                        CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                         EntityZombie zombiePack = new EntityZombie(world);
                         zombiePack.setBaby(true);
                         zombiePack.setGoalTarget(this.lastDamager);
@@ -388,6 +571,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
         } else {
 
             if (damagesource.getEntity() instanceof EntityLiving) {
+<<<<<<< HEAD
                 try
                 {
                     if (damagesource.getEntity().isAlive())
@@ -396,6 +580,9 @@ public class CustomEntityGiant extends EntityGiantZombie {
                 {
 
                 }
+=======
+                this.setGoalTarget(((EntityLiving) damagesource.j()));
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                 if (this.getHealth() <= (getMaxHealth() / 1.75)) {
                     currHitsAfterMaxHealth++;
 
@@ -403,7 +590,11 @@ public class CustomEntityGiant extends EntityGiantZombie {
                     if (currHitsAfterMaxHealth > HitsForZombiePack) {
 
                         for (int i = 0; i < ZombiePackCount; i++) {
+<<<<<<< HEAD
                        //     CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+=======
+                            CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                             EntityZombie zombiePack = new EntityZombie(world);
                             zombiePack.setBaby(true);
                             zombiePack.setGoalTarget(this.lastDamager);
@@ -421,8 +612,12 @@ public class CustomEntityGiant extends EntityGiantZombie {
             } else if (damagesource.j() instanceof EntityArrow) {
 
                 if (damagesource.getEntity().isAlive()) {
+<<<<<<< HEAD
                     if (damagesource.getEntity() != null)
                         this.setGoalTarget(((EntityLiving) damagesource.getEntity()), EntityTargetEvent.TargetReason.TARGET_ATTACKED_ENTITY,false);
+=======
+                    this.setGoalTarget(((EntityLiving) damagesource.j()));
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                 }
                 if (this.getHealth() <= (getMaxHealth() / 1.75)) {
                     currHitsAfterMaxHealth++;
@@ -430,7 +625,11 @@ public class CustomEntityGiant extends EntityGiantZombie {
                     if (currHitsAfterMaxHealth > HitsForZombiePack) {
 
                         for (int i = 0; i < ZombiePackCount; i++) {
+<<<<<<< HEAD
                       //      CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+=======
+                            CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                             EntityZombie zombiePack = new EntityZombie(world);
                             zombiePack.setBaby(true);
                             zombiePack.setGoalTarget(this.lastDamager);
@@ -517,7 +716,10 @@ public class CustomEntityGiant extends EntityGiantZombie {
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
         super.a(difficultydamagescaler);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
         if (this.random.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F)) {
             int i = this.random.nextInt(3);
             if (i == 0) {
@@ -547,6 +749,10 @@ public class CustomEntityGiant extends EntityGiantZombie {
             EntityVillager entityvillager = (EntityVillager) entityliving;
             EntityZombieVillager entityzombievillager = (EntityZombieVillager) EntityTypes.ZOMBIE_VILLAGER.a(this.world);
             entityzombievillager.u(entityvillager);
+<<<<<<< HEAD
+=======
+            // entityzombievillager.prepare(this.world, this.world.getDamageScaler(new BlockPosition(entityzombievillager)), EnumMobSpawn.CONVERSION, new EntityZombie.GroupDataZombie(false), (NBTTagCompound)null);
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
             entityzombievillager.setVillagerData(entityvillager.getVillagerData());
             entityzombievillager.a((NBTBase) entityvillager.eN().a(DynamicOpsNBT.a).getValue());
             entityzombievillager.setOffers(entityvillager.getOffers().a());
@@ -664,6 +870,10 @@ public class CustomEntityGiant extends EntityGiantZombie {
                 }
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     }
 
     protected ItemStack es() {
@@ -710,7 +920,10 @@ public class CustomEntityGiant extends EntityGiantZombie {
         private CustomEntityGiant d = null;
         private int e;
         private int fireball = 40;
+<<<<<<< HEAD
         private int levitation = 0;
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 
         public PathfinderGoalGiantAttack(CustomEntityGiant var0, double var1, boolean var3) {
             super(var0, var1, var3);
@@ -732,15 +945,25 @@ public class CustomEntityGiant extends EntityGiantZombie {
         public void e() {
             try {
                 super.e();
+<<<<<<< HEAD
                 if (this.d.getGoalTarget() == null)
                     return;
 
+=======
+                if (this.d.getGoalTarget() == null) {
+                    // find another target..
+
+                    return;
+                    // try find near player
+                }
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                 EntityLiving entityliving = this.d.getGoalTarget();
                 double d0 = 64.0D;
                 World world = this.d.world;
                 Vec3D vec3d = this.d.f(1.0F);
                 ++this.e;
                 ++this.fireball;
+<<<<<<< HEAD
                 ++this.levitation;
 
 
@@ -802,6 +1025,22 @@ public class CustomEntityGiant extends EntityGiantZombie {
                    //entitylargefireball.setPosition(this.d.locX() + vec3d.x * 4.0D, this.d.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
                    //entitylargefireball.forceExplosionKnockback = true;
                    //world.addEntity(entitylargefireball);
+=======
+
+                if (fireball > 80) {
+
+                    double d2 = entityliving.locX() - (this.d.locX() + vec3d.x * 4.0D);
+                    double d3 = entityliving.e(0.5D) - (0.5D + this.d.e(0.5D));
+                    double d4 = entityliving.locZ() - (this.d.locZ() + vec3d.z * 4.0D);
+
+                    EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.d, d2, d3, d4);
+                    entitylargefireball.bukkitYield = (float) (entitylargefireball.yield = 5);
+                    entitylargefireball.setPosition(this.d.locX() + vec3d.x * 4.0D, this.d.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
+                    entitylargefireball.forceExplosionKnockback = true;
+
+                    world.addEntity(entitylargefireball);
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                     fireball = 0;
                 }
 
@@ -810,6 +1049,11 @@ public class CustomEntityGiant extends EntityGiantZombie {
 
                 } else {
                     this.d.q(false);
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                 }
 
             } catch (Exception err) {

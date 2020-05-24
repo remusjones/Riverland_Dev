@@ -6,7 +6,11 @@
 
     <groupId>Riverland.dev</groupId>
     <artifactId>Riverland</artifactId>
+<<<<<<< HEAD
     <version>1.1</version>
+=======
+    <version>1.0</version>
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     <packaging>jar</packaging>
 
     <name>Riverland</name>
@@ -62,6 +66,7 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+<<<<<<< HEAD
         <repository>
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
@@ -78,6 +83,8 @@
             <id>SilkSpawners-Repo</id>
             <url>https://ci.dustplanet.de/plugin/repository/everything/</url>
         </repository>
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     </repositories>
     <dependencies>
         <dependency>
@@ -87,17 +94,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+<<<<<<< HEAD
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.5.10</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>net.raidstone</groupId>
             <artifactId>WorldGuardEvents</artifactId>
@@ -127,5 +138,8 @@
                 </exclusion>
             </exclusions>
         </dependency>
+=======
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     </dependencies>
 </project>

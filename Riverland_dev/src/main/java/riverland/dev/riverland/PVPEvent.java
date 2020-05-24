@@ -26,6 +26,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitScheduler;
 
+<<<<<<< HEAD
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -36,6 +37,10 @@ import java.util.*;
 #
 #
  */
+=======
+import java.util.*;
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 public class PVPEvent implements CommandExecutor, Listener
 {
 
@@ -361,18 +366,24 @@ public class PVPEvent implements CommandExecutor, Listener
                 if (joinedPlayers.size() < 2) {
                     AnnouncePlainRed("PvP Event Cancelled, not enough players!");
                     Riverland._Instance.getServer().getScheduler().cancelTask(eventStartID);
+<<<<<<< HEAD
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                     Date date = new Date();
                     date.setTime(1000999);
                     Riverland._Instance.config.set("THUMBUS_LASTSTART", dateFormat.format(date));
                     Riverland._Instance.saveConfig();
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                     RestartEvent();
                 }
                 isJoinable = false;
                 for(Player player : joinedPlayers)
                 {
                     player.teleport(spectating);
+<<<<<<< HEAD
                     player.setGameMode(GameMode.SURVIVAL);
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                 }
                 BeginRoundCountdown();
                 Riverland._Instance.getServer().getScheduler().cancelTask(eventStartID);
@@ -541,7 +552,10 @@ public class PVPEvent implements CommandExecutor, Listener
 
             combatingPlayers.get(0).setGameMode(GameMode.SURVIVAL);
             combatingPlayers.get(1).setGameMode(GameMode.SURVIVAL);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
             // Teleport Players
             combatingPlayers.get(0).teleport(playerStart1);
             combatingPlayers.get(1).teleport(playerStart2);
@@ -659,6 +673,7 @@ public class PVPEvent implements CommandExecutor, Listener
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+<<<<<<< HEAD
         //if (args.length==0)
         //    return false;
 //
@@ -717,6 +732,59 @@ public class PVPEvent implements CommandExecutor, Listener
         //        return true;
         //    }
         //}
+=======
+        if (args[0].equalsIgnoreCase("start"))
+        {
+            playerStart1 = Riverland._Instance.player1Location;
+            playerStart2 = Riverland._Instance.player2Location;
+            spectating = Riverland._Instance.playerWatchLocation;
+            RestartEvent();
+            // start
+            BeginEvent();
+            isJoinable = true;
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("join"))
+        {
+            if ( isJoinable) {
+                if (!joinedPlayers.contains((Player) sender)) {
+                    joinedPlayers.add((Player) sender);
+                    AnnouncePlainDarkPurple(((Player) sender).getName() + " has joined the event!");
+                }else
+                {
+                    ((Player)sender).sendMessage("You've already joined the event");
+                }
+            }
+            else{
+                if (!combatingPlayers.contains(((Player)sender))) {
+                    ((Player) sender).sendMessage("You are assigned as spectator");
+                    ((Player) sender).teleport(spectating);
+                }
+            }
+
+            return true;
+        }
+        if (sender.isOp()) {
+            if (args[0].equalsIgnoreCase("set1")) {
+                playerStart1 = ((Player) (sender)).getLocation();
+                Riverland._Instance.player1Location = playerStart1;
+                Riverland._Instance.SaveLocations();
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("set2")) {
+                playerStart2 = ((Player) (sender)).getLocation();
+                Riverland._Instance.player2Location = playerStart2;
+                Riverland._Instance.SaveLocations();
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("watch")) {
+                spectating = ((Player) (sender)).getLocation();
+                Riverland._Instance.playerWatchLocation = spectating;
+                Riverland._Instance.SaveLocations();
+                return true;
+            }
+        }
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
         return false;
     }
 }

@@ -3,12 +3,16 @@ package riverland.dev.riverland;
 import net.minecraft.server.v1_15_R1.Entity;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+<<<<<<< HEAD
 import riverland.dev.riverland.CustomEntityGiant;
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 
 import java.util.Map;
 
 //import static riverland.dev.riverland.CustomEntityGiant.getPrivateField;
 
+<<<<<<< HEAD
 /*
 #
 #
@@ -17,6 +21,9 @@ import java.util.Map;
 #
  */
 @Deprecated
+=======
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 public enum EntityTypesCustom
 {
     //NAME("Entity name", Entity ID, yourcustomclass.class);

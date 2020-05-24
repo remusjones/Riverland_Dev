@@ -2,6 +2,7 @@ package riverland.dev.riverland;
 import net.minecraft.server.v1_15_R1.*;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 
+<<<<<<< HEAD
 /*
 #
 #
@@ -10,6 +11,8 @@ import net.minecraft.server.v1_15_R1.EntityTypes;
 #
  */
 
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 public class CustomEntityCreeper extends EntityCreeper
 {
 
@@ -20,6 +23,10 @@ public class CustomEntityCreeper extends EntityCreeper
         // override our attributes here
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
@@ -38,7 +45,10 @@ public class CustomEntityCreeper extends EntityCreeper
         super.initAttributes();
 
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(2);
+<<<<<<< HEAD
         this.persistent = true;
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     }
     @Override
     public boolean damageEntity(DamageSource damagesource, float f)

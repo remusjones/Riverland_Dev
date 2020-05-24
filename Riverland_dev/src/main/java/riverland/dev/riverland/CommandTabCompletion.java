@@ -3,7 +3,10 @@ package riverland.dev.riverland;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+<<<<<<< HEAD
 import org.bukkit.entity.Player;
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,7 @@ public class CommandTabCompletion implements TabCompleter
     String RemoveAll = "removeall";
     String ThumbusSpawn = "setthumbusspawn";
     String ThumbusBoss = "setthumbusboss";
+<<<<<<< HEAD
     String deathSee = "deathsee";
     String deathRefund = "deathrefund";
     String dontationEventThumbus = "thumbuseventdonator";
@@ -45,11 +49,34 @@ public class CommandTabCompletion implements TabCompleter
                     l.add("setThumbusSpawn");
                 }
                 if (ThumbusBoss.contains(args[0].toLowerCase())) {
+=======
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        List<String> l = new ArrayList<>();
+        // riverland commands..
+        if(command.getName().equalsIgnoreCase("riverland") && args.length >= 0)
+        {
+            if (args.length == 1)
+            {
+                if (ThumbusSpawn.contains(args[0].toLowerCase()))
+                {
+                    l.add("setThumbusSpawn");
+                }
+                if (ThumbusBoss.contains(args[0].toLowerCase()))
+                {
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                     l.add("setThumbusBoss");
                 }
                 if (pickup.contains(args[0].toLowerCase()))
                     l.add("Pickup");
+<<<<<<< HEAD
                 if (TNTIgnoreWater.contains(args[0].toLowerCase())) {
+=======
+                if (TNTIgnoreWater.contains(args[0].toLowerCase()))
+                {
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                     l.add("TNTIgnoreWater");
                 }
                 if (Reload.contains(args[0].toLowerCase()))
@@ -64,7 +91,11 @@ public class CommandTabCompletion implements TabCompleter
                 if (TNTLarge.contains(args[0].toLowerCase()))
                     l.add("TNTLarge");
 
+<<<<<<< HEAD
                 if (TNTBuster.contains(args[0].toLowerCase()))
+=======
+                if ( TNTBuster.contains(args[0].toLowerCase()))
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
                     l.add("TNTBuster");
 
                 if (CustomTNT1.contains(args[0].toLowerCase()))
@@ -82,6 +113,7 @@ public class CommandTabCompletion implements TabCompleter
                 if (ObsidianBreakChance.contains(args[0].toLowerCase()))
                     l.add("ObsidianBreakChance");
             }
+<<<<<<< HEAD
             if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("TNTSmall")) {
                     l.add("Size");
@@ -102,6 +134,39 @@ public class CommandTabCompletion implements TabCompleter
             }
         } else if (command.getName().equalsIgnoreCase("opadminhelp") && args.length >= 0) {
             if (args.length == 1) {
+=======
+            if (args.length == 2)
+            {
+                if (args[0].equalsIgnoreCase("TNTSmall"))
+                {
+                    l.add("Size");
+                }
+                else if (args[0].equalsIgnoreCase("TNTMedium"))
+                {
+                    l.add("Size");
+                }
+                else if (args[0].equalsIgnoreCase("TNTLarge"))
+                {
+                    l.add("Size");
+                }
+                else if (args[0].equalsIgnoreCase("TNTBuster"))
+                {
+                    l.add("Size");
+                } else if (args[0].equalsIgnoreCase("ObsidianBreakChance"))
+                {
+                    l.add("chance [float]");
+                }
+                if (args[0].equalsIgnoreCase("TNTIgnoreWater"))
+                {
+                    l.add("True|False");
+                }
+
+            }
+        }else if (command.getName().equalsIgnoreCase("opadminhelp")&& args.length >= 0)
+        {
+            if (args.length == 1)
+            {
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 
 
                 if (Display.contains(args[0].toLowerCase()))
@@ -111,6 +176,7 @@ public class CommandTabCompletion implements TabCompleter
                 if (RemoveAll.contains(args[0].toLowerCase()))
                     l.add("RemoveAll");
 
+<<<<<<< HEAD
             } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
                 l.add("ID");
             }
@@ -134,6 +200,20 @@ public class CommandTabCompletion implements TabCompleter
                 }
             }
         }
+=======
+            }else if (args.length == 2 && args[0].equalsIgnoreCase("remove"))
+            {
+                l.add("ID");
+            }
+        }else if (command.getName().equalsIgnoreCase("adminhelp")&& args.length >= 0)
+        {
+            if (args.length == 1)
+            {
+                l.add("Message");
+            }
+        }
+
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
         return l;
     }
 }

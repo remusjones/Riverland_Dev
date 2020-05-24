@@ -33,6 +33,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.15-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.25" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
+<<<<<<< HEAD
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm:8.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-commons:8.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-tree:8.0.1" level="project" />
@@ -70,5 +71,12 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bstats:bstats-bukkit:1.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.SirBlobman.combatlogx:CombatLogX-API:10.0.0.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: de.dustplanet:SilkSpawners:6.0.0" level="project" />
+=======
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm:7.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-commons:7.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-tree:7.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-analysis:7.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.15.2-R0.1-SNAPSHOT" level="project" />
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
   </component>
 </module>

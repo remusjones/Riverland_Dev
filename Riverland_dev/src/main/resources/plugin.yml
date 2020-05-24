@@ -1,8 +1,11 @@
 name: Riverland
 version: ${project.version}
 main: riverland.dev.riverland.Riverland
+<<<<<<< HEAD
 depend: [WorldGuard]
 softdepend: [Factions, SilkSpawners]
+=======
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 api-version: 1.13
 author: riverland.dev
 commands:
@@ -21,6 +24,29 @@ commands:
     permission: Riverland.Riverland
     permission-message: You do not have permission!
     usage: /<command> [Reload|TNTSmall|TNTMedium|TNTLarge|Pickup|CustomTNT1|CustomTNT2|CustomTNT3]
+<<<<<<< HEAD
+=======
+  ArenaEvent:
+    description: ArenaEvent
+    permission: Riverland.ArenaEvent
+    permission-message: You do not have permission!
+    usage: /<command> [TEST]
+  Leave:
+    description: Leaves Specator Mode
+    permission: Riverland.Leave
+    permission-message: You do not have permission!
+    usage: /<command>
+  PVPArena:
+    description: Leaves Specator Mode
+    permission: Riverland.PVPArena
+    permission-message: You do not have permission!
+    usage: /<command>
+  EventManager:
+    description: Leaves Specator Mode
+    permission: Riverland.EventManager
+    permission-message: You do not have permission!
+    usage: /<command>
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 
 permissions:
   Riverland.AdminHelp:
@@ -31,4 +57,19 @@ permissions:
     default: op
   Riverland.Riverland:
     description: Riverland plugin management
+<<<<<<< HEAD
+=======
+    default: op
+  Riverland.ArenaEvent:
+    description: Riverland plugin management
+    default: op
+  Riverland.Leave:
+    description: Riverland plugin management
+    default: true
+  Riverland.PVPArena:
+    description: none
+    default: op
+  Riverland.EventManager:
+    description: none
+>>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
     default: op
