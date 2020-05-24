@@ -7,6 +7,7 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
+import de.dustplanet.util.SilkUtil;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -38,32 +39,22 @@ public final class Riverland extends JavaPlugin {
     public transient Map<Location, Integer> tntPositions = new HashMap<>();
     public boolean IgnoreWater = false;
     public double tntBreakChance = 0.5f;
-    public static CustomEntityType GiantTypeInstance;
     public static CustomEntityType CreeperTypeInstance;
-    public static CustomEntityType BabyZombieTypeInstance;
-    public RiverlandEventManager riverlandEventManager = null;
-
-
-    public Location giantBossStartLocation = null;
-    public Location giantBossEndLocation = null;
-
-    public Location playerWatchLocation = null;
-    public Location player1Location = null;
-    public Location player2Location = null;
+    public static SilkUtil SilkSpawnerInstance = null;
 
 
     public ArrayList<String> randomNameList = new ArrayList<>();
-    public SpecatorMode spectatorMode;
     Gson gsonObj = new Gson();
 
-    LootTable thumbusRewardsPool = new LootTable();
-
     public static StateFlag CustomExplosionFlag;
-
-    public ArrayList<ItemStack> ThumbusLoot = new ArrayList<>();
-
+    public static StateFlag SpawnExitCommands;
     private File folder;
     private File f;
+
+    public static SilkUtil _SilkSpawnerInstance()
+    {
+        return SilkSpawnerInstance;
+    }
 
     public String randomString() {
         int leftLimit = 97; // letter 'a'
@@ -104,6 +95,63 @@ public final class Riverland extends JavaPlugin {
     @Override
     public void onLoad()
     {
+
+
+        if (CustomExplosionFlag == null) {
+            FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
+            try {
+                // create a flag with the name "my-custom-flag", defaulting to true
+                StateFlag flag = new StateFlag("RiverlandExplosion", true);
+                registry.register(flag);
+                CustomExplosionFlag = flag; // only set our field if there was no error
+            } catch (FlagConflictException e) {
+                // some other plugin registered a flag by the same name already.
+                // you can use the existing flag, but this may cause conflicts - be sure to check type
+                Flag<?> existing = registry.get("RiverlandExplosion");
+                if (existing instanceof StateFlag) {
+                    CustomExplosionFlag = (StateFlag) existing;
+                } else {
+                    // types don't match - this is bad news! some other plugin conflicts with you
+                    // hopefully this never actually happens
+                }
+            }
+        }
+    }
+    public void SetEntityRandomName(Entity entity)
+    {
+        Random rand = new Random();
+        String randomElement = randomNameList.get(rand.nextInt(randomNameList.size()));
+        entity.setCustomName(randomElement);
+        entity.setCustomNameVisible(true);
+    }
+
+    public void RegisterEntities()
+    {
+        // config.yml end
+        try {
+            //new PetType<PetZombie>("pet_zombie", PetZombie.class, EntityTypes.ZOMBIE, PetZombie::new);
+            CreeperTypeInstance = new CustomEntityType <CustomEntityCreeper> (randomString().toLowerCase(), CustomEntityCreeper.class, EntityTypes.CREEPER, CustomEntityCreeper::new);
+            CreeperTypeInstance.register();
+        } catch (Exception err)
+        {
+            err.printStackTrace();
+        }
+    }
+    public void UnRegisterEntities()
+    {
+        try
+        {
+            CreeperTypeInstance.unregister();
+        }catch (Exception err)
+        {
+            err.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onEnable()
+    {
+
         randomNameList.add("James");
         randomNameList.add("John");
         randomNameList.add("Robert");
@@ -131,132 +179,31 @@ public final class Riverland extends JavaPlugin {
         randomNameList.add("Jason");
         randomNameList.add("Karen");
 
-        FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
-        try {
-            // create a flag with the name "my-custom-flag", defaulting to true
-            StateFlag flag = new StateFlag("RiverlandExplosion", true);
-            registry.register(flag);
-            CustomExplosionFlag = flag; // only set our field if there was no error
-        } catch (FlagConflictException e) {
-            // some other plugin registered a flag by the same name already.
-            // you can use the existing flag, but this may cause conflicts - be sure to check type
-            Flag<?> existing = registry.get("RiverlandExplosion");
-            if (existing instanceof StateFlag) {
-                CustomExplosionFlag = (StateFlag) existing;
-            } else {
-                // types don't match - this is bad news! some other plugin conflicts with you
-                // hopefully this never actually happens
+        if (CustomExplosionFlag == null)
+        {
+            FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
+
+            try {
+                // create a flag with the name "my-custom-flag", defaulting to true
+                StateFlag flag = new StateFlag("RiverlandExplosion", true);
+                registry.register(flag);
+
+                CustomExplosionFlag = flag; // only set our field if there was no error
+            } catch (FlagConflictException e) {
+                // some other plugin registered a flag by the same name already.
+                // you can use the existing flag, but this may cause conflicts - be sure to check type
+                Flag<?> existing = registry.get("RiverlandExplosion");
+                if (existing instanceof StateFlag) {
+                    CustomExplosionFlag = (StateFlag) existing;
+                } else {
+                    // types don't match - this is bad news! some other plugin conflicts with you
+                    // hopefully this never actually happens
+                }
             }
         }
-    }
-    public void SetEntityRandomName(Entity entity)
-    {
-        Random rand = new Random();
-        String randomElement = randomNameList.get(rand.nextInt(randomNameList.size()));
-        entity.setCustomName(randomElement);
-        entity.setCustomNameVisible(true);
-    }
-
-    public void RegisterEntities()
-    {
-        // config.yml end
-        try {
-            //new PetType<PetZombie>("pet_zombie", PetZombie.class, EntityTypes.ZOMBIE, PetZombie::new);
-            BabyZombieTypeInstance = new CustomEntityType <CustomEntityBabyZombies> (randomString().toLowerCase(), CustomEntityBabyZombies.class, EntityTypes.ZOMBIE, CustomEntityBabyZombies::new);
-            BabyZombieTypeInstance.register();
-        } catch (Exception err)
-        {
-            err.printStackTrace();
-        }
 
 
-
-        // config.yml end
-        try {
-            //new PetType<PetZombie>("pet_zombie", PetZombie.class, EntityTypes.ZOMBIE, PetZombie::new);
-            GiantTypeInstance = new CustomEntityType <CustomEntityGiant> (randomString().toLowerCase(), CustomEntityGiant.class, EntityTypes.GIANT, CustomEntityGiant::new);
-            GiantTypeInstance.register();
-        } catch (Exception err)
-        {
-            err.printStackTrace();
-        }
-
-        // config.yml end
-        try {
-            //new PetType<PetZombie>("pet_zombie", PetZombie.class, EntityTypes.ZOMBIE, PetZombie::new);
-            CreeperTypeInstance = new CustomEntityType <CustomEntityCreeper> (randomString().toLowerCase(), CustomEntityCreeper.class, EntityTypes.CREEPER, CustomEntityCreeper::new);
-            CreeperTypeInstance.register();
-        } catch (Exception err)
-        {
-            err.printStackTrace();
-        }
-    }
-    public void UnRegisterEntities()
-    {
-        // unregister first if it exists
-        try
-        {
-            BabyZombieTypeInstance.unregister();
-        }catch (Exception err)
-        {
-            err.printStackTrace();
-        }
-        try
-        {
-            GiantTypeInstance.unregister();
-        }catch (Exception err)
-        {
-            err.printStackTrace();
-        }
-        try
-        {
-            CreeperTypeInstance.unregister();
-        }catch (Exception err)
-        {
-            err.printStackTrace();
-        }
-    }
-
-
-    public void SaveThumbusRewardsPool()
-    {
-        try {
-            folder = this.getDataFolder();
-            f = new File(folder, "ThumbusLootTable.json");
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace();
-        }
-        try
-        {
-            getLogger().log(Level.WARNING,"Saving Json.. " );
-            gsonObj = new Gson();
-            FileWriter myWriter = new FileWriter(f);
-
-
-            String str = gsonObj.toJson(thumbusRewardsPool);
-            if (str.length() > 3)
-            {
-                myWriter.write(str);
-                getLogger().log(Level.WARNING,"Writing Json.." );
-            }
-            myWriter.close();
-        }
-        catch (Exception exc)
-        {
-            getLogger().log(Level.WARNING,"Could not save Thumbus Rewards" + exc.toString());
-        }
-    }
-
-    @Override
-    public void onEnable() {
-
-        //thumbusRewardsPool.PopulateDefaultFallbackItems();
-        //thumbusRewardsPool.PopulateDefaultFallbackItems();
-
-
-
+        SilkSpawnerInstance = SilkUtil.hookIntoSilkSpanwers();
         _Instance = this;
         // config.yml setup
         config.addDefault("WelcomeMessage", "Welcome to Riverlands!");
@@ -329,27 +276,19 @@ public final class Riverland extends JavaPlugin {
 
         // setup ticketer info
         _InstanceRiverLandTicket = new TicketSQL(config.getString("SQL_Host"), config.getInt("SQL_Port"),config.getString("SQL_TablePrefix"),config.getString("SQL_Database"),config.getString("SQL_Username"),config.getString("SQL_Password"),config.getInt("SQL_MaxTicketIssuesPerPlayer"));
-        riverlandEventManager = new RiverlandEventManager();
         getLogger().log(Level.INFO,"Riverland Plugin Enabled");
         // register command against plugin.yml commands list..
         this.getCommand("AdminHelp").setExecutor(new AdminHelp());
         this.getCommand("OPAdminHelp").setExecutor(new OPAdminHelp());
         this.getCommand("Riverland").setExecutor(new RiverlandCommands());
-        PVPEvent event = new PVPEvent();
-        this.getCommand("PVPArena").setExecutor(event);
-        this.getCommand("EventManager").setExecutor(new RiverlandEventManagerListener());
-        this.getCommand("DonationEventManager").setExecutor(new DonatorEventCommands());
-
 
         CommandTabCompletion commandTab = new CommandTabCompletion();
         getCommand("Riverland").setTabCompleter(commandTab);
         getCommand("OpAdminHelp").setTabCompleter(commandTab);
         getCommand("AdminHelp").setTabCompleter(commandTab);
-        getCommand("donationeventmanager").setTabCompleter(commandTab);
+
         // register join listener..
         getServer().getPluginManager().registerEvents(new RiverLandEventListener(), this);
-        getServer().getPluginManager().registerEvents(event, this);
-
         // setup tnt from config file
         tntRadiusDefault = config.getDouble("TNT_ExplosionRadius");
         tntRadiusLow =    config.getDouble("TNT_ExplosionRadiusLow");
@@ -357,10 +296,6 @@ public final class Riverland extends JavaPlugin {
         tntBunkerBusterRange = config.getDouble("TNT_BunkerBusterRange");
         tntBreakChance = config.getDouble("TNT_BreakChance");
         IgnoreWater = config.getBoolean("TNT_BunkerBusterIgnoresWater");
-        //ThumbusLoot = ((ArrayList<ItemStack>)config.get("Thumbus.LootTable"));
-        //InventoryUtil.ThumbusLootTable = CreateInventoryFromConfig();
-        // load all stored locations..
-        LoadLocations();
 
         if (!Riverland._InstanceRiverLandTicket._IsTaskRunning) // check if server is running an async sql thingo..
         {
@@ -444,7 +379,7 @@ public final class Riverland extends JavaPlugin {
         }
         catch (Exception exc)
         {
-            getLogger().log(Level.WARNING,"Could not load TNT Json" + exc.toString());
+            getLogger().log(Level.WARNING,"Could not save TNT Json" + exc.toString());
         }
     }
 }

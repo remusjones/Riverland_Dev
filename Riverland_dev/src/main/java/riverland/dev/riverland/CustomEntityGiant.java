@@ -362,7 +362,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
 
                     for (int i = 0; i < ZombiePackCount; i++) {
 
-                        CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+                     //   CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
                         EntityZombie zombiePack = new EntityZombie(world);
                         zombiePack.setBaby(true);
                         zombiePack.setGoalTarget(this.lastDamager);
@@ -403,7 +403,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
                     if (currHitsAfterMaxHealth > HitsForZombiePack) {
 
                         for (int i = 0; i < ZombiePackCount; i++) {
-                            CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+                       //     CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
                             EntityZombie zombiePack = new EntityZombie(world);
                             zombiePack.setBaby(true);
                             zombiePack.setGoalTarget(this.lastDamager);
@@ -430,7 +430,7 @@ public class CustomEntityGiant extends EntityGiantZombie {
                     if (currHitsAfterMaxHealth > HitsForZombiePack) {
 
                         for (int i = 0; i < ZombiePackCount; i++) {
-                            CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
+                      //      CraftZombie myZombie = (CraftZombie) Riverland.BabyZombieTypeInstance.spawn(new Location((org.bukkit.World) world.getWorld(), this.locX() + (random.nextDouble() * 5), this.locY(), this.locZ() + (random.nextDouble() * 5)));
                             EntityZombie zombiePack = new EntityZombie(world);
                             zombiePack.setBaby(true);
                             zombiePack.setGoalTarget(this.lastDamager);

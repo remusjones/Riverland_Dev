@@ -1,5 +1,6 @@
 package riverland.dev.riverland;
 
+import com.massivecraft.factions.*;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,6 +9,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.tags.ItemTagType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class RiverlandCommands implements CommandExecutor {
     Integer currBlockX = 0;
@@ -175,6 +181,45 @@ public class RiverlandCommands implements CommandExecutor {
                     player.sendMessage("Err: " + exc.toString());
 
                 }
+
+            }else if (args[0].equalsIgnoreCase("spongeegg") && sender.isOp() && sender instanceof Player)
+            {
+                ItemStack egg = new ItemStack(Material.EGG);
+                egg.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                ItemMeta spongeData = egg.getItemMeta();
+                NamespacedKey key = new NamespacedKey(Riverland._Instance, "spongekey");
+                spongeData.getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, 1);
+                egg.setItemMeta(spongeData);
+
+                ((Player) sender).getInventory().addItem(egg);
+            }else if (args[0].equalsIgnoreCase("givespongeegg") && sender.isOp())
+            {
+                ItemStack egg = new ItemStack(Material.EGG);
+                egg.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                ItemMeta spongeData = egg.getItemMeta();
+                NamespacedKey key = new NamespacedKey(Riverland._Instance, "spongekey");
+                spongeData.getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, 1);
+
+
+                spongeData.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b[&5&lRAID-SPONGE&b]"));
+                ArrayList<String> Lore = new ArrayList<String>();
+                Lore.add("&d------------------------------------");
+                Lore.add("&5&lRaid Sponge");
+                Lore.add("&eSpawns a Sponge");
+                Lore.add("&eWorks with Water/Lava");
+                Lore.add("&cWill only work in &4&lenemy &cfaction land");
+                Lore.add("&d------------------------------------");
+                ArrayList<String> convertedLore = new ArrayList<>();
+
+
+                for (String s : Lore) {
+                    convertedLore.add(ChatColor.translateAlternateColorCodes('&', s));
+                }
+
+                spongeData.setLore(convertedLore);
+                egg.setItemMeta(spongeData);
+
+                Riverland._Instance.getServer().getPlayer(args[1]).getInventory().addItem(egg);
 
             }
             return true;

@@ -33,10 +33,10 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.15-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.25" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm:7.3.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-commons:7.3.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-tree:7.3.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-analysis:7.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm:8.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-commons:8.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-tree:8.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-analysis:8.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.massivecraft:Factions:1.6.9.5-U0.5.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.massivecraft:Factions-Legacy:1.6.9.5-U0.5.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: mkremins:fanciful:0.4.0-SNAPSHOT" level="project" />
@@ -53,6 +53,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.15.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.raidstone:WorldGuardEvents:1.15.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains:annotations:17.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sk89q.worldguard:worldguard-bukkit:7.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sk89q.worldedit:worldedit-bukkit:7.0.1-SNAPSHOT" level="project" />
@@ -67,6 +69,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sk89q:commandbook:2.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bstats:bstats-bukkit:1.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.SirBlobman.combatlogx:CombatLogX-API:10.0.0.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.SirBlobman.api:SirBlobmanAPI:1.10-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: de.dustplanet:SilkSpawners:6.0.0" level="project" />
   </component>
 </module>

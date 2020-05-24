@@ -74,6 +74,10 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>SilkSpawners-Repo</id>
+            <url>https://ci.dustplanet.de/plugin/repository/everything/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -95,6 +99,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>net.raidstone</groupId>
+            <artifactId>WorldGuardEvents</artifactId>
+            <version>1.15.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.1</version>
@@ -105,6 +115,17 @@
             <artifactId>CombatLogX-API</artifactId>
             <version>10.0.0.0-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.dustplanet</groupId>
+            <artifactId>SilkSpawners</artifactId>
+            <version>6.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
