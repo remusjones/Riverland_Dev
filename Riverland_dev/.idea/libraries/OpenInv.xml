@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="OpenInv">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/OpenInv.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
