@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 riverland\dev\riverland\TicketSQL$1.class
 riverland\dev\riverland\CommandTabCompletion.class
 riverland\dev\riverland\CustomEntityGiant.class
@@ -20,42 +19,3 @@ riverland\dev\riverland\Riverland$1.class
 riverland\dev\riverland\RiverLandEventListener.class
 riverland\dev\riverland\SerializableTNT.class
 riverland\dev\riverland\CustomEntityType.class
-=======
-riverland\dev\riverland\CommandTabCompletion.class
-riverland\dev\riverland\CustomEntityGiant$a.class
-riverland\dev\riverland\CustomEntityBabyZombies.class
-riverland\dev\riverland\RiverLandEventListener$1.class
-riverland\dev\riverland\RiverlandEventManagerListener.class
-riverland\dev\riverland\AdminHelp.class
-riverland\dev\riverland\SerializableLocation.class
-riverland\dev\riverland\RiverlandEventType.class
-riverland\dev\riverland\CustomEntityCreeper.class
-riverland\dev\riverland\ThumbusEvent$2.class
-riverland\dev\riverland\RiverlandEventManager$1.class
-riverland\dev\riverland\TicketSQL.class
-riverland\dev\riverland\OPAdminHelp.class
-riverland\dev\riverland\PVPEvent.class
-riverland\dev\riverland\Riverland$1.class
-riverland\dev\riverland\ThumbusEventListener.class
-riverland\dev\riverland\RiverLandEventListener.class
-riverland\dev\riverland\SerializableTNT.class
-riverland\dev\riverland\CustomEntityType.class
-riverland\dev\riverland\ThumbusEvent$3$1.class
-riverland\dev\riverland\TicketSQL$1.class
-riverland\dev\riverland\ThumbusEvent$2$1.class
-riverland\dev\riverland\CustomEntityGiant.class
-riverland\dev\riverland\RiverlandEventManager.class
-riverland\dev\riverland\ThumbusEvent$1$1.class
-riverland\dev\riverland\RiverlandEvent.class
-riverland\dev\riverland\ThumbusEvent$3.class
-riverland\dev\riverland\EntityTypesCustom.class
-riverland\dev\riverland\ThumbusEvent$1$1$1.class
-riverland\dev\riverland\CustomEntityGiant$PathfinderGoalGiantAttack.class
-riverland\dev\riverland\RiverlandCommands.class
-riverland\dev\riverland\Riverland$2.class
-riverland\dev\riverland\Riverland.class
-riverland\dev\riverland\CustomEntityGiant$GroupDataZombie.class
-riverland\dev\riverland\ThumbusEvent.class
-riverland\dev\riverland\SpecatorMode.class
-riverland\dev\riverland\ThumbusEvent$1.class
->>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b

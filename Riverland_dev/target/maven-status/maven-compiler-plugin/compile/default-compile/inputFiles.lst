@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\Riverland.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\ThumbusEvent.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\SerializableTNT.java
@@ -16,35 +15,12 @@ C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverl
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\LootTable.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\OPAdminHelp.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\RiverlandCommands.java
-=======
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CustomEntityBabyZombies.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\OPAdminHelp.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\Riverland.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\SerializableTNT.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CustomEntityTypeTest.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\AdminHelp.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CustomEntityCreeper.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\RiverlandCommands.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\AIArenaEvent.java
->>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\RiverLandEventListener.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\TicketSQL.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CommandTabCompletion.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CustomEntityTypes.java
-<<<<<<< HEAD
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\RiverlandEvent.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\InventoryUtil.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CustomEntityGiant.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\RiverlandEventManager.java
 C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\ThumbusEventListener.java
-=======
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\EntityTypesCustom.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\RiverlandEvent.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\PVPEvent.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\SerializableLocation.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CustomEntityGiant.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\CustomCreatureType.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\GiantEventCustomAi.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\MobLocationHelperUtil.java
-C:\Users\Remus\Documents\GitHub\Riverland_Dev\Riverland_dev\src\main\java\riverland\dev\riverland\SpecatorMode.java
->>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b

@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
 /*
 #
 #
@@ -32,9 +31,6 @@ import java.util.List;
 #
 #
  */
-=======
-
->>>>>>> 89bc361f785924f34d027f6f7113f8a198456a8b
 public class CustomEntityBabyZombies extends EntityZombie
 {
     public CustomEntityBabyZombies(EntityTypes<CustomEntityBabyZombies> customEntityBabyZombies, World world)
