@@ -52,8 +52,6 @@ public class TicketSQL
         public void run()
         {
             _IsTaskRunning = true;
-
-
             try
             {
                     openConnection();

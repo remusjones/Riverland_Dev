@@ -1,22 +1,17 @@
 package riverland.dev.riverland;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
-//import de.dustplanet.util.SilkUtil;
-//import net.minecraft.server.v1_15_R1.EntityTypes;
 import de.dustplanet.util.SilkUtil;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import de.dustplanet.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
@@ -74,13 +69,11 @@ public final class Riverland extends JavaPlugin {
     public void ConfigReload()
     {
         config = getConfig(); // reload config?
-
         tntRadiusDefault = config.getDouble("TNT_ExplosionRadius"); // get config
         tntRadiusHigh = config.getDouble("TNT_ExplosionRadiusHigh"); // get config
         tntRadiusLow = config.getDouble("TNT_ExplosionRadiusLow"); // get config
         tntBunkerBusterRange = config.getDouble("TNT_BunkerBusterRange");
         tntBreakChance = config.getDouble("TNT_BreakChance");
-
     }
     public void UpdateConfig()
     {
@@ -90,14 +83,11 @@ public final class Riverland extends JavaPlugin {
         config.set("TNT_BunkerBusterRange", tntBunkerBusterRange);
         config.set("TNT_BreakChance", tntBreakChance);
         config.set("TNT_BunkerBusterIgnoresWater", IgnoreWater);
-        SaveLocations();
         saveConfig();
     }
     @Override
     public void onLoad()
     {
-
-
         if (CustomExplosionFlag == null) {
             FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
             try {
@@ -126,28 +116,6 @@ public final class Riverland extends JavaPlugin {
         entity.setCustomNameVisible(true);
     }
 
-    public void RegisterEntities()
-    {
-        // config.yml end
-      //  try {
-      //      //new PetType<PetZombie>("pet_zombie", PetZombie.class, EntityTypes.ZOMBIE, PetZombie::new);
-      //      CreeperTypeInstance = new CustomEntityType <CustomEntityCreeper> (randomString().toLowerCase(), CustomEntityCreeper.class, EntityTypes.CREEPER, CustomEntityCreeper::new);
-      //      CreeperTypeInstance.register();
-      //  } catch (Exception err)
-      //  {
-      //      err.printStackTrace();
-      //  }
-    }
-    public void UnRegisterEntities()
-    {
-        try
-        {
-           // CreeperTypeInstance.unregister();
-        }catch (Exception err)
-        {
-            err.printStackTrace();
-        }
-    }
 
     @Override
     public void onEnable()
@@ -228,8 +196,7 @@ public final class Riverland extends JavaPlugin {
 
 
         saveConfig();
-        // register
-        RegisterEntities();
+
         try
         {
             folder = this.getDataFolder();
@@ -331,28 +298,10 @@ public final class Riverland extends JavaPlugin {
         this.tntPositions.clear();
     }
 
-    public void LoadLocations() // loads event locations yml json
-    {
-
-    }
-    public void SaveLocations() // saves stored event locations
-    {
-    }
-
     @Override
     public void onDisable() {
 
         saveConfig();
-
-        getLogger().log(Level.WARNING,"Saving event locations.. " );
-        SaveLocations();
-        try {
-            UnRegisterEntities();
-        }
-        catch (Exception exc)
-        {
-
-        }
         f = new File(folder, "TNTWorldPositions.yml");
         folder = this.getDataFolder();
         try
