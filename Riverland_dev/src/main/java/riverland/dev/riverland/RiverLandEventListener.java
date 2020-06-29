@@ -17,15 +17,13 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.minecraft.server.v1_15_R1.BlockShulkerBox;
-import net.raidstone.wgevents.events.RegionEnteredEvent;
-import net.raidstone.wgevents.events.RegionsLeftEvent;
+//import net.minecraft.server.v1_15_R1.BlockShulkerBox;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Slab;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCreeper;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
+//import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCreeper;
+//import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -207,44 +205,44 @@ public class RiverLandEventListener implements Listener {
     @EventHandler
     public void onCustomExplode(BlockExplodeEvent explodeEvent)
     {
+        //TODO: Reimplement Silspawner Reference
+       if (Riverland._SilkSpawnerInstance() == null)
+           return;
 
-        if (Riverland._SilkSpawnerInstance() == null)
-            return;
+       Map<Location, ItemStack > spawners = new HashMap<>();
+       for(Block block : explodeEvent.blockList())
+       {
+           if (block.getType() == Material.SPAWNER)
+           {
 
-        Map<Location, ItemStack > spawners = new HashMap<>();
-        for(Block block : explodeEvent.blockList())
-        {
-            if (block.getType() == Material.SPAWNER)
-            {
-
-                if (block.getWorld().getEnvironment() == World.Environment.NETHER)
-                {
-                    CreatureSpawner type = ((CreatureSpawner) block.getState());
-                    if (type.getSpawnedType() == EntityType.BLAZE)
-                        continue;
-                }
-                String id = Riverland._SilkSpawnerInstance().getSpawnerEntityID(block);
-                ItemStack spawnerItem = Riverland._SilkSpawnerInstance().newSpawnerItem(id, id, 1, true);
-                spawners.put(block.getLocation(), spawnerItem);
-            }
-        }
+               if (block.getWorld().getEnvironment() == World.Environment.NETHER)
+               {
+                   CreatureSpawner type = ((CreatureSpawner) block.getState());
+                   if (type.getSpawnedType() == EntityType.BLAZE)
+                       continue;
+               }
+               String id = Riverland._SilkSpawnerInstance().getSpawnerEntityID(block);
+               ItemStack spawnerItem = Riverland._SilkSpawnerInstance().newSpawnerItem(id, id, 1, true);
+               spawners.put(block.getLocation(), spawnerItem);
+           }
+       }
         // wait and spawn item..
 
 
-        if (spawners.size() > 0)
-        {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Riverland._Instance, new Runnable() {
-                @Override
-                public void run() {
-                    Set<Map.Entry<Location, ItemStack>> map = spawners.entrySet();
-                    for(Map.Entry<Location, ItemStack> itempair : map)
-                    {
-                        itempair.getKey().getWorld().dropItemNaturally(itempair.getKey(), itempair.getValue());
-                    }
-                }
+       if (spawners.size() > 0)
+       {
+           Bukkit.getScheduler().scheduleSyncDelayedTask(Riverland._Instance, new Runnable() {
+               @Override
+               public void run() {
+                   Set<Map.Entry<Location, ItemStack>> map = spawners.entrySet();
+                   for(Map.Entry<Location, ItemStack> itempair : map)
+                   {
+                       itempair.getKey().getWorld().dropItemNaturally(itempair.getKey(), itempair.getValue());
+                   }
+               }
 
-            }, 5L);
-        }
+           }, 5L);
+       }
 
 
     }
@@ -274,16 +272,23 @@ public class RiverLandEventListener implements Listener {
                                 Faction faction = Factions.getInstance().getFactionById(metaData);
                                 if (otherFaction.isWilderness())
                                 {
+                                    // TODO: Create a new way to get reference to creepers, not relying on NMS
                                     if (!isSpongeEgg) {
-                                        CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitBlock().getLocation().getWorld(), event.getHitBlock().getLocation().getX(), event.getHitBlock().getLocation().getY(), event.getHitBlock().getLocation().getZ()));
-                                        customExplodingCreepers.add(myCreeper.getUniqueId());
-                                        myCreeper.setPowered(true);
-                                        Riverland._Instance.SetEntityRandomName(myCreeper);
-                                        myCreeper.setPersistent(true);
+                                        Location loc = event.getHitBlock().getRelative(event.getHitBlockFace()).getLocation();
+                                        Creeper creeper = (Creeper)loc.getWorld().spawnEntity(loc, EntityType.CREEPER);
+                                        creeper.setPowered(true);
+                                        creeper.setMaxFuseTicks(30);
+                                        creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                        creeper.setPersistent(true);
+                                       //CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitBlock().getLocation().getWorld(), event.getHitBlock().getLocation().getX(), event.getHitBlock().getLocation().getY(), event.getHitBlock().getLocation().getZ()));
+                                       //customExplodingCreepers.add(myCreeper.getUniqueId());
+                                       //myCreeper.setPowered(true);
+                                       //Riverland._Instance.SetEntityRandomName(myCreeper);
+                                       //myCreeper.setPersistent(true);
 
-                                        myCreeper.setMaxFuseTicks(30);
-                                        // egg.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, factionPlayer.getFactionId() ));
-                                        myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                       //myCreeper.setMaxFuseTicks(30);
+                                       //// egg.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, factionPlayer.getFactionId() ));
+                                       //myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
                                     }else
                                     {
                                         if (event.getHitBlock().getState() instanceof Sign || event.getHitBlock().getBlockData() instanceof Slab)
@@ -298,7 +303,7 @@ public class RiverLandEventListener implements Listener {
                                                     }
                                                 }
                                                 event.getHitBlock().setType(Material.SPONGE);
-                                          //  }
+                                          //  }evemt
                                         }else {
                                             Block block = event.getHitBlock().getRelative(event.getHitBlockFace());
                                        //     Riverland._Instance.getServer().broadcastMessage(block.getType().toString());
@@ -340,13 +345,23 @@ public class RiverLandEventListener implements Listener {
                                                 otherFaction.addAnnouncement(player, net.md_5.bungee.api.ChatColor.YELLOW + "Owner: " +net.md_5.bungee.api.ChatColor.RED + faction.getFPlayerAdmin().getNameAndTitle());
                                             }
                                         }
+                                        // TODO: Create a new way to get reference to creepers, not relying on NMS
                                         if (!isSpongeEgg) {
-                                            CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitBlock().getLocation().getWorld(), event.getHitBlock().getLocation().getX(), event.getHitBlock().getLocation().getY(), event.getHitBlock().getLocation().getZ()));
-                                            customExplodingCreepers.add(myCreeper.getUniqueId());
-                                            myCreeper.setPowered(true);
-                                            Riverland._Instance.SetEntityRandomName(myCreeper);
-                                            myCreeper.setMaxFuseTicks(30);
-                                            myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                           // CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitBlock().getLocation().getWorld(), event.getHitBlock().getLocation().getX(), event.getHitBlock().getLocation().getY(), event.getHitBlock().getLocation().getZ()));
+                                           // customExplodingCreepers.add(myCreeper.getUniqueId());
+                                           // myCreeper.setPowered(true);
+                                           // Riverland._Instance.SetEntityRandomName(myCreeper);
+                                           // myCreeper.setMaxFuseTicks(30);
+                                           // myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+
+                                            Location loc = event.getHitBlock().getRelative(event.getHitBlockFace()).getLocation();
+                                            loc.set(event.getHitBlock().getLocation().getBlockX() + event.getHitBlockFace().getModX(), event.getHitBlock().getLocation().getBlockY() + event.getHitBlockFace().getModY(),event.getHitBlock().getLocation().getBlockZ() + event.getHitBlockFace().getModZ());
+
+                                            Creeper creeper = (Creeper)loc.getWorld().spawnEntity(loc, EntityType.CREEPER);
+                                            creeper.setPowered(true);
+                                            creeper.setMaxFuseTicks(30);
+                                            creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                            creeper.setPersistent(true);
                                         }else
                                         {
                                             if (event.getHitBlock().getState() instanceof Sign || event.getHitBlock().getBlockData() instanceof Slab)
@@ -399,14 +414,23 @@ public class RiverLandEventListener implements Listener {
                                 Faction faction = Factions.getInstance().getFactionById(metaData);
                                 if (otherFaction.isWilderness())
                                 {
+                                    // TODO: Create a new way to get reference to creepers, not relying on NMS
                                     if(!isSpongeEgg)
                                     {
-                                        CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitEntity().getLocation().getWorld(), event.getHitEntity().getLocation().getX(), event.getHitEntity().getLocation().getY(), event.getHitEntity().getLocation().getZ()));
-                                        customExplodingCreepers.add(myCreeper.getUniqueId());
-                                        myCreeper.setPowered(true);
-                                        Riverland._Instance.SetEntityRandomName(myCreeper);
-                                        myCreeper.setMaxFuseTicks(30);
-                                        myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                    //    CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitEntity().getLocation().getWorld(), event.getHitEntity().getLocation().getX(), event.getHitEntity().getLocation().getY(), event.getHitEntity().getLocation().getZ()));
+                                    //    customExplodingCreepers.add(myCreeper.getUniqueId());
+                                    //    myCreeper.setPowered(true);
+                                    //    Riverland._Instance.SetEntityRandomName(myCreeper);
+                                    //    myCreeper.setMaxFuseTicks(30);
+                                    //    myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+
+                                        Location loc = event.getHitEntity().getLocation();
+
+                                        Creeper creeper = (Creeper)loc.getWorld().spawnEntity(loc, EntityType.CREEPER);
+                                        creeper.setPowered(true);
+                                        creeper.setMaxFuseTicks(30);
+                                        creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                        creeper.setPersistent(true);
                                     }else
                                     {
                                         Block block = event.getHitEntity().getLocation().getBlock();
@@ -449,15 +473,21 @@ public class RiverLandEventListener implements Listener {
                                             }
                                         }
 
-
+                                        // TODO: Create a new way to get reference to creepers, not relying on NMS
                                         if (!isSpongeEgg)
                                         {
-                                            CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitEntity().getLocation().getWorld(), event.getHitEntity().getLocation().getX(), event.getHitEntity().getLocation().getY(), event.getHitEntity().getLocation().getZ()));
-                                            customExplodingCreepers.add(myCreeper.getUniqueId());
-                                            myCreeper.setPowered(true);
-                                            Riverland._Instance.SetEntityRandomName(myCreeper);
-                                            myCreeper.setMaxFuseTicks(30);
-                                            myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                         //   CraftCreeper myCreeper = (CraftCreeper) Riverland.CreeperTypeInstance.spawn(new Location((org.bukkit.World) event.getHitEntity().getLocation().getWorld(), event.getHitEntity().getLocation().getX(), event.getHitEntity().getLocation().getY(), event.getHitEntity().getLocation().getZ()));
+                                         //   customExplodingCreepers.add(myCreeper.getUniqueId());
+                                         //   myCreeper.setPowered(true);
+                                         //   Riverland._Instance.SetEntityRandomName(myCreeper);
+                                         //   myCreeper.setMaxFuseTicks(30);
+                                         //   myCreeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                            Location loc = event.getHitEntity().getLocation();
+                                            Creeper creeper = (Creeper)loc.getWorld().spawnEntity(loc, EntityType.CREEPER);
+                                            creeper.setPowered(true);
+                                            creeper.setMaxFuseTicks(30);
+                                            creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                            creeper.setPersistent(true);
                                         }
                                         else
                                         {
@@ -756,7 +786,7 @@ public class RiverLandEventListener implements Listener {
                         {
                             event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), (float) Riverland._Instance.tntRadiusLow);
                             event.getEntity().remove();
-
+                            event.setRadius(0);
 
 
 

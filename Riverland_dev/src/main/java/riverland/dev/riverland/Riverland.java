@@ -7,15 +7,16 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
+//import de.dustplanet.util.SilkUtil;
+//import net.minecraft.server.v1_15_R1.EntityTypes;
 import de.dustplanet.util.SilkUtil;
-import net.minecraft.server.v1_15_R1.EntityTypes;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import de.dustplanet.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
@@ -39,7 +40,7 @@ public final class Riverland extends JavaPlugin {
     public transient Map<Location, Integer> tntPositions = new HashMap<>();
     public boolean IgnoreWater = false;
     public double tntBreakChance = 0.5f;
-    public static CustomEntityType CreeperTypeInstance;
+  //  public static CustomEntityType CreeperTypeInstance;
     public static SilkUtil SilkSpawnerInstance = null;
 
 
@@ -128,20 +129,20 @@ public final class Riverland extends JavaPlugin {
     public void RegisterEntities()
     {
         // config.yml end
-        try {
-            //new PetType<PetZombie>("pet_zombie", PetZombie.class, EntityTypes.ZOMBIE, PetZombie::new);
-            CreeperTypeInstance = new CustomEntityType <CustomEntityCreeper> (randomString().toLowerCase(), CustomEntityCreeper.class, EntityTypes.CREEPER, CustomEntityCreeper::new);
-            CreeperTypeInstance.register();
-        } catch (Exception err)
-        {
-            err.printStackTrace();
-        }
+      //  try {
+      //      //new PetType<PetZombie>("pet_zombie", PetZombie.class, EntityTypes.ZOMBIE, PetZombie::new);
+      //      CreeperTypeInstance = new CustomEntityType <CustomEntityCreeper> (randomString().toLowerCase(), CustomEntityCreeper.class, EntityTypes.CREEPER, CustomEntityCreeper::new);
+      //      CreeperTypeInstance.register();
+      //  } catch (Exception err)
+      //  {
+      //      err.printStackTrace();
+      //  }
     }
     public void UnRegisterEntities()
     {
         try
         {
-            CreeperTypeInstance.unregister();
+           // CreeperTypeInstance.unregister();
         }catch (Exception err)
         {
             err.printStackTrace();
