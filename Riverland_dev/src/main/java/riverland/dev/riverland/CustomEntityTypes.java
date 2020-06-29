@@ -10,6 +10,7 @@ import com.google.common.collect.BiMap;
 //mport java.lang.reflect.Field;
 //mport java.util.Map;
 
+@Deprecated
 class CustomEntityTypes{}
 //class CustomEntityType<T extends EntityLiving> {
 //

@@ -31,6 +31,7 @@ package riverland.dev.riverland;
 //#
 //#
 // */
+@Deprecated
 public class CustomEntityBabyZombies {}
 //{
 //    public CustomEntityBabyZombies(EntityTypes<CustomEntityBabyZombies> customEntityBabyZombies, World world)

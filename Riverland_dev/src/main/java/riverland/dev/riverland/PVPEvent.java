@@ -36,6 +36,7 @@ import java.util.*;
 #
 #
  */
+@Deprecated
 public class PVPEvent implements CommandExecutor, Listener
 {
 

@@ -40,7 +40,7 @@ package riverland.dev.riverland;
 //#
 //#
 // */
-//@Deprecated
+@Deprecated
 public class CustomEntityGiant {}//extends EntityGiantZombie {
 //    private ArrayList<Player> playerList = new ArrayList<>();
 //

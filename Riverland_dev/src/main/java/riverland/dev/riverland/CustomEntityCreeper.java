@@ -1,4 +1,7 @@
 package riverland.dev.riverland;
+
+import org.apache.http.annotation.Obsolete;
+
 //import net.minecraft.server.v1_15_R1.*;
 //import net.minecraft.server.v1_15_R1.EntityTypes;
 //
@@ -10,7 +13,9 @@ package riverland.dev.riverland;
 //#
 // */
 //
-public class CustomEntityCreeper {}//extends EntityCreeper
+@Deprecated
+public class CustomEntityCreeper
+{//extends EntityCreeper
 //{
 //
 //    public CustomEntityCreeper(EntityTypes<CustomEntityCreeper> customEntityGiantEntityTypes, World world)
@@ -19,7 +24,6 @@ public class CustomEntityCreeper {}//extends EntityCreeper
 //        super(EntityTypes.CREEPER, world);
 //        // override our attributes here
 //    }
-//
 //    @Override
 //    protected void initPathfinder() {
 //        this.goalSelector.a(1, new PathfinderGoalFloat(this));
@@ -53,3 +57,4 @@ public class CustomEntityCreeper {}//extends EntityCreeper
 //
 //}
 //
+}
