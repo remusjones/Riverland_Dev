@@ -10,6 +10,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.*;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.enchantments.Enchantment;
@@ -43,6 +44,7 @@ public class RiverLandEventListener implements Listener {
     ArrayList<UUID> customExplodingCreepers = new ArrayList<>();
     ArrayList<Egg> thrownCreeperEggs = new ArrayList<>();
     List<UUID> handledPlayerIds = new ArrayList<>();
+    public double creeperMoveSpeed = 1;
 
 
     @EventHandler
@@ -260,6 +262,8 @@ public class RiverLandEventListener implements Listener {
                                         creeper.setMaxFuseTicks(30);
                                         creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
                                         creeper.setPersistent(true);
+                                        creeper.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(creeperMoveSpeed);
+                                        customExplodingCreepers.add(creeper.getUniqueId());
                                         Riverland._Instance.SetEntityRandomName(creeper);
                                     }else
                                     {
@@ -322,10 +326,12 @@ public class RiverLandEventListener implements Listener {
                                             loc.set(event.getHitBlock().getLocation().getBlockX() + event.getHitBlockFace().getModX(), event.getHitBlock().getLocation().getBlockY() + event.getHitBlockFace().getModY(),event.getHitBlock().getLocation().getBlockZ() + event.getHitBlockFace().getModZ());
 
                                             Creeper creeper = (Creeper)loc.getWorld().spawnEntity(loc, EntityType.CREEPER);
+                                            customExplodingCreepers.add(creeper.getUniqueId());
                                             creeper.setPowered(true);
                                             creeper.setMaxFuseTicks(30);
                                             Riverland._Instance.SetEntityRandomName(creeper);
                                             creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                            creeper.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(creeperMoveSpeed);
                                             creeper.setPersistent(true);
                                         }else
                                         {
@@ -383,10 +389,12 @@ public class RiverLandEventListener implements Listener {
                                         Location loc = event.getHitEntity().getLocation();
 
                                         Creeper creeper = (Creeper)loc.getWorld().spawnEntity(loc, EntityType.CREEPER);
+                                        customExplodingCreepers.add(creeper.getUniqueId());
                                         creeper.setPowered(true);
                                         Riverland._Instance.SetEntityRandomName(creeper);
                                         creeper.setMaxFuseTicks(30);
                                         creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                        creeper.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(creeperMoveSpeed);
                                         creeper.setPersistent(true);
                                     }else
                                     {
@@ -434,10 +442,12 @@ public class RiverLandEventListener implements Listener {
                                         {
                                             Location loc = event.getHitEntity().getLocation();
                                             Creeper creeper = (Creeper)loc.getWorld().spawnEntity(loc, EntityType.CREEPER);
+                                            customExplodingCreepers.add(creeper.getUniqueId());
                                             Riverland._Instance.SetEntityRandomName(creeper);
                                             creeper.setPowered(true);
                                             creeper.setMaxFuseTicks(30);
                                             creeper.setMetadata("Faction", new FixedMetadataValue(Riverland._Instance, metaData));
+                                            creeper.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(creeperMoveSpeed);
                                             creeper.setPersistent(true);
                                         }
                                         else
@@ -716,15 +726,17 @@ public class RiverLandEventListener implements Listener {
     @EventHandler
     public void onCreeperExplode(ExplosionPrimeEvent event) {
         boolean canExplode = CanExplode(event.getEntity().getLocation());
-
         FLocation location = new FLocation(event.getEntity().getLocation());
         Faction faction = Board.getInstance().getFactionAt(location);
         if (customExplodingCreepers.contains(event.getEntity().getUniqueId()))
         {
+
             if (canExplode && !faction.isPeaceful() && !faction.isSafeZone() && !faction.isWarZone())
             {
+
                 if (event.getEntity().hasMetadata("Faction"))
                 {
+
                     String metaData = event.getEntity().getMetadata("Faction").get(0).asString();
                     // Faction Creeper
                     Faction factionCreeper = Factions.getInstance().getFactionById(metaData);
@@ -739,8 +751,7 @@ public class RiverLandEventListener implements Listener {
                             event.getEntity().remove();
                             event.setRadius(0);
 
-
-
+                            Riverland._Instance.getServer().getLogger().log(Level.WARNING, factionCreeper.getTag() + " Creeper" +  " Exploding in " + faction.getTag());
                             customExplodingCreepers.remove(event.getEntity().getUniqueId());
                             event.setCancelled(true);
                         }
