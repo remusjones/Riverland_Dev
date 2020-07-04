@@ -8,6 +8,8 @@ import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import de.dustplanet.util.SilkUtil;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.data.type.TNT;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
@@ -220,17 +222,27 @@ public final class Riverland extends JavaPlugin {
                     {
                         data += myReader.nextLine();
                     }
-                    getLogger().log(Level.WARNING,"String Contents: " + data);
+
                     // try load json
                    Type type = new TypeToken<
                            ArrayList<SerializableTNT>>(){}.getType();
 
                     tntPositions.clear();
                     ArrayList<SerializableTNT> tmp = gsonObj.fromJson(data, type);
+                    getLogger().log(Level.WARNING,"TNT Serialized count: " + tmp.size());
+                    int skippedTNT = 0;
                     for(SerializableTNT tnt : tmp)
                     {
                         Location loc = new Location(getServer().getWorld(tnt.world), tnt.x, tnt.y, tnt.z);
-                        tntPositions.put(loc, tnt.tntType);
+                        if (loc.getBlock().getType() == Material.TNT)
+                            tntPositions.put(loc, tnt.tntType);
+                        else
+                            skippedTNT++;
+                    }
+                    if (skippedTNT > 0)
+                    {
+                        getLogger().log(Level.WARNING, skippedTNT + " invalid TNT Locations removed.");
+                        getLogger().log(Level.WARNING, "Final TNT Size: " + tntPositions.size());
                     }
                    myReader.close();
                 }
