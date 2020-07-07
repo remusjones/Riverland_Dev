@@ -14,6 +14,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcmonkey.sentinel.SentinelPlugin;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
@@ -48,6 +50,7 @@ public final class Riverland extends JavaPlugin {
     public static StateFlag SpawnExitCommands;
     private File folder;
     private File f;
+    public ArrayList<NPCFaction> npcFactions = new ArrayList<>();
 
     public static SilkUtil _SilkSpawnerInstance()
     {
@@ -199,6 +202,54 @@ public final class Riverland extends JavaPlugin {
 
         saveConfig();
 
+        if(getServer().getPluginManager().getPlugin("Citizens") == null || getServer().getPluginManager().getPlugin("Citizens").isEnabled() == false) {
+            getLogger().log(Level.SEVERE, "Citizens 2.0 not found or not enabled");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        //Register your trait with Citizens.
+        net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(RiverlandSentinel.class).withName("RiverlandSentinel"));
+
+        //SentinelPlugin sentinelPlugin = new SentinelPlugin();
+
+        // try load config for npcFactions..
+        try
+        {
+            folder = this.getDataFolder();
+            f= new File(folder,"FactionNPC.json");
+            if (f.exists())
+            {
+                String data = "";
+                Scanner myReader = new Scanner(f);
+                while (myReader.hasNextLine())
+                {
+                    data += myReader.nextLine();
+                }
+
+                // try load json
+                Type type = new TypeToken<
+                        ArrayList<SerializedSentinelFaction>>(){}.getType();
+
+                ArrayList<SerializedSentinelFaction> tmp = gsonObj.fromJson(data, type);
+                if (tmp.size() > 0)
+                {
+                    for(SerializedSentinelFaction sentinelData : tmp)
+                    {
+                        NPCFaction faction = new NPCFaction("");
+                        faction.Load(sentinelData);
+                        Riverland._Instance.npcFactions.add(faction);
+                    }
+                }
+            }
+
+        }catch (Exception exc)
+        {
+            getLogger().log(Level.SEVERE, "Could not load Riverland Sentinel Data - Send Stack Trace to Developer");
+            exc.printStackTrace();
+        }
+
+
         try
         {
             folder = this.getDataFolder();
@@ -229,7 +280,8 @@ public final class Riverland extends JavaPlugin {
 
                     tntPositions.clear();
                     ArrayList<SerializableTNT> tmp = gsonObj.fromJson(data, type);
-                    getLogger().log(Level.WARNING,"TNT Serialized count: " + tmp.size());
+                    if (tmp.size() > 0)
+                        getLogger().log(Level.WARNING,"TNT Serialized count: " + tmp.size());
                     int skippedTNT = 0;
                     for(SerializableTNT tnt : tmp)
                     {
@@ -261,7 +313,7 @@ public final class Riverland extends JavaPlugin {
         this.getCommand("AdminHelp").setExecutor(new AdminHelp());
         this.getCommand("OPAdminHelp").setExecutor(new OPAdminHelp());
         this.getCommand("Riverland").setExecutor(new RiverlandCommands());
-
+        this.getCommand("Thrall").setExecutor(new FactionSentinelCommands());
         CommandTabCompletion commandTab = new CommandTabCompletion();
         getCommand("Riverland").setTabCompleter(commandTab);
         getCommand("OpAdminHelp").setTabCompleter(commandTab);
@@ -342,6 +394,34 @@ public final class Riverland extends JavaPlugin {
         catch (Exception exc)
         {
             getLogger().log(Level.WARNING,"Could not save TNT Json" + exc.toString());
+        }
+        try
+        {
+            f = new File(folder, "FactionNPC.json");
+            folder = this.getDataFolder();
+
+            if (npcFactions.size() > 0) {
+                gsonObj = new Gson();
+                FileWriter myWriter = new FileWriter(f);
+                //
+                ArrayList<SerializedSentinelFaction> list = new ArrayList<>();
+
+                for (NPCFaction fac : npcFactions)
+                {
+                    fac.Save();
+                    list.add(fac.savedData);
+                }
+                String str = gsonObj.toJson(list);
+
+                if (str.length() > 3) {
+                    myWriter.write(str);
+                }
+                myWriter.close();
+            }
+        }catch (Exception exc)
+        {
+
+
         }
     }
 }

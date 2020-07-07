@@ -5,9 +5,13 @@ riverland\dev\riverland\CustomEntityBabyZombies.class
 riverland\dev\riverland\RiverLandEventListener$1.class
 riverland\dev\riverland\EntityTypesCustom.class
 riverland\dev\riverland\CustomEntityTypes.class
+riverland\dev\riverland\RiverlandSentinel.class
 riverland\dev\riverland\RiverlandCommands.class
+riverland\dev\riverland\Riverland$2.class
 riverland\dev\riverland\Riverland.class
 riverland\dev\riverland\AdminHelp.class
+riverland\dev\riverland\NPCFaction.class
+riverland\dev\riverland\FactionSentinelCommands.class
 riverland\dev\riverland\CustomEntityCreeper.class
 riverland\dev\riverland\TicketSQL.class
 riverland\dev\riverland\OPAdminHelp.class
@@ -16,3 +20,4 @@ riverland\dev\riverland\RiverLandEventListener$2.class
 riverland\dev\riverland\Riverland$1.class
 riverland\dev\riverland\RiverLandEventListener.class
 riverland\dev\riverland\SerializableTNT.class
+riverland\dev\riverland\SerializedSentinelFaction.class

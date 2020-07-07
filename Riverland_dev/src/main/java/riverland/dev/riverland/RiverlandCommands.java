@@ -11,8 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.tags.ItemTagType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class RiverlandCommands implements CommandExecutor {
@@ -32,6 +34,7 @@ public class RiverlandCommands implements CommandExecutor {
 
         if (!sender.isOp())
             return false;
+
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("reload")) {
 
@@ -220,7 +223,34 @@ public class RiverlandCommands implements CommandExecutor {
                 egg.setItemMeta(spongeData);
 
                 Riverland._Instance.getServer().getPlayer(args[1]).getInventory().addItem(egg);
+            }else if (args[0].equalsIgnoreCase("NPC"))
+            {
 
+                boolean exists = false;
+                FPlayer factionPlayer = FPlayers.getInstance().getByPlayer((Player)sender);
+                NPCFaction target = null;
+                for (NPCFaction faction :      Riverland._Instance.npcFactions)
+                {
+
+                    if (faction.factionID == factionPlayer.getTag())
+                    {
+                        target = faction;
+                        exists = true;
+                        break;
+                    }
+                }
+                Location loc = ((Player)sender).getLocation();
+                if (exists)
+                {
+                    target.storedNPCs++;
+                    target.SpawnSentinel(loc);
+                }else
+                {
+                    target = new NPCFaction(factionPlayer.getTag());
+                    target.storedNPCs++;
+                    target.SpawnSentinel(loc);
+                    Riverland._Instance.npcFactions.add(target);
+                }
             }
             return true;
         }
