@@ -15,6 +15,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 public class RiverlandSentinel extends Trait
 {
 
@@ -28,21 +30,16 @@ public class RiverlandSentinel extends Trait
         plugin = JavaPlugin.getPlugin(Riverland.class);
 
     }
-    @EventHandler
-    public void OnSpawn(NPCSpawnEvent event)
-    {
-        inventory = Bukkit.createInventory(null, 54, npc.getId() + "'s Inventory");
-    }
     public void load(DataKey key)
     {
-        inventory = Bukkit.createInventory(null, 54, npc.getId() + "'s Inventory");
-        inventory.setContents(items);
+        ownerFaction = key.getString("ownerFaction");
     }
     @EventHandler
     public void OnDeath(NPCDeathEvent event)
     {
-        if (inventory == null)
-            inventory = Bukkit.createInventory(null, 54, npc.getId() + "'s Inventory");
+        Equipment equipment = npc.getTrait(Equipment.class);
+        if (event.getNPC() != this.npc)
+            return;
         for (NPCFaction npcfac:
                 plugin.npcFactions)
         {
@@ -52,80 +49,95 @@ public class RiverlandSentinel extends Trait
                 npcfac.NPCCount--;
             }
         }
-        for (ItemStack item: inventory.getContents())
+        for (ItemStack item:  equipment.getEquipment())
         {
             if (item != null) {
                 npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(), item);
             }
         }
-        inventory.clear();
-        inventory = null;
-        //inventory = null;
         event.getNPC().destroy();
     }
     public void Strip()
     {
-        if (inventory == null)
-            inventory = Bukkit.createInventory(null, 54, npc.getId() + "'s Inventory");
-        for (ItemStack item: inventory.getContents())
+
+        Equipment equipment = npc.getTrait(Equipment.class);
+
+        for (ItemStack item:  equipment.getEquipment())
         {
             if (item != null) {
                 npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(), item);
             }
         }
-        inventory.clear();
+
         npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, new ItemStack(Material.AIR));
         npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.AIR));
         npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.LEGGINGS, new ItemStack(Material.AIR));
         npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HELMET, new ItemStack(Material.AIR));
         npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, new ItemStack(Material.AIR));
         npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.BOOTS, new ItemStack(Material.AIR));
-        items = inventory.getContents();
+
     }
 
     public void EquipItem(Player player, ItemStack item)
     {
-        if (inventory == null)
-        {
-            inventory = Bukkit.createInventory(null, 54, npc.getId() + "'s Inventory");
-        }
-        if (inventory.getContents().length >= this.inventory.getMaxStackSize())
-        {
-            player.sendMessage("The inventory is full");
-            return;
-        }
         boolean success = false;
         if (item.getType().toString().contains("BOOTS"))
         {
+            Equipment equipment = npc.getTrait(Equipment.class);
+            if (equipment.get(Equipment.EquipmentSlot.BOOTS) != null)
+            {
+                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.BOOTS));
+            }
             npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.BOOTS, item);
+
             success= true;
         }
         else if (item.getType().toString().contains("HELMET")) {
+            Equipment equipment = npc.getTrait(Equipment.class);
+            if (equipment.get(Equipment.EquipmentSlot.HELMET) != null)
+            {
+                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.HELMET));
+            }
             npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HELMET, item);
             success= true;
         }
         else if (item.getType().toString().contains("LEGGINGS")) {
+            Equipment equipment = npc.getTrait(Equipment.class);
+            if (equipment.get(Equipment.EquipmentSlot.LEGGINGS)!= null)
+            {
+                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.LEGGINGS));
+            }
             npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.LEGGINGS, item);
             success= true;
         }
         else if (item.getType().toString().contains("CHESTPLATE")) {
+            Equipment equipment = npc.getTrait(Equipment.class);
+            if (equipment.get(Equipment.EquipmentSlot.CHESTPLATE)!= null)
+            {
+                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.CHESTPLATE));
+            }
             npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, item);
             success= true;
         }else if (item.getType().toString().contains("SWORD") || item.getType().toString().contains("AXE")|| item.getType().toString().contains("TRIDENT") ){
+            Equipment equipment = npc.getTrait(Equipment.class);
+            if (equipment.get(Equipment.EquipmentSlot.HAND)!= null)
+            {
+                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.HAND));
+            }
             npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, item);
             success = true;
         }else if (item.getType().toString().contains("SHIELD")){
+            Equipment equipment = npc.getTrait(Equipment.class);
+            if (equipment.get(Equipment.EquipmentSlot.OFF_HAND)!= null)
+            {
+                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.OFF_HAND));
+            }
             npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, item);
             success = true;
         }
         if (success)
-        {
-            player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            this.inventory.addItem(item);
+        {            player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
         }else player.sendMessage("Invalid item");
-
-        //npc.getTrait(Equipment.class).set(
-        items= inventory.getContents();
     }
 
 }

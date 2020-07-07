@@ -9,7 +9,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.inventory.meta.tags.ItemTagType;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -191,7 +194,8 @@ public class RiverlandCommands implements CommandExecutor {
                 egg.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
                 ItemMeta spongeData = egg.getItemMeta();
                 NamespacedKey key = new NamespacedKey(Riverland._Instance, "spongekey");
-                spongeData.getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, 1);
+                spongeData.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 1);
+                //spongeData.getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, 1);
                 egg.setItemMeta(spongeData);
 
                 ((Player) sender).getInventory().addItem(egg);
@@ -201,8 +205,8 @@ public class RiverlandCommands implements CommandExecutor {
                 egg.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
                 ItemMeta spongeData = egg.getItemMeta();
                 NamespacedKey key = new NamespacedKey(Riverland._Instance, "spongekey");
-                spongeData.getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, 1);
-
+               // spongeData.getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, 1);
+                spongeData.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 1);
 
                 spongeData.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b[&5&lRAID-SPONGE&b]"));
                 ArrayList<String> Lore = new ArrayList<String>();
@@ -228,11 +232,13 @@ public class RiverlandCommands implements CommandExecutor {
 
                 boolean exists = false;
                 FPlayer factionPlayer = FPlayers.getInstance().getByPlayer((Player)sender);
+
                 NPCFaction target = null;
-                for (NPCFaction faction :      Riverland._Instance.npcFactions)
+                for (NPCFaction faction : Riverland._Instance.npcFactions)
                 {
 
-                    if (faction.factionID == factionPlayer.getTag())
+                    Faction ffaction = Factions.getInstance().getBestTagMatch(faction.savedData.factionID);
+                    if (ffaction == factionPlayer.getFaction())
                     {
                         target = faction;
                         exists = true;

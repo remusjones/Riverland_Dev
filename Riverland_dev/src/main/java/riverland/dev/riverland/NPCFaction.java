@@ -4,11 +4,16 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.config.file.MainConfig;
+import com.massivecraft.factions.integration.Econ;
+import com.sk89q.wepif.VaultResolver;
+import jdk.vm.ci.code.ValueUtil;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.mcmonkey.sentinel.SentinelTrait;
 import org.mcmonkey.sentinel.integration.SentinelFactions;
 import org.mcmonkey.sentinel.targeting.SentinelTargetLabel;
@@ -24,6 +29,7 @@ public class NPCFaction
     Faction ownerFaction;
     //current faction money
     long currentFactionMoney = 0;
+    long singleCost = 2000;
     //cost per day time
     long costPerNPC = 1000;
     //cost multiplier
@@ -31,6 +37,7 @@ public class NPCFaction
     //current npc count to multiply
     short NPCCount = 0;
     short storedNPCs = 0;
+    long lastPurchase = -1;
 
     ArrayList<SentinelTrait> activeSentinels = new ArrayList<>();
 
@@ -48,6 +55,8 @@ public class NPCFaction
         savedData = data;
         factionID = data.factionID;
         NpcUUID = data.NpcUUID;
+        storedNPCs = data.storedNPCS;
+        NPCCount = (short)(NpcUUID.size() + storedNPCs);
         Riverland._Instance.getLogger().log(Level.WARNING, "NPC Count for " + factionID + " is: " + NpcUUID.size());
         ownerFaction = Factions.getInstance().getByTag(factionID);
         // iterate over npc's and store them ..
@@ -68,27 +77,48 @@ public class NPCFaction
      //      // }
      //   }
     }
+    public boolean Purchase(Player purchaser)
+    {
+        // compare vault..
+        String acc = ownerFaction.getAccountId();
+        double balance = Econ.getBalance(acc);
+        double finalCost = 0;
+        if (NPCCount == 0)
+        {
+            finalCost = singleCost;
+        }else {
+            finalCost = (singleCost) + (costPerNPC * (NPCCount + 1));
+        }
+
+        if (balance > finalCost)
+        {
+            Econ.setBalance(acc, balance - finalCost);
+            purchaser.sendMessage("New Faction Balance: " + Econ.getBalance(acc));
+            storedNPCs ++;
+            return true;
+        }
+
+        return false;
+    }
+    public int UnusedNPCS()
+    {
+        return storedNPCs;
+    }
     public void Save()
     {
         // serialize Sentinel UUID's and Faction Name..
         savedData.factionID = factionID;
         savedData.NpcUUID = NpcUUID;
-    }
-    public boolean PurchaseSentinel()
-    {
-        // get faction, deduct costs, etc..
-        storedNPCs++;
-        NPCCount++;
-        return false;
+        savedData.storedNPCS = storedNPCs;
     }
     public boolean Upkeep()
     {
         return false;
     }
-    public void SpawnSentinel(Location location)
+    public boolean SpawnSentinel(Location location)
     {
         if (storedNPCs<=0)
-            return;
+            return false;
 
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, ownerFaction.getTag() + "'s SellSword");
         npc.addTrait(SentinelTrait.class);
@@ -97,10 +127,6 @@ public class NPCFaction
         SentinelTrait sentinel = npc.getTrait(SentinelTrait.class);
         sentinel.respawnTime = -1;
         sentinel.enemyDrops = true;
-
-        sentinel.avoidRange = 1.5;
-
-        new SentinelTargetLabel("npcs").addToList(sentinel.allAvoids);
         npc.addTrait(RiverlandSentinel.class);
         RiverlandSentinel sentinel1 = npc.getTrait(RiverlandSentinel.class);
         sentinel1.ownerFaction = ownerFaction.getTag();
@@ -110,6 +136,7 @@ public class NPCFaction
         sentinel.chaseRange = 20;
         NpcUUID.add(sentinel.getNPC().getUniqueId());
         storedNPCs --;
+        return true;
     }
     void AddSentinel(SentinelTrait sentinel)
     {

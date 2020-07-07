@@ -1,6 +1,9 @@
 package riverland.dev.riverland;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -12,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.type.TNT;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcmonkey.sentinel.SentinelPlugin;
@@ -89,6 +93,21 @@ public final class Riverland extends JavaPlugin {
         config.set("TNT_BreakChance", tntBreakChance);
         config.set("TNT_BunkerBusterIgnoresWater", IgnoreWater);
         saveConfig();
+    }
+    public NPCFaction getNPCFaction(Player player)
+    {
+        Faction target = FPlayers.getInstance().getByPlayer(player).getFaction();
+        for(NPCFaction npcFaction : npcFactions)
+        {
+            // convert data to faction
+            Faction fac = Factions.getInstance().getBestTagMatch(npcFaction.factionID);
+            if (fac == target)
+                return npcFaction;
+        }
+        // create
+        NPCFaction newFaction =new NPCFaction(target.getTag());
+        npcFactions.add(newFaction);
+        return newFaction;
     }
     @Override
     public void onLoad()
