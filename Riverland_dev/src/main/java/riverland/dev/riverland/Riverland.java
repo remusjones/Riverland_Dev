@@ -10,6 +10,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import de.dustplanet.util.SilkUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.TNT;
@@ -109,6 +110,7 @@ public final class Riverland extends JavaPlugin {
         npcFactions.add(newFaction);
         return newFaction;
     }
+
     @Override
     public void onLoad()
     {
@@ -172,6 +174,12 @@ public final class Riverland extends JavaPlugin {
         randomNameList.add("Jason");
         randomNameList.add("Karen");
 
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            new RiverlandPlaceholderAPI().register();
+        }else
+        {
+            getLogger().log(Level.SEVERE, "Riverland: PlaceholderAPI Not Found");
+        }
         if (CustomExplosionFlag == null)
         {
             FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
@@ -198,6 +206,7 @@ public final class Riverland extends JavaPlugin {
 
         SilkSpawnerInstance = SilkUtil.hookIntoSilkSpanwers();
         _Instance = this;
+        config.options().copyDefaults(true);
         // config.yml setup
         config.addDefault("WelcomeMessage", "Welcome to Riverlands!");
         config.addDefault("SQL_Host", "localhost");
@@ -215,10 +224,12 @@ public final class Riverland extends JavaPlugin {
         config.addDefault("TNT_BunkerBusterIgnoresWater", false);
         config.addDefault("PVP_DONATION_COOLDOWN", 12);
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date d = new Date();
 
+        config.addDefault("Merc_Cost:", 2000);
+        config.addDefault("Merc_UpkeepCost", 1000);
 
+        config.addDefault("Merc_DefaultSkinURL", "https://www.minecraftskins.com/uploads/skins/2019/08/19/kenku-rogue-13358211.png?v234");
+        config.addDefault("Merc_PremiumSkinURL", "https://www.minecraftskins.com/uploads/skins/2019/02/01/faaram-armor-darksouls-12768753.png?v234");
         saveConfig();
 
         if(getServer().getPluginManager().getPlugin("Citizens") == null || getServer().getPluginManager().getPlugin("Citizens").isEnabled() == false) {
@@ -229,8 +240,6 @@ public final class Riverland extends JavaPlugin {
 
         //Register your trait with Citizens.
         net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(RiverlandSentinel.class).withName("RiverlandSentinel"));
-
-        //SentinelPlugin sentinelPlugin = new SentinelPlugin();
 
         // try load config for npcFactions..
         try
@@ -332,11 +341,12 @@ public final class Riverland extends JavaPlugin {
         this.getCommand("AdminHelp").setExecutor(new AdminHelp());
         this.getCommand("OPAdminHelp").setExecutor(new OPAdminHelp());
         this.getCommand("Riverland").setExecutor(new RiverlandCommands());
-        this.getCommand("Thrall").setExecutor(new FactionSentinelCommands());
+        this.getCommand("Merc").setExecutor(new FactionSentinelCommands());
         CommandTabCompletion commandTab = new CommandTabCompletion();
         getCommand("Riverland").setTabCompleter(commandTab);
         getCommand("OpAdminHelp").setTabCompleter(commandTab);
         getCommand("AdminHelp").setTabCompleter(commandTab);
+        getCommand("Merc").setTabCompleter(new MercenaryTabCompletion());
 
         // register join listener..
         getServer().getPluginManager().registerEvents(new RiverLandEventListener(), this);
@@ -352,6 +362,44 @@ public final class Riverland extends JavaPlugin {
         {
             getLogger().log(Level.INFO,"Starting SQL Thread..");
             Riverland._InstanceRiverLandTicket.WriteSQLData.runTaskTimerAsynchronously(Riverland._Instance,0,25);
+        }
+
+        new RiverlandTimedUpkeepRunnable().runTaskTimer(this, 0,12000);
+        new RiverlandSaveRunnable().runTaskTimer(this, 12000,12000);
+    }
+
+    public void SaveNPCFaction()
+    {
+        try
+        {
+            f = new File(folder, "FactionNPC.json");
+            folder = this.getDataFolder();
+
+            if (npcFactions.size() > 0) {
+                gsonObj = new Gson();
+                FileWriter myWriter = new FileWriter(f);
+                //
+                ArrayList<SerializedSentinelFaction> list = new ArrayList<>();
+
+                for (NPCFaction fac : npcFactions)
+                {
+                    if (fac.NPCCount > 0) {
+                        fac.Save();
+                        list.add(fac.savedData);
+                    }
+                }
+                String str = gsonObj.toJson(list);
+
+                if (str.length() > 3) {
+                    myWriter.write(str);
+                }
+                myWriter.close();
+            }
+        }catch (Exception exc)
+        {
+            getLogger().log(Level.SEVERE, "Could not save NPC Faction Data" );
+            exc.printStackTrace();
+
         }
     }
 
@@ -427,8 +475,10 @@ public final class Riverland extends JavaPlugin {
 
                 for (NPCFaction fac : npcFactions)
                 {
-                    fac.Save();
-                    list.add(fac.savedData);
+                    if (fac.NPCCount > 0) {
+                        fac.Save();
+                        list.add(fac.savedData);
+                    }
                 }
                 String str = gsonObj.toJson(list);
 
@@ -439,8 +489,8 @@ public final class Riverland extends JavaPlugin {
             }
         }catch (Exception exc)
         {
-
-
+            getLogger().log(Level.SEVERE, "Could not save NPC Faction Data");
+            exc.printStackTrace();
         }
     }
 }

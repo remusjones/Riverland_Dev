@@ -5,6 +5,8 @@ package riverland.dev.riverland;
 //mport org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 //mport riverland.dev.riverland.CustomEntityGiant;
 
+import org.apache.http.annotation.Obsolete;
+
 import java.util.Map;
 
 //import static riverland.dev.riverland.CustomEntityGiant.getPrivateField;
@@ -16,6 +18,7 @@ import java.util.Map;
 #
 #
  */
+@Obsolete
 @Deprecated
 public enum EntityTypesCustom
 {

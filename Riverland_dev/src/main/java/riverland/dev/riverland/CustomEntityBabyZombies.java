@@ -1,4 +1,7 @@
 package riverland.dev.riverland;
+
+import org.apache.http.annotation.Obsolete;
+
 //import com.destroystokyo.paper.event.entity.EntityTransformedEvent;
 //import com.mojang.brigadier.exceptions.CommandSyntaxException;
 //import net.minecraft.server.v1_15_R1.*;
@@ -31,7 +34,7 @@ package riverland.dev.riverland;
 //#
 //#
 // */
-@Deprecated
+@Obsolete @Deprecated
 public class CustomEntityBabyZombies {}
 //{
 //    public CustomEntityBabyZombies(EntityTypes<CustomEntityBabyZombies> customEntityBabyZombies, World world)

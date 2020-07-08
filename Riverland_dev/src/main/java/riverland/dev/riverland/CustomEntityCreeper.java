@@ -2,6 +2,8 @@ package riverland.dev.riverland;
 
 //import org.apache.http.annotation.Obsolete;
 
+import org.apache.http.annotation.Obsolete;
+
 //import net.minecraft.server.v1_15_R1.*;
 //import net.minecraft.server.v1_15_R1.EntityTypes;
 //
@@ -13,6 +15,7 @@ package riverland.dev.riverland;
 //#
 // */
 //
+@Obsolete
 @Deprecated
 public class CustomEntityCreeper
 {//extends EntityCreeper

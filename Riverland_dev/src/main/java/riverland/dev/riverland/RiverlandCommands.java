@@ -227,36 +227,6 @@ public class RiverlandCommands implements CommandExecutor {
                 egg.setItemMeta(spongeData);
 
                 Riverland._Instance.getServer().getPlayer(args[1]).getInventory().addItem(egg);
-            }else if (args[0].equalsIgnoreCase("NPC"))
-            {
-
-                boolean exists = false;
-                FPlayer factionPlayer = FPlayers.getInstance().getByPlayer((Player)sender);
-
-                NPCFaction target = null;
-                for (NPCFaction faction : Riverland._Instance.npcFactions)
-                {
-
-                    Faction ffaction = Factions.getInstance().getBestTagMatch(faction.savedData.factionID);
-                    if (ffaction == factionPlayer.getFaction())
-                    {
-                        target = faction;
-                        exists = true;
-                        break;
-                    }
-                }
-                Location loc = ((Player)sender).getLocation();
-                if (exists)
-                {
-                    target.storedNPCs++;
-                    target.SpawnSentinel(loc);
-                }else
-                {
-                    target = new NPCFaction(factionPlayer.getTag());
-                    target.storedNPCs++;
-                    target.SpawnSentinel(loc);
-                    Riverland._Instance.npcFactions.add(target);
-                }
             }
             return true;
         }

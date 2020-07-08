@@ -5,98 +5,205 @@ import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.perms.Role;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.mcmonkey.sentinel.SentinelPlugin;
 import org.mcmonkey.sentinel.SentinelTrait;
 
+import java.util.UUID;
+import java.util.logging.Level;
+
 public class FactionSentinelCommands  implements CommandExecutor
 {
+    public static double powerCostPerSentinel = 20;
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        // basic thrall checks..
         if (!(sender instanceof Player))
             return true;
+        String prefix = ChatColor.DARK_BLUE + "[" + ChatColor.GOLD+"Mercenaries"+ChatColor.DARK_BLUE+"] " +ChatColor.YELLOW;
 
         Player player = (Player)sender;
+        FPlayer tmpPlayer = FPlayers.getInstance().getByPlayer(player);
+        if (tmpPlayer.getFaction().isWilderness() || !tmpPlayer.getRole().isAtLeast(Role.MODERATOR))
+        {
+            player.sendMessage(prefix + "You cannot do this for your faction, only Faction Moderator and above have access to this command.");
+            return true;
+        }
         if (args[0].equalsIgnoreCase("Unused"))
         {
-            player.sendMessage("Unused Thralls: " + Riverland._Instance.getNPCFaction(player).storedNPCs);
+            player.sendMessage(prefix + "Unused Mercenaries: " + ChatColor.GOLD + Riverland._Instance.getNPCFaction(player).storedNPCs);
             return true;
+        }
+        else if (args[0].equalsIgnoreCase("tphere"))
+        {
+            NPCFaction fac = Riverland._Instance.getNPCFaction(player);
+            for (UUID npcuuid : fac.NpcUUID)
+            {
+                NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(npcuuid);
+                npc.teleport(player.getLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
+            }
+        }else if (args[0].equalsIgnoreCase("Remove"))
+        {
+            NPCFaction fac = Riverland._Instance.getNPCFaction(player);
+            if (args.length > 1)
+            {
+
+                // translate index 1 to int
+                try {
+                    int amount = Integer.parseUnsignedInt(args[1]);
+                    if (amount > fac.NPCCount)
+                        sender.sendMessage(prefix + "You do not own that many Mercenaries.");
+                    if (amount > 0)
+                    {
+                        for (int i = 0; i < amount; i++)
+                        {
+                            fac.DespawnLast();
+                        }
+                        if (amount == 1) sender.sendMessage(prefix + "Removed " +ChatColor.GOLD+ amount + ChatColor.YELLOW +" Mercenary");
+                        else  sender.sendMessage(prefix + "Removed " +ChatColor.GOLD+ amount +ChatColor.YELLOW +" Mercenaries");
+                    }
+
+                }catch (Exception exc)
+                {
+                    sender.sendMessage(prefix +"Invalid Input");
+                    return true;
+                }
+            }else
+            {
+                if (fac.NPCCount > 0) {
+                    fac.DespawnLast();
+                    sender.sendMessage(prefix + "Removed " + ChatColor.GOLD + "1" + ChatColor.YELLOW + " Mercenary");
+                }
+                return true;
+            }
         }
 
         else if (args[0].equalsIgnoreCase("Used"))
         {
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player);
-            player.sendMessage("Used Thralls: " + (npcFaction.NPCCount - npcFaction.storedNPCs));
+            player.sendMessage(prefix + "Used Mercenaries: " + ChatColor.GOLD +(npcFaction.NPCCount - npcFaction.storedNPCs));
             return true;
         }else if (args[0].equalsIgnoreCase("Buy"))
         {
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player);
-            FPlayer tmpPlayer = FPlayers.getInstance().getByPlayer(player);
             if (tmpPlayer.getRole().isAtLeast(Role.MODERATOR)) {
-                if (!npcFaction.Purchase(player)) {
-                    player.sendMessage("Your Faction cannot afford that.");
-                }
-            }
-            else
-                player.sendMessage("You cannot do this for your faction, only Faction Moderator and above have access to this command.");
+                double wouldUsePower = (npcFaction.NPCCount + 1) *  powerCostPerSentinel;
+                if (wouldUsePower < tmpPlayer.getFaction().getPowerMax()) {
+                    if (!npcFaction.Purchase(player)) {
+                        player.sendMessage(prefix + "Your Faction cannot afford that.");
+                    }
+                }else player.sendMessage(prefix +"Not enough available power. Cost per Mercenary: " + ChatColor.RED + (int)powerCostPerSentinel);
+            }else
+                player.sendMessage(prefix +"You cannot do this for your faction, only Faction Moderator and above have access to this command.");
             return true;
         }
         else if (args[0].equalsIgnoreCase("Spawn"))
         {
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player);
-            FPlayer tmpPlayer = FPlayers.getInstance().getByPlayer(player);
+
             FLocation flocation = new FLocation(player.getLocation());
             Faction faction = Board.getInstance().getFactionAt(flocation);
             if (faction == tmpPlayer.getFaction() || faction.isWilderness())
             {
-                boolean success = npcFaction.SpawnSentinel(player.getLocation());
+                boolean success = npcFaction.SpawnSentinel(player.getLocation(), player);
                 if (success)
-                    player.sendMessage("Thrall Spawned");
+                    player.sendMessage(prefix + "Mercenary Spawned");
                 else
-                    player.sendMessage("No Thralls in reserve");
+                    player.sendMessage(prefix +"No Mercenaries in reserve");
             }
             return true;
+        }else if (args[0].equalsIgnoreCase("Select"))
+        {
+            ((Player)sender).performCommand("npc select");
         }
 
 
         NPC selected = CitizensAPI.getDefaultNPCSelector().getSelected(sender);
         if (selected == null)
         {
-            sender.sendMessage("Please select an NPC");
+            sender.sendMessage(prefix + "Please select an NPC");
             return true;
         }
         // check if npc is valid ..
         if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
         {
-            sender.sendMessage("Please select a valid NPC");
+            sender.sendMessage(prefix +"Please select a valid NPC");
             return true;
         }
         // check validity of selection..
 
         FPlayer factionPlayer = FPlayers.getInstance().getByPlayer(player);
         RiverlandSentinel riverlandSentinel = selected.getTrait(RiverlandSentinel.class);
+        if (sender.isOp())
+        {
+            if (args[0].equalsIgnoreCase("Info"))
+            {
+                sender.sendMessage(prefix +"Owner: " + riverlandSentinel.ownerFaction);
+                // add additional detail here..
+            }
+        }
+
         if (factionPlayer.getFaction() != Factions.getInstance().getByTag(riverlandSentinel.ownerFaction))
         {
-            sender.sendMessage("This NPC Doesn't belong to your faction!");
+            sender.sendMessage(prefix +"This NPC Doesn't belong to your faction!");
             return true;
         }
         SentinelTrait sentinel =  selected.getTrait(SentinelTrait.class);
-
+        if (args[0].equalsIgnoreCase("Delete"))
+        {
+            riverlandSentinel.ForceRemove(Riverland._Instance.getNPCFaction(player));
+        }
+        else if (args[0].equalsIgnoreCase("Store"))
+        {
+            NPCFaction fac = Riverland._Instance.getNPCFaction(player);
+            riverlandSentinel.ForceRemove(fac);
+            fac.storedNPCs++;
+        }
 
         if (args[0].equalsIgnoreCase("equip"))
         {
             // remove from player hand
             riverlandSentinel.EquipItem(player, player.getInventory().getItemInMainHand());
+        }else if (args[0].equalsIgnoreCase("rename"))
+        {
+            if (player.hasPermission("Riverland.NpcChangeName")) {
+                if (args.length > 1) {
+                    String finalName = "";
+                    for (int i = 1; i < args.length; i++) {
+                        finalName += args[i] + " ";
+                    }
+                    finalName.trim();
+                    if (finalName.length() > 16) {
+                        player.sendMessage(prefix + "Name too long");
+                        return true;
+                    } else {
+                        selected.setName(finalName);
+
+                        Riverland._Instance.getLogger().log(Level.WARNING, "User: " + player.getDisplayName() + " set NPC name to: " + finalName);
+                    }
+                } else sender.sendMessage(ChatColor.YELLOW + "Invalid Name");
+            }else player.sendMessage(prefix + "You don't have this donator privilege");
+        }else if (args[0].equalsIgnoreCase("Skin"))
+        {
+                if (player.hasPermission("Riverland.NpcChangeSkin")) {
+                if (args.length > 1) {
+                    NPCFaction fac = Riverland._Instance.getNPCFaction(player);
+                    NPCFaction.SetTexture(args[1], selected, player);
+                } else
+                    player.sendMessage(prefix + "Invalid Input");
+            }
+            else player.sendMessage(prefix + "You don't have this donator privilege");
         }
         else if (args[0].equalsIgnoreCase("strip"))
         {
             // remove all items, drop onto ground
             riverlandSentinel.Strip();
+            sentinel.sayTo(player, prefix +  "I have dropped my equipment");
         }
         else if (args[0].equalsIgnoreCase("Follow"))
         {
@@ -109,28 +216,29 @@ public class FactionSentinelCommands  implements CommandExecutor
                     if (factionPlayer.getFaction() == otherFactionPlayer.getFaction())
                     {
                         sentinel.setGuarding(other.getUniqueId());
-                        sentinel.sayTo(player, "I am now following " + other.getDisplayName());
+                        sentinel.sayTo(player, ChatColor.YELLOW + "I am now following " + other.getDisplayName());
                         sentinel.sayTo(other, player.getDisplayName() + " has commanded me to follow you");
                     }else {
-                        sentinel.sayTo(player, "I won't follow anyone who isn't in our faction.");
+                        sentinel.sayTo(player, ChatColor.YELLOW + "I won't follow anyone who isn't in our faction.");
                     }
                 }else
                 {
                     sentinel.setGuarding(player.getUniqueId());
-                    sentinel.sayTo(player, "I don't know who that is, I'll follow you instead.");
+                    sentinel.sayTo(player, ChatColor.YELLOW + "I don't know who that is, I'll follow you instead.");
                 }
 
             }else {
                 sentinel.setGuarding(player.getUniqueId());
-                sentinel.sayTo(player, "Lead the way.");
+                sentinel.sayTo(player, ChatColor.YELLOW + "Lead the way.");
             }
 
         }
         else if (args[0].equalsIgnoreCase("Wait"))
         {
-            sentinel.sayTo(player, "I will wait here.");
+            sentinel.sayTo(player, ChatColor.YELLOW + "I will wait here.");
             sentinel.pathTo(selected.getStoredLocation());
         }
+
 
 
         return true;

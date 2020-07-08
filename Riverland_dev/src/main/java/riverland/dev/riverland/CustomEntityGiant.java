@@ -1,5 +1,7 @@
 package riverland.dev.riverland;
 
+import org.apache.http.annotation.Obsolete;
+
 //import com.destroystokyo.paper.event.entity.EntityTransformedEvent;
 //import com.mojang.brigadier.exceptions.CommandSyntaxException;
 //import net.minecraft.server.v1_15_R1.*;
@@ -40,6 +42,7 @@ package riverland.dev.riverland;
 //#
 //#
 // */
+@Obsolete
 @Deprecated
 public class CustomEntityGiant {}//extends EntityGiantZombie {
 //    private ArrayList<Player> playerList = new ArrayList<>();

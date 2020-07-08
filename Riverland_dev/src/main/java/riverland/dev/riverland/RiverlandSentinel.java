@@ -34,6 +34,13 @@ public class RiverlandSentinel extends Trait
     {
         ownerFaction = key.getString("ownerFaction");
     }
+    public void ForceRemove(NPCFaction faction)
+    {
+        Strip();
+        faction.NPCCount--;
+        faction.NpcUUID.remove(npc.getUniqueId());
+        this.npc.destroy();
+    }
     @EventHandler
     public void OnDeath(NPCDeathEvent event)
     {

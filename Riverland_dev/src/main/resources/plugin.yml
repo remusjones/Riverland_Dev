@@ -2,7 +2,7 @@ name: Riverland
 version: ${project.version}
 main: riverland.dev.riverland.Riverland
 depend: [WorldGuard, Sentinel, Citizens]
-softdepend: [Factions, SilkSpawners]
+softdepend: [Factions, SilkSpawners, PlaceholderAPI]
 api-version: 1.13
 author: riverland.dev
 commands:
@@ -21,19 +21,25 @@ commands:
     permission: Riverland.Riverland
     permission-message: You do not have permission!
     usage: /<command> [Reload|TNTSmall|TNTMedium|TNTLarge|Pickup|CustomTNT1|CustomTNT2|CustomTNT3]
-  Thrall:
+  Merc:
     description: Commands NPC's
-    permission: Riverland.Thrall
+    permission: Riverland.Merc
     permission-message: You do not have permission!
-    usage: /Thrall [Follow|Follow PlayerName|Wait|Equip|Strip]
+    usage: /Merc [Follow|Follow PlayerName|Wait|Equip|Strip]
 
 permissions:
   Riverland.AdminHelp:
     description: Allows AdminHelp command
     default: true
-  Riverland.Thrall:
+  Riverland.Merc:
     description: Allows AdminHelp command
     default: true
+  Riverland.NpcChangeName:
+    description: Allows users to change npc name
+    default: false
+  Riverland.NpcChangeSkin:
+    description: Allows users to change npc skin
+    default: false
   Riverland.OpAdminHelp:
     description: Allows OPAdminHelp command
     default: op

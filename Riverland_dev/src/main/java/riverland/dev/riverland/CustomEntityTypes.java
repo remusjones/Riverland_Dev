@@ -10,6 +10,9 @@ package riverland.dev.riverland;
 //mport java.lang.reflect.Field;
 //mport java.util.Map;
 
+import org.apache.http.annotation.Obsolete;
+
+@Obsolete
 @Deprecated
 class CustomEntityTypes{}
 //class CustomEntityType<T extends EntityLiving> {

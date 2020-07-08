@@ -19,4 +19,8 @@ public class SerializedSentinelFaction
     @Expose
     @SerializedName("UnusedNPCs")
     short storedNPCS;
+
+    @Expose
+    @SerializedName("LastPurchase")
+    long lastPurchase;
 }
