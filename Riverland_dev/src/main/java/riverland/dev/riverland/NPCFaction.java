@@ -64,7 +64,7 @@ public class NPCFaction
 
     ArrayList<SentinelTrait> activeSentinels = new ArrayList<>();
 
-    ArrayList<UUID> NpcUUID = new ArrayList<>();
+    ArrayList<Integer> NpcUUID = new ArrayList<>();
 
     public SerializedSentinelFaction savedData = new SerializedSentinelFaction();
     // load
@@ -84,6 +84,10 @@ public class NPCFaction
         NpcUUID = data.NpcUUID;
         storedNPCs = data.storedNPCS;
         lastPurchaseTime = data.lastPurchase;
+        if (NpcUUID == null)
+        {
+            NpcUUID = new ArrayList<>();
+        }
         NPCCount = (short)(NpcUUID.size() + storedNPCs);
         Riverland._Instance.getLogger().log(Level.WARNING, "NPC Count for " + factionID + " is: " + NpcUUID.size());
         ownerFaction = Factions.getInstance().getByTag(factionID);
@@ -125,7 +129,6 @@ public class NPCFaction
         }
         return finalCost;
     }
-
     public boolean Purchase(Player purchaser)
     {
         // compare vault..
@@ -219,8 +222,8 @@ public class NPCFaction
                 storedNPCs --;
                 NPCCount --;
             }else if (NpcUUID.size() > 0){
-                NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(NpcUUID.get(NpcUUID.size() - 1));
-                NpcUUID.remove(npc.getUniqueId());
+                NPC npc = CitizensAPI.getNPCRegistry().getById(NpcUUID.get(NpcUUID.size() - 1));
+                NpcUUID.remove(Integer.valueOf(npc.getId()));
                 npc.getTrait(RiverlandSentinel.class).ForceRemove(this);
 
             }
@@ -256,7 +259,7 @@ public class NPCFaction
         new SentinelTargetLabel("factionsenemy:"+ownerFaction.getTag()).addToList(sentinel.allTargets);
         new SentinelTargetLabel("monsters").addToList(sentinel.allTargets);
         sentinel.chaseRange = 20;
-        NpcUUID.add(sentinel.getNPC().getUniqueId());
+        NpcUUID.add(sentinel.getNPC().getId());
         storedNPCs --;
 
 
@@ -266,7 +269,7 @@ public class NPCFaction
     void AddSentinel(SentinelTrait sentinel)
     {
         activeSentinels.add(sentinel);
-        NpcUUID.add(sentinel.getNPC().getUniqueId());
+        NpcUUID.add(sentinel.getNPC().getId());
     }
     void RemoveSentinel(SentinelTrait sentinel)
     {
@@ -277,7 +280,7 @@ public class NPCFaction
     // ripped from https://github.com/CitizensDev/Citizens2/blob/29e6e20feb66730b2f3fe9052314e0b16bc8489e/main/src/main/java/net/citizensnpcs/commands/NPCCommands.java#L1768
     public static void SetTexture(String url, NPC npc, Player player)
     {
-        Bukkit.getScheduler().runTaskAsynchronously(CitizensAPI.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(Riverland._Instance, new Runnable() {
             @Override
             public void run() {
                 DataOutputStream out = null;
@@ -287,8 +290,8 @@ public class NPCFaction
                     HttpURLConnection con = (HttpURLConnection) target.openConnection();
                     con.setRequestMethod("POST");
                     con.setDoOutput(true);
-                    con.setConnectTimeout(1000);
-                    con.setReadTimeout(30000);
+                    con.setConnectTimeout(100000);
+                    con.setReadTimeout(300000);
                     out = new DataOutputStream(con.getOutputStream());
                     out.writeBytes("url=" + URLEncoder.encode(url, "UTF-8"));
                     out.close();
@@ -300,17 +303,17 @@ public class NPCFaction
                     String textureEncoded = (String) texture.get("value");
                     String signature = (String) texture.get("signature");
                     con.disconnect();
-                    Bukkit.getScheduler().runTask(CitizensAPI.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTask(Riverland._Instance, new Runnable() {
                         @Override
                         public void run() {
                             npc.getTrait(SkinTrait.class).setSkinPersistent(uuid, signature, textureEncoded);
                         }
                     });
                 } catch (Throwable t) {
-                    if (Messaging.isDebugging()) {
+                   // if (Messaging.isDebugging()) {
                         t.printStackTrace();
-                    }
-                    Bukkit.getScheduler().runTask(CitizensAPI.getPlugin(), new Runnable() {
+                   // }
+                    Bukkit.getScheduler().runTask(Riverland._Instance, new Runnable() {
                         @Override
                         public void run() {
                             Messaging.sendErrorTr(player, Messages.ERROR_SETTING_SKIN_URL, url);

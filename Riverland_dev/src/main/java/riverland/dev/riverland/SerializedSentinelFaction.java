@@ -14,7 +14,7 @@ public class SerializedSentinelFaction
 
     @Expose
     @SerializedName("npcUUID")
-    ArrayList<UUID> NpcUUID = new ArrayList<>();
+    ArrayList<Integer> NpcUUID = new ArrayList<>();
 
     @Expose
     @SerializedName("UnusedNPCs")

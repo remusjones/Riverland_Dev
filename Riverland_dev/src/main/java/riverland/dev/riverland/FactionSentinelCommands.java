@@ -48,9 +48,9 @@ public class FactionSentinelCommands  implements CommandExecutor
         else if (args[0].equalsIgnoreCase("tphere"))
         {
             NPCFaction fac = Riverland._Instance.getNPCFaction(player);
-            for (UUID npcuuid : fac.NpcUUID)
+            for (int npcuuid : fac.NpcUUID)
             {
-                NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(npcuuid);
+                NPC npc = CitizensAPI.getNPCRegistry().getById(npcuuid);
                 npc.teleport(player.getLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
             }
         }else if (args[0].equalsIgnoreCase("Remove"))
@@ -74,11 +74,15 @@ public class FactionSentinelCommands  implements CommandExecutor
                         }
                         if (amount == 1) sender.sendMessage(prefix + "Removed " +ChatColor.GOLD+ amount + ChatColor.YELLOW +" Mercenary");
                         else  sender.sendMessage(prefix + "Removed " +ChatColor.GOLD+ amount +ChatColor.YELLOW +" Mercenaries");
+
+                        return true;
                     }
 
                 }catch (Exception exc)
                 {
                     sender.sendMessage(prefix +"Invalid Input");
+                    exc.printStackTrace();
+
                     return true;
                 }
             }else
@@ -138,23 +142,24 @@ public class FactionSentinelCommands  implements CommandExecutor
 
 
         NPC selected = CitizensAPI.getDefaultNPCSelector().getSelected(sender);
-        if (selected == null)
-        {
-            sender.sendMessage(prefix + "Please select an NPC");
-            return true;
-        }
-        // check if npc is valid ..
-        if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
-        {
-            sender.sendMessage(prefix +"Please select a valid NPC");
-            return true;
-        }
+
         // check validity of selection..
 
         FPlayer factionPlayer = FPlayers.getInstance().getByPlayer(player);
         RiverlandSentinel riverlandSentinel = selected.getTrait(RiverlandSentinel.class);
         if (sender.isOp())
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             if (args[0].equalsIgnoreCase("Info"))
             {
                 sender.sendMessage(prefix +"Owner: " + riverlandSentinel.ownerFaction);
@@ -170,10 +175,32 @@ public class FactionSentinelCommands  implements CommandExecutor
         SentinelTrait sentinel =  selected.getTrait(SentinelTrait.class);
         if (args[0].equalsIgnoreCase("Delete"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             riverlandSentinel.ForceRemove(Riverland._Instance.getNPCFaction(player));
         }
         else if (args[0].equalsIgnoreCase("Store"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             NPCFaction fac = Riverland._Instance.getNPCFaction(player);
             riverlandSentinel.ForceRemove(fac);
             fac.storedNPCs++;
@@ -182,10 +209,32 @@ public class FactionSentinelCommands  implements CommandExecutor
 
         if (args[0].equalsIgnoreCase("equip"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             // remove from player hand
             riverlandSentinel.EquipItem(player, player.getInventory().getItemInMainHand());
         }else if (args[0].equalsIgnoreCase("rename"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             if (player.hasPermission("Riverland.NpcChangeName")) {
                 if (args.length > 1) {
                     String finalName = "";
@@ -205,6 +254,17 @@ public class FactionSentinelCommands  implements CommandExecutor
             }else player.sendMessage(prefix + "You don't have this donator privilege");
         }else if (args[0].equalsIgnoreCase("Skin"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
                 if (player.hasPermission("Riverland.NpcChangeSkin")) {
                 if (args.length > 1) {
                     NPCFaction fac = Riverland._Instance.getNPCFaction(player);
@@ -216,12 +276,34 @@ public class FactionSentinelCommands  implements CommandExecutor
         }
         else if (args[0].equalsIgnoreCase("strip"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             // remove all items, drop onto ground
             riverlandSentinel.Strip();
             sentinel.sayTo(player, prefix +  "I have dropped my equipment");
         }
         else if (args[0].equalsIgnoreCase("Follow"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             if (args.length > 1)
             {
                 Player other = Riverland._Instance.getServer().getPlayer(args[1]);
@@ -250,6 +332,17 @@ public class FactionSentinelCommands  implements CommandExecutor
         }
         else if (args[0].equalsIgnoreCase("Wait"))
         {
+            if (selected == null)
+            {
+                sender.sendMessage(prefix + "Please select an NPC");
+                return true;
+            }
+            // check if npc is valid ..
+            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+            {
+                sender.sendMessage(prefix +"Please select a valid NPC");
+                return true;
+            }
             sentinel.sayTo(player, ChatColor.YELLOW + "I will wait here.");
             sentinel.setGuarding(-1);
 

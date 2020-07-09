@@ -70,6 +70,9 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
     private String MercCurrentUpkeepCost = "Merc_Current_Upkeep_Cost";
     private String MercRent = "Merc_Rent";
     private String MercCost = "Merc_Cost";
+    private String MercCurrentAmount = "Merc_Current_Amount_Total";
+    private String MercCurrentStored = "Merc_Current_Stored_Total";
+    private String MercCurrentUsed = "Merc_Current_Used_Total";
     @Override
     public String onRequest(OfflinePlayer player, String identifier){
 
@@ -81,6 +84,33 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
             // get cost
             String cost = Double.toString(npcFaction.getPurchaseCost());
+            // return cost
+            return cost;
+        }
+        if(identifier.equalsIgnoreCase(MercCurrentAmount))
+        {
+            // get data
+            NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
+            // get cost
+            String cost = Short.toString(npcFaction.NPCCount);
+            // return cost
+            return cost;
+        }
+        if(identifier.equalsIgnoreCase(MercCurrentStored))
+        {
+            // get data
+            NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
+            // get cost
+            String cost = Short.toString(npcFaction.storedNPCs);
+            // return cost
+            return cost;
+        }
+        if(identifier.equalsIgnoreCase(MercCurrentUsed))
+        {
+            // get data
+            NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
+            // get cost
+            String cost = Integer.toString(npcFaction.NPCCount - npcFaction.storedNPCs);
             // return cost
             return cost;
         }

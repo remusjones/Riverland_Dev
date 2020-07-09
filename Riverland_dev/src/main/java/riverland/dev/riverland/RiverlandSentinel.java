@@ -45,30 +45,27 @@ public class RiverlandSentinel extends Trait
     {
         Strip();
         faction.NPCCount--;
-        faction.NpcUUID.remove(npc.getUniqueId());
+        faction.NpcUUID.remove(Integer.valueOf(npc.getId()));
         this.npc.destroy();
     }
     @EventHandler
     public void OnDeath(NPCDeathEvent event)
     {
-        Equipment equipment = npc.getTrait(Equipment.class);
         if (event.getNPC() != this.npc)
             return;
+
         for (NPCFaction npcfac:
                 plugin.npcFactions)
         {
-            if (npcfac.factionID == ownerFaction)
+            if (npcfac.factionID.equals(ownerFaction))
             {
-                npcfac.NpcUUID.remove(npc.getUniqueId());
+              //  npcfac.NpcUUID.remove(npc.getId());
+                npcfac.NpcUUID.remove(Integer.valueOf(npc.getId()));
                 npcfac.NPCCount--;
             }
         }
-        for (ItemStack item:  equipment.getEquipment())
-        {
-            if (item != null) {
-                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(), item);
-            }
-        }
+        Riverland._Instance.getLogger().log(Level.WARNING, "NPC Died");
+        Strip();
         event.getNPC().destroy();
     }
     public void Strip()
