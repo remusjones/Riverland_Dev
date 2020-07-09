@@ -7,6 +7,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.event.NPCSpawnEvent;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.Equipment;
@@ -29,9 +30,12 @@ public class RiverlandSentinel extends Trait
 {
 
     Riverland plugin = null;
+
     @Persist("ownerFaction") String ownerFaction = "";
     @Persist("Inventory")
             ItemStack[] items;
+
+    SentinelTrait sentinelTrait = null;
     public RiverlandSentinel() {
         super("RiverlandSentinel");
         plugin = JavaPlugin.getPlugin(Riverland.class);
@@ -40,6 +44,7 @@ public class RiverlandSentinel extends Trait
     public void load(DataKey key)
     {
         ownerFaction = key.getString("ownerFaction");
+
     }
     public void ForceRemove(NPCFaction faction)
     {
@@ -48,6 +53,7 @@ public class RiverlandSentinel extends Trait
         faction.NpcUUID.remove(Integer.valueOf(npc.getId()));
         this.npc.destroy();
     }
+
     @EventHandler
     public void OnDeath(NPCDeathEvent event)
     {
@@ -75,7 +81,7 @@ public class RiverlandSentinel extends Trait
 
         for (ItemStack item:  equipment.getEquipment())
         {
-            if (item != null) {
+            if (item != null && item.getType() != Material.AIR) {
                 npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(), item);
             }
         }
@@ -89,8 +95,10 @@ public class RiverlandSentinel extends Trait
 
     }
 
+
     public void EquipItem(Player player, ItemStack item)
     {
+
         boolean success = false;
         if (item.getType().toString().contains("BOOTS"))
         {
@@ -144,6 +152,15 @@ public class RiverlandSentinel extends Trait
                 npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.OFF_HAND));
             }
             npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, item);
+            success = true;
+        }else if (item.getType().toString().contains("BOW"))
+        {
+            Equipment equipment = npc.getTrait(Equipment.class);
+            if (equipment.get(Equipment.EquipmentSlot.HAND)!= null)
+            {
+                npc.getStoredLocation().getWorld().dropItemNaturally(npc.getStoredLocation(),equipment.get(Equipment.EquipmentSlot.HAND));
+            }
+            npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, item);
             success = true;
         }
         if (success)

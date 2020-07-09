@@ -24,6 +24,7 @@ public class FactionSentinelCommands  implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         String prefix = ChatColor.DARK_BLUE + "[" + ChatColor.GOLD+"Mercenaries"+ChatColor.DARK_BLUE+"] " +ChatColor.YELLOW;
+
         if (args.length == 0)
         {
             sender.sendMessage(prefix + "Incorrect Usage");
@@ -53,7 +54,18 @@ public class FactionSentinelCommands  implements CommandExecutor
                 NPC npc = CitizensAPI.getNPCRegistry().getById(npcuuid);
                 npc.teleport(player.getLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
             }
-        }else if (args[0].equalsIgnoreCase("Remove"))
+        }else if (args[0].equalsIgnoreCase("Forgive"))
+        {
+            NPCFaction fac = Riverland._Instance.getNPCFaction(player);
+            for(Integer i : fac.NpcUUID)
+            {
+                SentinelTrait tmpSentinel = CitizensAPI.getNPCRegistry().getById(i).getTrait(SentinelTrait.class);
+                tmpSentinel.targetingHelper.currentTargets.clear();
+                tmpSentinel.chasing = null;
+            }
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("Remove"))
         {
             NPCFaction fac = Riverland._Instance.getNPCFaction(player);
             if (args.length > 1)
@@ -147,39 +159,69 @@ public class FactionSentinelCommands  implements CommandExecutor
 
         FPlayer factionPlayer = null;
         RiverlandSentinel riverlandSentinel = null;
+        SentinelTrait sentinel =  null;
         if (selected != null)
         {
             factionPlayer= FPlayers.getInstance().getByPlayer(player);
             riverlandSentinel = selected.getTrait(RiverlandSentinel.class);
+            sentinel = selected.getTrait(SentinelTrait.class);
         }
         if (sender.isOp())
         {
-            if (selected == null)
-            {
-                sender.sendMessage(prefix + "Please select an NPC");
-                return true;
-            }
-            // check if npc is valid ..
-            if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
-            {
-                sender.sendMessage(prefix +"Please select a valid NPC");
-                return true;
-            }
             if (args[0].equalsIgnoreCase("Info"))
             {
-                sender.sendMessage(prefix +"Owner: " + riverlandSentinel.ownerFaction);
+
                 // add additional detail here..
+                if (selected == null)
+                {
+                    sender.sendMessage(prefix + "Please select an NPC");
+                    return true;
+                }else {
+                    if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+                    {
+                        sender.sendMessage(prefix +"Please select a valid NPC");
+                        return true;
+                    }else
+                    {
+                        sender.sendMessage(prefix +"Owner: " + riverlandSentinel.ownerFaction);
+                        return true;
+                    }
+                }
+                // check if npc is valid ..
+
+            }else if (args[0].equalsIgnoreCase("SetFaction"))
+            {
+                if (selected == null)
+                {
+                    sender.sendMessage(prefix + "Please select an NPC");
+                    return true;
+                }else
+                {
+                    if (selected.getTrait(SentinelTrait.class) == null || selected.getTrait(RiverlandSentinel.class) == null)
+                    {
+                        sender.sendMessage(prefix +"Please select a valid NPC");
+                        return true;
+                    }else
+                    {
+                        if (args.length > 1)
+                        {
+                            riverlandSentinel.ownerFaction = args[1];
+                        }
+                        return true;
+                    }
+                }
             }
         }
 
-        if (factionPlayer.getFaction() != Factions.getInstance().getByTag(riverlandSentinel.ownerFaction))
+        if (factionPlayer != null &&factionPlayer.getFaction() != Factions.getInstance().getByTag(riverlandSentinel.ownerFaction))
         {
             sender.sendMessage(prefix +"This NPC Doesn't belong to your faction!");
             return true;
         }
-        SentinelTrait sentinel =  selected.getTrait(SentinelTrait.class);
+
         if (args[0].equalsIgnoreCase("Delete"))
         {
+
             if (selected == null)
             {
                 sender.sendMessage(prefix + "Please select an NPC");

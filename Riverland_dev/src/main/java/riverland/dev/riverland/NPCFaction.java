@@ -39,7 +39,6 @@ import java.net.URLEncoder;
 
 public class NPCFaction
 {
-
     String factionID = "";
     Faction ownerFaction;
 
@@ -223,9 +222,14 @@ public class NPCFaction
                 NPCCount --;
             }else if (NpcUUID.size() > 0){
                 NPC npc = CitizensAPI.getNPCRegistry().getById(NpcUUID.get(NpcUUID.size() - 1));
-                NpcUUID.remove(Integer.valueOf(npc.getId()));
-                npc.getTrait(RiverlandSentinel.class).ForceRemove(this);
-
+                if (npc==null)
+                {
+                    NpcUUID.remove(NpcUUID.get(NpcUUID.size() - 1));
+                    Riverland._Instance.getLogger().log(Level.WARNING, "Mercs: Issue removing an NPC.. " + this.ownerFaction);
+                }else {
+                    NpcUUID.remove(Integer.valueOf(npc.getId()));
+                    npc.getTrait(RiverlandSentinel.class).ForceRemove(this);
+                }
             }
         }
     }
@@ -258,6 +262,10 @@ public class NPCFaction
         sentinel1.ownerFaction = ownerFaction.getTag();
         new SentinelTargetLabel("factionsenemy:"+ownerFaction.getTag()).addToList(sentinel.allTargets);
         new SentinelTargetLabel("monsters").addToList(sentinel.allTargets);
+        // ignores own faction
+        new SentinelTargetLabel("factionIgnore:"+ownerFaction.getTag()).addToList(sentinel.allIgnores);
+       // new SentinelTargetLabel("factionsally:"+ownerFaction.getTag()).addToList(sentinel.allIgnores);
+
         sentinel.chaseRange = 20;
         NpcUUID.add(sentinel.getNPC().getId());
         storedNPCs --;
@@ -336,6 +344,4 @@ public class NPCFaction
             }
         });
     }
-
-
 }

@@ -1,4 +1,5 @@
 riverland\dev\riverland\CommandTabCompletion.class
+riverland\dev\riverland\RiverlandIgnoresSentinelIntegration.class
 riverland\dev\riverland\CustomEntityBabyZombies.class
 riverland\dev\riverland\RiverlandTimedUpkeepRunnable.class
 riverland\dev\riverland\NPCFaction$1.class

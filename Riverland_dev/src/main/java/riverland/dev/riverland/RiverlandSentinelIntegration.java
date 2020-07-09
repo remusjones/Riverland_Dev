@@ -27,6 +27,7 @@ public class RiverlandSentinelIntegration extends SentinelIntegration
         return new String[] { "factions", "factionsenemy", "factionsally" };
     }
 
+
     @Override
     public boolean isTarget(LivingEntity ent, String prefix, String value)
     {
@@ -72,6 +73,14 @@ public class RiverlandSentinelIntegration extends SentinelIntegration
                     {
                         return true;
                     }
+                    if (rel.isAlly() || rel2.isAlly())
+                    {
+                        return false;
+                    }
+                    if (rel.isMember() || rel2.isMember())
+                    {
+                        return false;
+                    }
 
                 }
             }
@@ -81,6 +90,7 @@ public class RiverlandSentinelIntegration extends SentinelIntegration
             }
 
         }
+
         return false;
     }
 }

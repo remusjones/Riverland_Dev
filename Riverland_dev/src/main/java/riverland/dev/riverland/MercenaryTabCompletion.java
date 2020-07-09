@@ -25,6 +25,7 @@ public class MercenaryTabCompletion implements TabCompleter
     String Rename = "Rename";
     String Remove = "Remove";
     String Skin = "Skin";
+    String Forgive = "Forgive";
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
@@ -98,6 +99,10 @@ public class MercenaryTabCompletion implements TabCompleter
                 if (Remove.toLowerCase().contains(converted))
                 {
                     l.add(Remove);
+                }
+                if (Forgive.toLowerCase().contains(converted))
+                {
+                    l.add(Forgive);
                 }
             }if (args.length == 2)
             {

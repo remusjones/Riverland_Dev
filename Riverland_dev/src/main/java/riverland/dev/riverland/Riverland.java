@@ -363,6 +363,8 @@ public final class Riverland extends JavaPlugin {
             Riverland._InstanceRiverLandTicket.WriteSQLData.runTaskTimerAsynchronously(Riverland._Instance,0,25);
         }
         SentinelPlugin.instance.registerIntegration(new RiverlandSentinelIntegration());
+        SentinelPlugin.instance.registerIntegration(new RiverlandIgnoresSentinelIntegration());
+
         new RiverlandTimedUpkeepRunnable().runTaskTimer(this, 0,12000);
         new RiverlandSaveRunnable().runTaskTimer(this, 12500,12500);
     }
