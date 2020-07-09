@@ -145,8 +145,13 @@ public class FactionSentinelCommands  implements CommandExecutor
 
         // check validity of selection..
 
-        FPlayer factionPlayer = FPlayers.getInstance().getByPlayer(player);
-        RiverlandSentinel riverlandSentinel = selected.getTrait(RiverlandSentinel.class);
+        FPlayer factionPlayer = null;
+        RiverlandSentinel riverlandSentinel = null;
+        if (selected != null)
+        {
+            factionPlayer= FPlayers.getInstance().getByPlayer(player);
+            riverlandSentinel = selected.getTrait(RiverlandSentinel.class);
+        }
         if (sender.isOp())
         {
             if (selected == null)
