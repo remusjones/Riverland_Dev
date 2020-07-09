@@ -5,27 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe7ed87a-2c1c-4eab-95c6-e39192a29135" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/RiverlandSentinelIntegration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Remus.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Remus.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/FactionSentinelCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/FactionSentinelCommands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/MercenaryTabCompletion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/MercenaryTabCompletion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/Riverland.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/Riverland.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/RiverlandSentinel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/RiverlandSentinel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/Riverland-1.3-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/Riverland-1.3-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/Riverland-1.3.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/Riverland-1.3.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/CommandTabCompletion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/CommandTabCompletion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/FactionSentinelCommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/FactionSentinelCommands.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/MercenaryTabCompletion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/MercenaryTabCompletion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/Riverland$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/Riverland$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/Riverland$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/Riverland$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/Riverland.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/Riverland.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/RiverlandSentinel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/riverland/dev/riverland/RiverlandSentinel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-Riverland-1.3.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-Riverland-1.3.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/AdminHelp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/riverland/dev/riverland/AdminHelp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
