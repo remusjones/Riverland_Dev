@@ -206,7 +206,6 @@ public final class Riverland extends JavaPlugin {
 
         SilkSpawnerInstance = SilkUtil.hookIntoSilkSpanwers();
         _Instance = this;
-        config.options().copyDefaults(true);
         // config.yml setup
         config.addDefault("WelcomeMessage", "Welcome to Riverlands!");
         config.addDefault("SQL_Host", "localhost");
@@ -363,9 +362,9 @@ public final class Riverland extends JavaPlugin {
             getLogger().log(Level.INFO,"Starting SQL Thread..");
             Riverland._InstanceRiverLandTicket.WriteSQLData.runTaskTimerAsynchronously(Riverland._Instance,0,25);
         }
-
+        SentinelPlugin.instance.registerIntegration(new RiverlandSentinelIntegration());
         new RiverlandTimedUpkeepRunnable().runTaskTimer(this, 0,12000);
-        new RiverlandSaveRunnable().runTaskTimer(this, 12000,12000);
+        new RiverlandSaveRunnable().runTaskTimer(this, 12500,12500);
     }
 
     public void SaveNPCFaction()

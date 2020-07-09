@@ -14,20 +14,16 @@ public class MercenaryTabCompletion implements TabCompleter
     String Used = "Used";
     String Store = "Store";
     String Tphere = "Tphere";
-
     String Buy = "Buy";
     String Spawn = "Spawn";
     String Select = "Select";
     String Delete = "Delete";
     String Equip = "Equip";
-
     String Strip = "Strip";
     String Follow = "Follow";
     String Wait = "Wait";
-
     String Rename = "Rename";
     String Remove = "Remove";
-
     String Skin = "Skin";
 
     @Override
@@ -119,9 +115,6 @@ public class MercenaryTabCompletion implements TabCompleter
                     l.add("URL");
                 }
             }
-
-
-
         }
         return l;
     }

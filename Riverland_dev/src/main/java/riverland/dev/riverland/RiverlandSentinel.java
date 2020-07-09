@@ -1,19 +1,27 @@
 package riverland.dev.riverland;
 
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.perms.Relation;
+import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.event.NPCSpawnEvent;
+import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.api.util.DataKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcmonkey.sentinel.SentinelTrait;
 
 import java.util.logging.Level;
 
@@ -24,7 +32,6 @@ public class RiverlandSentinel extends Trait
     @Persist("ownerFaction") String ownerFaction = "";
     @Persist("Inventory")
             ItemStack[] items;
-    Inventory inventory;
     public RiverlandSentinel() {
         super("RiverlandSentinel");
         plugin = JavaPlugin.getPlugin(Riverland.class);

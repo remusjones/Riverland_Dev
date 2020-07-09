@@ -20,6 +20,7 @@ riverland\dev\riverland\RiverLandEventListener.class
 riverland\dev\riverland\RiverlandPlaceholderAPI.class
 riverland\dev\riverland\SerializableTNT.class
 riverland\dev\riverland\SerializedSentinelFaction.class
+riverland\dev\riverland\RiverlandSentinelIntegration.class
 riverland\dev\riverland\TicketSQL$1.class
 riverland\dev\riverland\CustomEntityGiant.class
 riverland\dev\riverland\EntityTypesCustom.class

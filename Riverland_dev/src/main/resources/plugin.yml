@@ -32,8 +32,8 @@ permissions:
     description: Allows AdminHelp command
     default: true
   Riverland.Merc:
-    description: Allows AdminHelp command
-    default: true
+    description: Allows Merc commands
+    default: op
   Riverland.NpcChangeName:
     description: Allows users to change npc name
     default: false

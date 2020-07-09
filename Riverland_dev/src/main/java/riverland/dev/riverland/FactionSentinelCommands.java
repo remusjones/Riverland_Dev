@@ -23,9 +23,15 @@ public class FactionSentinelCommands  implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        String prefix = ChatColor.DARK_BLUE + "[" + ChatColor.GOLD+"Mercenaries"+ChatColor.DARK_BLUE+"] " +ChatColor.YELLOW;
+        if (args.length == 0)
+        {
+            sender.sendMessage(prefix + "Incorrect Usage");
+            return true;
+
+        }
         if (!(sender instanceof Player))
             return true;
-        String prefix = ChatColor.DARK_BLUE + "[" + ChatColor.GOLD+"Mercenaries"+ChatColor.DARK_BLUE+"] " +ChatColor.YELLOW;
 
         Player player = (Player)sender;
         FPlayer tmpPlayer = FPlayers.getInstance().getByPlayer(player);
@@ -56,8 +62,10 @@ public class FactionSentinelCommands  implements CommandExecutor
                 // translate index 1 to int
                 try {
                     int amount = Integer.parseUnsignedInt(args[1]);
-                    if (amount > fac.NPCCount)
+                    if (amount > fac.NPCCount) {
                         sender.sendMessage(prefix + "You do not own that many Mercenaries.");
+                        return true;
+                    }
                     if (amount > 0)
                     {
                         for (int i = 0; i < amount; i++)
@@ -93,9 +101,12 @@ public class FactionSentinelCommands  implements CommandExecutor
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player);
             if (tmpPlayer.getRole().isAtLeast(Role.MODERATOR)) {
                 double wouldUsePower = (npcFaction.NPCCount + 1) *  powerCostPerSentinel;
-                if (wouldUsePower < tmpPlayer.getFaction().getPowerMax()) {
+                if (wouldUsePower <= tmpPlayer.getFaction().getPowerMax()) {
                     if (!npcFaction.Purchase(player)) {
                         player.sendMessage(prefix + "Your Faction cannot afford that.");
+                    }else
+                    {
+                        player.sendMessage(prefix + "Your faction now has " + ChatColor.GOLD + npcFaction.storedNPCs + ChatColor.YELLOW + " Stored.");
                     }
                 }else player.sendMessage(prefix +"Not enough available power. Cost per Mercenary: " + ChatColor.RED + (int)powerCostPerSentinel);
             }else
@@ -115,6 +126,9 @@ public class FactionSentinelCommands  implements CommandExecutor
                     player.sendMessage(prefix + "Mercenary Spawned");
                 else
                     player.sendMessage(prefix +"No Mercenaries in reserve");
+            }else
+            {
+                player.sendMessage(prefix + "You can only place Mercs in the wilderness or in your own faction land.");
             }
             return true;
         }else if (args[0].equalsIgnoreCase("Select"))
@@ -163,6 +177,7 @@ public class FactionSentinelCommands  implements CommandExecutor
             NPCFaction fac = Riverland._Instance.getNPCFaction(player);
             riverlandSentinel.ForceRemove(fac);
             fac.storedNPCs++;
+            sender.sendMessage(prefix + "Merc Stored");
         }
 
         if (args[0].equalsIgnoreCase("equip"))
@@ -175,7 +190,7 @@ public class FactionSentinelCommands  implements CommandExecutor
                 if (args.length > 1) {
                     String finalName = "";
                     for (int i = 1; i < args.length; i++) {
-                        finalName += args[i] + " ";
+                        finalName +=  " " + args[i];
                     }
                     finalName.trim();
                     if (finalName.length() > 16) {
@@ -236,7 +251,9 @@ public class FactionSentinelCommands  implements CommandExecutor
         else if (args[0].equalsIgnoreCase("Wait"))
         {
             sentinel.sayTo(player, ChatColor.YELLOW + "I will wait here.");
-            sentinel.pathTo(selected.getStoredLocation());
+            sentinel.setGuarding(-1);
+
+
         }
 
 
