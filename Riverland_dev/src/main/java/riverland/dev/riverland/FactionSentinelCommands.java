@@ -5,7 +5,13 @@ import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.perms.Role;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.trait.waypoint.LinearWaypointProvider;
+import net.citizensnpcs.trait.waypoint.Waypoint;
+import net.citizensnpcs.trait.waypoint.WaypointProvider;
+import net.citizensnpcs.trait.waypoint.Waypoints;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,6 +20,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.mcmonkey.sentinel.SentinelPlugin;
 import org.mcmonkey.sentinel.SentinelTrait;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -390,8 +397,13 @@ public class FactionSentinelCommands  implements CommandExecutor
                 sender.sendMessage(prefix +"Please select a valid NPC");
                 return true;
             }
+            WaypointProvider provider = selected.getTrait(Waypoints.class).getCurrentProvider();
+            Location loc = selected.getStoredLocation();
+
+            List<Waypoint> waypoints = (List<Waypoint>) ((LinearWaypointProvider) provider).waypoints();
+            waypoints.clear();
+            waypoints.add(0, new Waypoint(loc));
             sentinel.sayTo(player, ChatColor.YELLOW + "I will wait here.");
-            sentinel.setGuarding(-1);
 
 
         }
