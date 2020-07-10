@@ -4,6 +4,7 @@ package riverland.dev.riverland;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.integration.Econ;
+import jdk.internal.net.http.common.Pair;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
@@ -23,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +62,9 @@ public class NPCFaction
     public long getCostPerNPC() {
         return costPerNPC;
     }
+    public static ArrayList<LoadedSkinData> storedSkinData = new ArrayList<>();
+
+
 
     ArrayList<SentinelTrait> activeSentinels = new ArrayList<>();
 
@@ -226,9 +231,20 @@ public class NPCFaction
                 {
                     NpcUUID.remove(NpcUUID.get(NpcUUID.size() - 1));
                     Riverland._Instance.getLogger().log(Level.WARNING, "Mercs: Issue removing an NPC.. " + this.ownerFaction);
+                    // check validity of list here.. and cleanup
+                    short expectedCount = (short)(this.storedNPCs + this.NpcUUID.size());
+                    if (expectedCount != NPCCount)
+                    {
+                        NPCCount = expectedCount;
+                    }
                 }else {
                     NpcUUID.remove(Integer.valueOf(npc.getId()));
                     npc.getTrait(RiverlandSentinel.class).ForceRemove(this);
+                    short expectedCount = (short)(this.storedNPCs + this.NpcUUID.size());
+                    if (expectedCount != NPCCount)
+                    {
+                        NPCCount = expectedCount;
+                    }
                 }
             }
         }
@@ -239,16 +255,20 @@ public class NPCFaction
         if (storedNPCs<=0)
             return false;
 
-        NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, ownerFaction.getTag() + "'s SellSword");
+        NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, ownerFaction.getTag() + "'s Merc");
         npc.addTrait(SentinelTrait.class);
 
         // do a permission check
         if (player.hasPermission("Riverland.NpcChangeSkin"))
         {
-            SetTexture(premiumSkinURL, npc, player);
+            SetTextureTryLoad(premiumSkinURL,npc,player);
+            //RiverlandSetTextureRunnable.skinQueue.add(new NPCSkinData(premiumSkinURL,npc,player));
+           // SetTexture(premiumSkinURL, npc, player);
         }else
         {
-            SetTexture(defaultSkinURL, npc, player);
+            SetTextureTryLoad(premiumSkinURL,npc,player);
+            //RiverlandSetTextureRunnable.skinQueue.add(new NPCSkinData(defaultSkinURL,npc,player));
+            //SetTexture(defaultSkinURL, npc, player);
         }
 
 
@@ -284,6 +304,32 @@ public class NPCFaction
         NpcUUID.remove(sentinel.getNPC().getUniqueId());
         activeSentinels.remove(sentinel);
     }
+    public static void SetTextureTryLoad(String url, NPC npc, Player player)
+    {
+        boolean found = false;
+        for(LoadedSkinData skin : storedSkinData)
+        {
+            if (skin.isValid())
+            {
+                if (skin.url == url)
+                {
+                    found = true;
+                    Bukkit.getScheduler().runTask(Riverland._Instance, new Runnable() {
+                        @Override
+                        public void run() {
+                            npc.getTrait(SkinTrait.class).setSkinPersistent(skin.uuid, skin.signature, skin.textureEncoded);
+                        }
+                    });
+                }
+            }
+        }
+        if (found == false)
+        {
+            String prefix = ChatColor.DARK_BLUE + "[" + ChatColor.GOLD+"Mercenaries"+ChatColor.DARK_BLUE+"] " +ChatColor.YELLOW;
+            RiverlandSetTextureRunnable.skinQueue.add(new NPCSkinData(url,npc,player));
+            player.sendMessage(prefix +"Loading skin..");
+        }
+    }
 
     // ripped from https://github.com/CitizensDev/Citizens2/blob/29e6e20feb66730b2f3fe9052314e0b16bc8489e/main/src/main/java/net/citizensnpcs/commands/NPCCommands.java#L1768
     public static void SetTexture(String url, NPC npc, Player player)
@@ -298,8 +344,9 @@ public class NPCFaction
                     HttpURLConnection con = (HttpURLConnection) target.openConnection();
                     con.setRequestMethod("POST");
                     con.setDoOutput(true);
-                    con.setConnectTimeout(100000);
-                    con.setReadTimeout(300000);
+                    con.setConnectTimeout(5000);
+                    con.setReadTimeout(25000);
+
                     out = new DataOutputStream(con.getOutputStream());
                     out.writeBytes("url=" + URLEncoder.encode(url, "UTF-8"));
                     out.close();
@@ -315,11 +362,18 @@ public class NPCFaction
                         @Override
                         public void run() {
                             npc.getTrait(SkinTrait.class).setSkinPersistent(uuid, signature, textureEncoded);
+                            LoadedSkinData loadedData = new LoadedSkinData();
+                            loadedData.url = url;
+                            loadedData.uuid = uuid;
+                            loadedData.signature = signature;
+                            loadedData.textureEncoded = textureEncoded;
+                            NPCFaction.storedSkinData.add(loadedData);
                         }
                     });
                 } catch (Throwable t) {
                    // if (Messaging.isDebugging()) {
                         t.printStackTrace();
+
                    // }
                     Bukkit.getScheduler().runTask(Riverland._Instance, new Runnable() {
                         @Override
@@ -332,12 +386,14 @@ public class NPCFaction
                         try {
                             out.close();
                         } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
                     if (reader != null) {
                         try {
                             reader.close();
                         } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
                 }

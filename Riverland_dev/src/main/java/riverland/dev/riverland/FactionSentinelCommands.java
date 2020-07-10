@@ -315,7 +315,7 @@ public class FactionSentinelCommands  implements CommandExecutor
                 if (player.hasPermission("Riverland.NpcChangeSkin")) {
                 if (args.length > 1) {
                     NPCFaction fac = Riverland._Instance.getNPCFaction(player);
-                    NPCFaction.SetTexture(args[1], selected, player);
+                    NPCFaction.SetTextureTryLoad(args[1], selected, player);
                 } else
                     player.sendMessage(prefix + "Invalid Input");
             }

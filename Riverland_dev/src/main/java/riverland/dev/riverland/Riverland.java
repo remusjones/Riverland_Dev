@@ -367,6 +367,7 @@ public final class Riverland extends JavaPlugin {
 
         new RiverlandTimedUpkeepRunnable().runTaskTimer(this, 0,12000);
         new RiverlandSaveRunnable().runTaskTimer(this, 12500,12500);
+        new RiverlandSetTextureRunnable().runTaskTimer(this, 100, 600);
     }
 
     public void SaveNPCFaction()
