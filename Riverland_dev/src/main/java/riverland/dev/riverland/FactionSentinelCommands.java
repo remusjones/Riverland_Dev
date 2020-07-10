@@ -27,6 +27,7 @@ import java.util.logging.Level;
 public class FactionSentinelCommands  implements CommandExecutor
 {
     public static double powerCostPerSentinel = 20;
+    /**Handles "Merc" On Commands*/
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
@@ -156,6 +157,7 @@ public class FactionSentinelCommands  implements CommandExecutor
             return true;
         }else if (args[0].equalsIgnoreCase("Select"))
         {
+
             ((Player)sender).performCommand("npc select");
         }
 
@@ -399,7 +401,7 @@ public class FactionSentinelCommands  implements CommandExecutor
             }
             WaypointProvider provider = selected.getTrait(Waypoints.class).getCurrentProvider();
             Location loc = selected.getStoredLocation();
-
+            sentinel.setGuarding(-1);
             List<Waypoint> waypoints = (List<Waypoint>) ((LinearWaypointProvider) provider).waypoints();
             waypoints.clear();
             waypoints.add(0, new Waypoint(loc));

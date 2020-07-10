@@ -27,6 +27,7 @@ public class MercenaryTabCompletion implements TabCompleter
     String Skin = "Skin";
     String Forgive = "Forgive";
 
+    /**AutoCompletes Merc commands.*/
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {

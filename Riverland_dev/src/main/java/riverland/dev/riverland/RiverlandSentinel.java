@@ -36,6 +36,7 @@ public class RiverlandSentinel extends Trait
             ItemStack[] items;
 
     SentinelTrait sentinelTrait = null;
+
     public RiverlandSentinel() {
         super("RiverlandSentinel");
         plugin = JavaPlugin.getPlugin(Riverland.class);
@@ -52,6 +53,11 @@ public class RiverlandSentinel extends Trait
         faction.NPCCount--;
         faction.NpcUUID.remove(Integer.valueOf(npc.getId()));
         this.npc.destroy();
+    }
+    @Override
+    public void onRemove()
+    {
+
     }
 
     @EventHandler
@@ -86,16 +92,18 @@ public class RiverlandSentinel extends Trait
             }
         }
 
-        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, new ItemStack(Material.AIR));
-        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.AIR));
-        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.LEGGINGS, new ItemStack(Material.AIR));
-        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HELMET, new ItemStack(Material.AIR));
-        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, new ItemStack(Material.AIR));
-        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.BOOTS, new ItemStack(Material.AIR));
+        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, null);
+        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, null);
+        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.LEGGINGS, null);
+        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HELMET,  null);
+        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, null);
+        npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.BOOTS, null);
 
     }
 
-
+    /**Attempts to equip item stack to relevant item, sends player a message if unable.
+     *
+     * */
     public void EquipItem(Player player, ItemStack item)
     {
 

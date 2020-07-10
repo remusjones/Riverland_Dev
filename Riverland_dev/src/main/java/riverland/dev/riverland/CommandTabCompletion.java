@@ -35,7 +35,7 @@ public class CommandTabCompletion implements TabCompleter
     String thumbusCooldownReset = "thumbuseventresetTime";
     String thumbusDisplayLastRan = "thumbuslastran";
 
-
+    /**Autocompletes Riverlands commands*/
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> l = new ArrayList<>();

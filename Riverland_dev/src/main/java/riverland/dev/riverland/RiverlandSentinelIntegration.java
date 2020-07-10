@@ -28,6 +28,7 @@ public class RiverlandSentinelIntegration extends SentinelIntegration
     }
 
 
+    /**Used as a sentinel all-target to check validity of target*/
     @Override
     public boolean isTarget(LivingEntity ent, String prefix, String value)
     {

@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public class AdminHelp implements CommandExecutor
 {
 
+    /**Registers and parses adminhelp request to adminhelp*/
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 

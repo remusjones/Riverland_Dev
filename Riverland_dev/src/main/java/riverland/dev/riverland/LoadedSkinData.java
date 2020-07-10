@@ -9,7 +9,7 @@ public class LoadedSkinData
     String signature = null;
     String url = null;
 
-
+    /**Checks if the skin data is a valid skin data.*/
     // checks if the contents are valid ..
     public boolean isValid() {
         boolean isValid = true;

@@ -17,6 +17,7 @@ import java.util.Set;
 
 public class OPAdminHelp implements CommandExecutor
 {
+    /**Attempts to parse an int from string returns validity*/
     boolean tryParseInt(String value) {
         try {
             Integer.parseInt(value);
@@ -26,6 +27,7 @@ public class OPAdminHelp implements CommandExecutor
         }
     }
 
+    /**Handles OP Controls from SQL.*/
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {

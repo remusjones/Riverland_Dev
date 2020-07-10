@@ -3,6 +3,8 @@ package riverland.dev.riverland;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 
+import java.text.NumberFormat;
+
 public class RiverlandPlaceholderAPI extends PlaceholderExpansion
 {
     @Override
@@ -76,6 +78,8 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
     @Override
     public String onRequest(OfflinePlayer player, String identifier){
 
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
         // %Riverlands_MercPurchasePrice%
         // get next cost
         if(identifier.equalsIgnoreCase(MercPurchasePrice))
@@ -83,15 +87,14 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
             // get data
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
             // get cost
-            String cost = Double.toString(npcFaction.getPurchaseCost());
-            // return cost
-            return cost;
+            return formatter.format(npcFaction.getPurchaseCost()).replace("$","");
         }
         if(identifier.equalsIgnoreCase(MercCurrentAmount))
         {
             // get data
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
             // get cost
+
             String cost = Short.toString(npcFaction.NPCCount);
             // return cost
             return cost;
@@ -120,29 +123,30 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
             // get data
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
             // get cost
-            String cost = Double.toString(npcFaction.getUpkeepCost());
-            // return cost
-            return cost;
+            return formatter.format(npcFaction.getUpkeepCost()).replace("$","");
+          // String cost = Double.toString(npcFaction.getUpkeepCost());
+          // // return cost
+          // return cost;
         }
         // %Riverlands_CurrentMercUpkeepCost%;
         if (identifier.equalsIgnoreCase(MercCurrentUpkeepCost))
         {
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
-            String cost = Double.toString(npcFaction.getCurrentUpkeepCost());
-            return cost;
+            return formatter.format(npcFaction.getCurrentUpkeepCost()).replace("$","");
         }
 
         if (identifier.equalsIgnoreCase(MercRent))
         {
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
-            String cost = Double.toString(npcFaction.getCostPerNPC());
-            return cost;
+            //String cost = Double.toString(npcFaction.getCostPerNPC());
+            return formatter.format(npcFaction.getCostPerNPC()).replace("$","");
+           // return cost;
         }
         if (identifier.equalsIgnoreCase(MercCost))
         {
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
-            String cost = Double.toString(npcFaction.getPurchaseCost());
-            return cost;
+
+            return formatter.format(npcFaction.getPurchaseCost()).replace("$","");
         }
 
         // We return null if an invalid placeholder (f.e. %example_placeholder3%)

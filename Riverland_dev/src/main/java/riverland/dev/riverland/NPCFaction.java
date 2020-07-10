@@ -4,7 +4,6 @@ package riverland.dev.riverland;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.integration.Econ;
-import jdk.internal.net.http.common.Pair;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
@@ -72,6 +71,7 @@ public class NPCFaction
 
     public SerializedSentinelFaction savedData = new SerializedSentinelFaction();
     // load
+    /**Default Constructor for an NPCFaction Object which will attempt to load default values, including faction instance to the class*/
     NPCFaction(String storedFaction)
     {
         factionID = storedFaction;
@@ -81,6 +81,7 @@ public class NPCFaction
         defaultSkinURL = Riverland._Instance.getConfig().getString("Merc_DefaultSkinURL");
         premiumSkinURL = Riverland._Instance.getConfig().getString("Merc_PremiumSkinURL");
     }
+    /**Used to load the serialized data, after construction.*/
     public void Load(SerializedSentinelFaction data)
     {
         savedData = data;
@@ -97,6 +98,7 @@ public class NPCFaction
         ownerFaction = Factions.getInstance().getByTag(factionID);
 
     }
+    /**Returns the purchase cost post formula if the user were to purchase a new merc*/
     public double getPurchaseCost()
     {
         double finalCost = 0.0;
@@ -111,6 +113,7 @@ public class NPCFaction
 
         return finalCost;
     }
+    /**Returns the Upkeep Cost post formula if the user were to purchase a new merc.*/
     public double getUpkeepCost()
     {
         double finalCost = 0.0;
@@ -122,17 +125,19 @@ public class NPCFaction
         }
         return finalCost;
     }
+    /**Returns the current upkeep cost post formula*/
     public double getCurrentUpkeepCost()
     {
         double finalCost = 0.0;
         if (NPCCount == 0)
         {
-            finalCost = costPerNPC;
+            finalCost = 0;
         }else {
             finalCost = (costPerNPC) * ((NPCCount) * costMultiplier );
         }
         return finalCost;
     }
+    /**Attempts to purchase a merc, sends the player a message if unable*/
     public boolean Purchase(Player purchaser)
     {
         // compare vault..
@@ -161,6 +166,7 @@ public class NPCFaction
 
         return false;
     }
+    /**Returns the difference in hours*/
     public static long getDifferenceDays(Date d1, Date d2) {
         long secs = (d1.getTime() - d2.getTime()) / 1000;
        // long mins = secs / 60;
@@ -184,6 +190,8 @@ public class NPCFaction
     {
         return date.getTime();
     }
+
+    /**Constructs a serialized data for saving.*/
     public void Save()
     {
         // serialize Sentinel UUID's and Faction Name..
@@ -192,6 +200,7 @@ public class NPCFaction
         savedData.storedNPCS = storedNPCs;
         savedData.lastPurchase = lastPurchaseTime;
     }
+    /**Attempts to deduct upkeep costs from faction, if unmet it will remove Mercs until cost is paid or there are no mercs remaining.*/
     public boolean Upkeep()
     {
         if (NPCCount == 0)
@@ -217,6 +226,7 @@ public class NPCFaction
         lastPurchaseTime = System.currentTimeMillis();
         return true;
     }
+    /**Despawns a merc. Pool to End of List*/
     public void DespawnLast()
     {
         if (NPCCount > 0)
@@ -249,7 +259,7 @@ public class NPCFaction
             }
         }
     }
-
+    /**Spawns a Sentinel*/
     public boolean SpawnSentinel(Location location, Player player)
     {
         if (storedNPCs<=0)
@@ -304,6 +314,7 @@ public class NPCFaction
         NpcUUID.remove(sentinel.getNPC().getUniqueId());
         activeSentinels.remove(sentinel);
     }
+    /**Attempts to load a skin from RAM, if unavailable, fallback is download.*/
     public static void SetTextureTryLoad(String url, NPC npc, Player player)
     {
         boolean found = false;
@@ -330,7 +341,7 @@ public class NPCFaction
             player.sendMessage(prefix +"Loading skin..");
         }
     }
-
+    /**Downloads, stores and sets the skin of an NPC from URL.*/
     // ripped from https://github.com/CitizensDev/Citizens2/blob/29e6e20feb66730b2f3fe9052314e0b16bc8489e/main/src/main/java/net/citizensnpcs/commands/NPCCommands.java#L1768
     public static void SetTexture(String url, NPC npc, Player player)
     {
