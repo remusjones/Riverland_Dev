@@ -157,6 +157,7 @@ public class NPCFaction
 
             String prefix = ChatColor.DARK_BLUE + "[" + ChatColor.GOLD+"Mercenaries"+ChatColor.DARK_BLUE+"] " +ChatColor.YELLOW;
             purchaser.sendMessage(prefix + "New Faction Balance: " + Econ.getBalance(acc));
+            remainingHours = 24;
             storedNPCs ++;
             NPCCount++;
 
