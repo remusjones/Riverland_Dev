@@ -55,11 +55,15 @@ public class RiverlandTimedUpkeepRunnable extends BukkitRunnable
         // loop over factions, compare timestamps and charge ..
         for (NPCFaction faction : Riverland._Instance.npcFactions)
         {
-            if (faction.NPCCount <= 0)
-                continue;;
+            if (faction.NPCCount <= 0) {
+                faction.remainingHours = 0;
+                continue;
+
+            }
             short npcCountStore = faction.NPCCount;
 
             long diff = NPCFaction.getDifferenceDays(NPCFaction.UnpackLongData(System.currentTimeMillis()),NPCFaction.UnpackLongData(faction.lastPurchaseTime));
+            faction.remainingHours = (int)diff;
             if (diff >= 24)
             {
 

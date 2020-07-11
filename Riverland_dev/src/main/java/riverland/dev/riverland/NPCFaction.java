@@ -62,7 +62,7 @@ public class NPCFaction
         return costPerNPC;
     }
     public static ArrayList<LoadedSkinData> storedSkinData = new ArrayList<>();
-
+    public int remainingHours = 0;
 
 
     ArrayList<SentinelTrait> activeSentinels = new ArrayList<>();
@@ -169,7 +169,7 @@ public class NPCFaction
     /**Returns the difference in hours*/
     public static long getDifferenceDays(Date d1, Date d2) {
         long secs = (d1.getTime() - d2.getTime()) / 1000;
-       // long mins = secs / 60;
+
         return secs / 3600;
 
       // long secs = (this.endDate.getTime() - this.startDate.getTime()) / 1000;

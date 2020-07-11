@@ -75,6 +75,7 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
     private String MercCurrentAmount = "Merc_Current_Amount_Total";
     private String MercCurrentStored = "Merc_Current_Stored_Total";
     private String MercCurrentUsed = "Merc_Current_Used_Total";
+    private String MercUpkeepDue = "Merc_Upkeep_Due";
     @Override
     public String onRequest(OfflinePlayer player, String identifier){
 
@@ -98,6 +99,15 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
             String cost = Short.toString(npcFaction.NPCCount);
             // return cost
             return cost;
+        }
+        if (identifier.equalsIgnoreCase(MercUpkeepDue))
+        {
+            NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
+            if (npcFaction.NPCCount > 0) {
+
+                return Integer.toString(npcFaction.remainingHours);
+            }else return Integer.toString(0);
+
         }
         if(identifier.equalsIgnoreCase(MercCurrentStored))
         {
