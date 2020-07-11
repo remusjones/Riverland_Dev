@@ -63,7 +63,7 @@ public class RiverlandTimedUpkeepRunnable extends BukkitRunnable
             short npcCountStore = faction.NPCCount;
 
             long diff = NPCFaction.getDifferenceDays(NPCFaction.UnpackLongData(System.currentTimeMillis()),NPCFaction.UnpackLongData(faction.lastPurchaseTime));
-            faction.remainingHours = (int)diff;
+            faction.remainingHours = (24 -(int)diff);
             if (diff >= 24)
             {
 
