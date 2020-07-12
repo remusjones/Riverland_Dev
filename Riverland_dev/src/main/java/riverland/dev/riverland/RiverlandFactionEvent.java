@@ -1,5 +1,7 @@
 package riverland.dev.riverland;
 import com.massivecraft.factions.event.FactionRenameEvent;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -19,6 +21,11 @@ public class RiverlandFactionEvent  implements Listener{
             {
                 npcFac.factionID = e.getFactionTag();
                 npcFac.ownerFaction = e.getFaction();
+                for (Integer npc:
+                     npcFac.NpcUUID)
+                {
+                    CitizensAPI.getNPCRegistry().getById(npc).getTrait(RiverlandSentinel.class).ownerFaction = npcFac.ownerFaction.getTag();
+                }
             }
         }
 
