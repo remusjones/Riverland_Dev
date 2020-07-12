@@ -48,7 +48,10 @@ public class RiverlandSentinelIntegration extends SentinelIntegration
                     {
                         Faction faction = Factions.getInstance().getBestTagMatch(value);
                         Faction otherFaction = Factions.getInstance().getBestTagMatch(sentinel.ownerFaction);
-
+                        if (faction == null || otherFaction == null)
+                        {
+                            return false;
+                        }
                         Relation rel = faction.getRelationWish(otherFaction);
                         Relation rel2 = otherFaction.getRelationWish(faction);
 

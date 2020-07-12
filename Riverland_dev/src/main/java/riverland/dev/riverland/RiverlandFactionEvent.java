@@ -17,7 +17,7 @@ public class RiverlandFactionEvent  implements Listener{
         // find old
         for (NPCFaction npcFac: Riverland._Instance.npcFactions)
         {
-            if (npcFac.factionID.equalsIgnoreCase(e.getFactionTag()))
+            if (npcFac.factionID.equalsIgnoreCase(e.getOldFactionTag()))
             {
                 npcFac.factionID = e.getFactionTag();
                 npcFac.ownerFaction = e.getFaction();
@@ -31,10 +31,12 @@ public class RiverlandFactionEvent  implements Listener{
                         RiverlandSentinel sentinel = npc1.getTrait(RiverlandSentinel.class);
                         if (sentinel != null)
                         {
-                            sentinel.ownerFaction = npcFac.ownerFaction.getTag();
+                            sentinel.ownerFaction = e.getFactionTag();
+                            Riverland._Instance.getLogger().log(Level.WARNING, "test");
                         }
                     }
                 }
+                npcFac.UpdateSentinels();
             }
         }
 

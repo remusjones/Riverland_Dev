@@ -1,6 +1,7 @@
 package riverland.dev.riverland;
 
 
+import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.integration.Econ;
@@ -85,6 +86,31 @@ public class NPCFaction
 
     ArrayList<Integer> NpcUUID = new ArrayList<>();
 
+    public void UpdateSentinels()
+    {
+        for (Integer npcID:
+             NpcUUID)
+        {
+            // try get
+            NPC npc = CitizensAPI.getNPCRegistry().getById(npcID);
+            if (npc != null)
+            {
+                npc.removeTrait(SentinelTrait.class);
+                npc.addTrait(SentinelTrait.class);
+                SentinelTrait sentinel = npc.getTrait(SentinelTrait.class);
+                sentinel.respawnTime = -1;
+                sentinel.enemyDrops = true;
+                new SentinelTargetLabel("factionsenemy:"+ownerFaction.getTag()).addToList(sentinel.allTargets);
+                new SentinelTargetLabel("monsters").addToList(sentinel.allTargets);
+                // ignores own faction
+                new SentinelTargetLabel("factionIgnore:"+ownerFaction.getTag()).addToList(sentinel.allIgnores);
+            }
+        }
+
+
+
+
+    }
     public SerializedSentinelFaction savedData = new SerializedSentinelFaction();
     // load
     /**Default Constructor for an NPCFaction Object which will attempt to load default values, including faction instance to the class*/
@@ -159,6 +185,10 @@ public class NPCFaction
     /**Attempts to purchase a merc, sends the player a message if unable*/
     public boolean Purchase(Player purchaser)
     {
+        if (ownerFaction == null)
+        {
+            ownerFaction = FPlayers.getInstance().getByPlayer(purchaser).getFaction();
+        }
         // compare vault..
         String acc = ownerFaction.getAccountId();
         double balance = Econ.getBalance(acc);
@@ -286,7 +316,7 @@ public class NPCFaction
             return false;
 
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, ownerFaction.getTag() + "'s Merc");
-        npc.addTrait(SentinelTrait.class);
+
 
         // do a permission check
         if (player.hasPermission("Riverland.NpcChangeSkin"))
@@ -303,7 +333,7 @@ public class NPCFaction
 
 
         npc.spawn(location);
-
+        npc.addTrait(SentinelTrait.class);
         SentinelTrait sentinel = npc.getTrait(SentinelTrait.class);
         sentinel.respawnTime = -1;
         sentinel.enemyDrops = true;
