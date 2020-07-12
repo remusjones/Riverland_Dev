@@ -1,10 +1,13 @@
 package riverland.dev.riverland;
 
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.perms.Relation;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCDeathEvent;
+import net.citizensnpcs.api.event.NPCSelectEvent;
 import net.citizensnpcs.api.event.NPCSpawnEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
@@ -18,9 +21,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcmonkey.sentinel.SentinelTrait;
 
@@ -101,6 +106,19 @@ public class RiverlandSentinel extends Trait
 
     }
 
+    @EventHandler
+    public void click(net.citizensnpcs.api.event.NPCRightClickEvent event) throws EventException {
+        if (event.getClicker() != null)
+        {
+            Faction fac = FPlayers.getInstance().getByPlayer(event.getClicker()).getFaction();
+            if (fac.getTag().equalsIgnoreCase(this.ownerFaction))
+            {
+
+                this.EquipItem(event.getClicker(), event.getClicker().getInventory().getItemInMainHand());
+            //    event1.callEvent();
+            }
+        }
+    }
     /**Attempts to equip item stack to relevant item, sends player a message if unable.
      *
      * */

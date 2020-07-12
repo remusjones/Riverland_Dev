@@ -264,7 +264,8 @@ public final class Riverland extends JavaPlugin {
                         ArrayList<SerializedSentinelFaction>>(){}.getType();
 
                 ArrayList<SerializedSentinelFaction> tmp = gsonObj.fromJson(data, type);
-                if (tmp.size() > 0)
+
+                if (tmp!=null&&tmp.size() > 0)
                 {
                     for(SerializedSentinelFaction sentinelData : tmp)
                     {
