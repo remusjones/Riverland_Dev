@@ -24,7 +24,16 @@ public class RiverlandFactionEvent  implements Listener{
                 for (Integer npc:
                      npcFac.NpcUUID)
                 {
-                    CitizensAPI.getNPCRegistry().getById(npc).getTrait(RiverlandSentinel.class).ownerFaction = npcFac.ownerFaction.getTag();
+
+                    NPC npc1 = CitizensAPI.getNPCRegistry().getById(npc);
+                    if (npc1 != null)
+                    {
+                        RiverlandSentinel sentinel = npc1.getTrait(RiverlandSentinel.class);
+                        if (sentinel != null)
+                        {
+                            sentinel.ownerFaction = npcFac.ownerFaction.getTag();
+                        }
+                    }
                 }
             }
         }

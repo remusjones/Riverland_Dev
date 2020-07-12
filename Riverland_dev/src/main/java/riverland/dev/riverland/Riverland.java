@@ -11,6 +11,8 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import de.dustplanet.util.SilkUtil;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -268,6 +270,20 @@ public final class Riverland extends JavaPlugin {
                         NPCFaction faction = new NPCFaction("");
                         faction.Load(sentinelData);
                         Riverland._Instance.npcFactions.add(faction);
+                        for (NPC npc:
+                                CitizensAPI.getNPCRegistry().sorted()) {
+                            RiverlandSentinel sent = npc.getTrait(RiverlandSentinel.class);
+                            if (sent != null)
+                            {
+                                if (sent.ownerFaction.equalsIgnoreCase(faction.factionID))
+                                {
+                                    if (!faction.NpcUUID.contains((Integer)npc.getId()))
+                                    {
+                                        faction.NpcUUID.add((Integer)npc.getId());
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
