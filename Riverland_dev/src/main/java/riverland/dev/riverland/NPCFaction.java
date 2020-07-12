@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -64,6 +65,21 @@ public class NPCFaction
     public static ArrayList<LoadedSkinData> storedSkinData = new ArrayList<>();
     public int remainingHours = 0;
 
+
+    boolean hasUpdatedUpkeepDataSinceLoad = false;
+
+    String storedUpkeepFormatted = "";
+    String storedCostFormatted = "";
+    String storedFutureUpkeepFormatted = "";
+
+    double storedUpkeep = 0.0;
+
+
+    public String FormatCurrency(double currency)
+    {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        return formatter.format(currency).replace("$","");
+    }
 
     ArrayList<SentinelTrait> activeSentinels = new ArrayList<>();
 
@@ -110,7 +126,7 @@ public class NPCFaction
 
             finalCost =(singleCost) * ((NPCCount + 1) * costMultiplier );
         }
-
+        storedCostFormatted =  FormatCurrency((finalCost));
         return finalCost;
     }
     /**Returns the Upkeep Cost post formula if the user were to purchase a new merc.*/
@@ -128,6 +144,7 @@ public class NPCFaction
     /**Returns the current upkeep cost post formula*/
     public double getCurrentUpkeepCost()
     {
+        hasUpdatedUpkeepDataSinceLoad = true;
         double finalCost = 0.0;
         if (NPCCount == 0)
         {
@@ -135,6 +152,8 @@ public class NPCFaction
         }else {
             finalCost = (costPerNPC) * ((NPCCount) * costMultiplier );
         }
+        storedUpkeepFormatted = FormatCurrency(finalCost);
+        storedUpkeep = finalCost;
         return finalCost;
     }
     /**Attempts to purchase a merc, sends the player a message if unable*/
@@ -210,7 +229,7 @@ public class NPCFaction
         String acc = ownerFaction.getAccountId();
         double balance = Econ.getBalance(acc);
 
-        double finalCost = (costPerNPC) * ((NPCCount) * costMultiplier );
+        double finalCost = getCurrentUpkeepCost();
 
         while(finalCost >= balance)
         {
@@ -220,7 +239,7 @@ public class NPCFaction
                 break;
             }
             Riverland._Instance.getLogger().log(Level.WARNING, "Cost: " + finalCost + " | " + balance + " NPCCount: " );
-            finalCost = (costPerNPC) * ((NPCCount) * costMultiplier );
+            finalCost = getCurrentUpkeepCost();
         }
 
         Econ.setBalance(acc,balance - finalCost);

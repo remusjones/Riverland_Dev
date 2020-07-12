@@ -128,6 +128,7 @@ public class FactionSentinelCommands  implements CommandExecutor
                 if (wouldUsePower <= tmpPlayer.getFaction().getPowerMax()) {
                     if (!npcFaction.Purchase(player)) {
                         player.sendMessage(prefix + "Your Faction cannot afford that.");
+
                     }else
                     {
                         player.sendMessage(prefix + "Your faction now has " + ChatColor.GOLD + npcFaction.storedNPCs + ChatColor.YELLOW + " Stored.");

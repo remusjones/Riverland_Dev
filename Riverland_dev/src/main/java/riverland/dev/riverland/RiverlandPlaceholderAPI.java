@@ -132,8 +132,12 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
         if(identifier.equalsIgnoreCase(MercUpkeepCost)){
             // get data
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
+            if (!npcFaction.hasUpdatedUpkeepDataSinceLoad)
+            {
+                npcFaction.getUpkeepCost();
+            }
             // get cost
-            return formatter.format(npcFaction.getUpkeepCost()).replace("$","");
+            return npcFaction.storedUpkeepFormatted;
           // String cost = Double.toString(npcFaction.getUpkeepCost());
           // // return cost
           // return cost;
@@ -148,7 +152,7 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
         if (identifier.equalsIgnoreCase(MercRent))
         {
             NPCFaction npcFaction = Riverland._Instance.getNPCFaction(player.getPlayer());
-            //String cost = Double.toString(npcFaction.getCostPerNPC());
+            //  String cost = Double.toString(npcFaction.getCostPerNPC());
             return formatter.format(npcFaction.getCostPerNPC()).replace("$","");
            // return cost;
         }
