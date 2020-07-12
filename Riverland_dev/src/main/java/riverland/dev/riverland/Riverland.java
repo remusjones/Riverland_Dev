@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.event.FactionEvent;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -239,6 +240,7 @@ public final class Riverland extends JavaPlugin {
 
         //Register your trait with Citizens.
         net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(RiverlandSentinel.class).withName("RiverlandSentinel"));
+        getServer().getPluginManager().registerEvents(new RiverlandFactionEvent(), this);
 
         // try load config for npcFactions..
         try
