@@ -136,9 +136,9 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
             {
                 npcFaction.getUpkeepCost();
             }
+
             // get cost
-            return npcFaction.storedUpkeepFormatted;
-          // String cost = Double.toString(npcFaction.getUpkeepCost());
+            return Double.toString(npcFaction.getUpkeepCost());
           // // return cost
           // return cost;
         }
