@@ -138,7 +138,8 @@ public class RiverlandPlaceholderAPI extends PlaceholderExpansion
             }
 
             // get cost
-            return Double.toString(npcFaction.getUpkeepCost());
+
+            return  npcFaction.FormatCurrency(npcFaction.getUpkeepCost());
           // // return cost
           // return cost;
         }
