@@ -25,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcmonkey.sentinel.SentinelPlugin;
 
+import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
@@ -60,6 +61,7 @@ public final class Riverland extends JavaPlugin {
     private File folder;
     private File f;
     public ArrayList<NPCFaction> npcFactions = new ArrayList<>();
+    public static RiverlandDiscordBot discordBot= null;
 
     public static SilkUtil _SilkSpawnerInstance()
     {
@@ -137,6 +139,8 @@ public final class Riverland extends JavaPlugin {
                 }
             }
         }
+
+
     }
     public void SetEntityRandomName(Entity entity)
     {
@@ -177,6 +181,15 @@ public final class Riverland extends JavaPlugin {
         randomNameList.add("Margaret");
         randomNameList.add("Jason");
         randomNameList.add("Karen");
+
+        try
+        {
+            discordBot = new RiverlandDiscordBot();
+        }
+        catch (LoginException | InterruptedException exc)
+        {
+            exc.printStackTrace();
+        }
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
             new RiverlandPlaceholderAPI().register();

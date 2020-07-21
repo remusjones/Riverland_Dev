@@ -1,5 +1,6 @@
 package riverland.dev.riverland;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -133,6 +134,20 @@ public class OPAdminHelp implements CommandExecutor
                         Player player = (Player)sender;
 
                         Integer target = Integer.parseInt(args[1]);
+                        if (Riverland.discordBot != null)
+                        {
+                            Set<Map.Entry<Integer, String>> map = Riverland._InstanceRiverLandTicket.storedTicketIssues.entrySet();
+
+                            //Riverland.discordBot.SendMessageToChannel(player.getDisplayName() + " has resolved ticket issue: \n```" + target +" | " + Riverland._InstanceRiverLandTicket.storedTicketIssues.get(target) + "```");
+                            EmbedBuilder eb = new EmbedBuilder();
+                            eb.setColor(Color.green);
+                            eb.setTitle("Ticket Completed");
+                            eb.addField("Ticket: ",Riverland._InstanceRiverLandTicket.storedTicketIssues.get(target),false);
+                            eb.setFooter("Resolved by: " + player.getDisplayName());
+                            eb.setThumbnail("https://lesspestcontrol.com.au/wp-content/uploads/green-tick.png");
+                            Riverland.discordBot.SendMessageToChannel(eb);
+
+                        }
                         Riverland._InstanceRiverLandTicket.removeDataBaseIssueID.add(target);
                         player.sendMessage(ChatColor.GREEN+"Removing Ticket Issue: " + ChatColor.DARK_RED+target);
 
@@ -147,26 +162,30 @@ public class OPAdminHelp implements CommandExecutor
                         }
                     }
                 }
-            }else if (args[0].equalsIgnoreCase("RemoveALL") && ((Player)sender).isOp())
-            {
-                Player player = (Player)sender;
-                // remove all entries..
-                Set<Map.Entry<Integer, String>> map = Riverland._InstanceRiverLandTicket.storedTicketIssues.entrySet();
-                for (Map.Entry<Integer, String> pair : map)
-                {
-                    Riverland._InstanceRiverLandTicket.removeDataBaseIssueID.add(pair.getKey());
-                }
-                player.sendMessage(ChatColor.GREEN.toString() + "Removed all Ticket entries.");
-
-
-                for(Player plr : Bukkit.getServer().getOnlinePlayers())
-                {
-                    if (plr != player)
-                    {
-                        plr.sendMessage( ChatColor.AQUA + player.getName() + " Is "+ChatColor.GREEN+"Removing All Tickets.");
-                    }
-                }
             }
+           // else if (args[0].equalsIgnoreCase("RemoveALL") && ((Player)sender).isOp())
+           // {
+           //     Player player = (Player)sender;
+           //     // remove all entries..
+           //     Set<Map.Entry<Integer, String>> map = Riverland._InstanceRiverLandTicket.storedTicketIssues.entrySet();
+           //     for (Map.Entry<Integer, String> pair : map)
+           //     {
+           //         Riverland._InstanceRiverLandTicket.removeDataBaseIssueID.add(pair.getKey());
+           //     }
+           //     player.sendMessage(ChatColor.GREEN.toString() + "Removed all Ticket entries.");
+           //     if (Riverland.discordBot != null)
+           //     {
+           //         Riverland.discordBot.SendMessageToChannel(player.getDisplayName() + " has removed/resolved all ticket entries");
+           //     }
+//
+           //     for(Player plr : Bukkit.getServer().getOnlinePlayers())
+           //     {
+           //         if (plr != player)
+           //         {
+           //             plr.sendMessage( ChatColor.AQUA + player.getName() + " Is "+ChatColor.GREEN+"Removing All Tickets.");
+           //         }
+           //     }
+           // }
 
 
         }

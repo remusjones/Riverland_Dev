@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.SirBlobman.combatlogx:CombatLogX-API:10.0.0.0-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/SirBlobman/combatlogx/CombatLogX-API/10.0.0.0-SNAPSHOT/CombatLogX-API-10.0.0.0-20200706.174148-50.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/SirBlobman/combatlogx/CombatLogX-API/10.0.0.0-SNAPSHOT/CombatLogX-API-10.0.0.0-20200717.204602-59.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/SirBlobman/combatlogx/CombatLogX-API/10.0.0.0-SNAPSHOT/CombatLogX-API-10.0.0.0-20200706.174148-50-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/SirBlobman/combatlogx/CombatLogX-API/10.0.0.0-SNAPSHOT/CombatLogX-API-10.0.0.0-20200717.204602-59-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/SirBlobman/combatlogx/CombatLogX-API/10.0.0.0-SNAPSHOT/CombatLogX-API-10.0.0.0-20200706.174148-50-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/SirBlobman/combatlogx/CombatLogX-API/10.0.0.0-SNAPSHOT/CombatLogX-API-10.0.0.0-20200717.204602-59-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

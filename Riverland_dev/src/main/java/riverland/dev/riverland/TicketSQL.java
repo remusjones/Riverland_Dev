@@ -2,12 +2,16 @@ package riverland.dev.riverland;
 
 
 // sql include
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.*;
 import java.sql.*;
 // calender include..
 import java.util.*;
@@ -123,6 +127,21 @@ public class TicketSQL
                                 player.sendMessage(message);
                             }
                         }
+
+                        if (Riverland.discordBot != null)
+                        {
+                            String messageToDiscord = "";
+                            EmbedBuilder eb = new EmbedBuilder();
+                            //MessageEmbed msg = new MessageEmbed(0,0,0,0,0,0,0,0,0,0,0,0,0)
+                            for (Map.Entry<Player, String> pair : map)
+                            {
+                                eb.setTitle("New Ticket Available");
+                                eb.setColor(Color.RED);
+                                eb.setThumbnail("https://www.pe.com/wp-content/uploads/2018/01/rpe-bus-bestlaw-warning.jpg");
+                                eb.addField(pair.getKey().getDisplayName(),pair.getValue(),false);
+                                Riverland.discordBot.SendMessageToChannel(eb);
+                            }
+                        }
                         SqlToWrite.clear(); // everything has been written, clear the list..
                     }
                     if (removeDataBaseIssueID.size() > 0) // removes index(s) specified..
@@ -140,7 +159,6 @@ public class TicketSQL
                             }
                         }
                         removeDataBaseIssueID.clear();
-                        Riverland._Instance.getLogger().log(Level.INFO, "Removed ID's.. ");
                     }
 
             }
