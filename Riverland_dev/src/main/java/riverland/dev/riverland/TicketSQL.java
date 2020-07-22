@@ -16,6 +16,7 @@ import java.sql.*;
 // calender include..
 import java.util.*;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 
 
@@ -89,12 +90,18 @@ public class TicketSQL
                     }
 
                     Set<Map.Entry<Player, String>> map = SqlToWrite.entrySet();
+                    ArrayList<RiverlandDiscordTicketData> ticketDataList = new ArrayList<>();
                     int iter = 1;
                     for (Map.Entry<Player, String> pair : map)
                     {
                         try
                         {
                             Integer id = highestTicketID + iter;
+                            RiverlandDiscordTicketData newData = new RiverlandDiscordTicketData();
+                            newData.ID = id;
+                            newData.message = pair.getValue();
+                            newData.player = pair.getKey();
+                            ticketDataList.add(newData);
                             statement.executeUpdate(
                                     "INSERT INTO " +
                                             "TICKETS " +
@@ -133,13 +140,14 @@ public class TicketSQL
                             String messageToDiscord = "";
                             EmbedBuilder eb = new EmbedBuilder();
                             //MessageEmbed msg = new MessageEmbed(0,0,0,0,0,0,0,0,0,0,0,0,0)
-                            for (Map.Entry<Player, String> pair : map)
+                            for (RiverlandDiscordTicketData ticket : ticketDataList)
                             {
                                 eb.setTitle("New Ticket Available");
+                                eb.addField("ID", ticket.ID.toString(),false);
                                 eb.setColor(Color.RED);
                                 eb.setThumbnail("https://www.pe.com/wp-content/uploads/2018/01/rpe-bus-bestlaw-warning.jpg");
-                                eb.addField(pair.getKey().getDisplayName(),pair.getValue(),false);
-                                Riverland.discordBot.SendMessageToChannel(eb);
+                                eb.addField(ticket.player.getDisplayName(),ticket.message,false);
+                                Riverland.discordBot.SendMessageToChannel(eb,true);
                             }
                         }
                         SqlToWrite.clear(); // everything has been written, clear the list..

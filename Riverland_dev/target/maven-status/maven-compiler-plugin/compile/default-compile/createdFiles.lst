@@ -23,9 +23,11 @@ riverland\dev\riverland\NPCFaction$2$2.class
 riverland\dev\riverland\RiverLandEventListener.class
 riverland\dev\riverland\RiverlandPlaceholderAPI.class
 riverland\dev\riverland\SerializableTNT.class
+riverland\dev\riverland\RiverlandDiscordReactionListener.class
 riverland\dev\riverland\SerializedSentinelFaction.class
 riverland\dev\riverland\RiverlandSentinelIntegration.class
 riverland\dev\riverland\RiverlandDiscordBot.class
+riverland\dev\riverland\RiverlandDiscordTicketData.class
 riverland\dev\riverland\TicketSQL$1.class
 riverland\dev\riverland\CustomEntityGiant.class
 riverland\dev\riverland\NPCFaction$2.class
